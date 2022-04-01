@@ -1,12 +1,11 @@
-from Scenario import ScenarioInstance
-from models.scenario import ScenarioInstance
 from simulation import SimulatorInterface
 
 class PrescanSimulator(SimulatorInterface):
-    def simulate(scenario: ScenarioInstance):
-        # move with constant speed until sim time runout
+    def simulateOSC(filepath: str, simTime: float):
+        # TODO
         pass
 
-    def simulateOSC(filepath: str):
+    def simulatePB(filepath: str, simTime: float):
+        # TODO
         pass
 

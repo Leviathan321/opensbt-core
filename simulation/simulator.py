@@ -2,12 +2,18 @@ from ctypes import Array
 from dataclasses import dataclass
 from typing import Dict, List
 from models.scenario import ScenarioInstance
-from legacy.models import Scenario
+import numpy as np
+import os
+import sys
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+@dataclass
 class SimulationOutput(object):
-    egoTrajectory: Array
-    objectTrajectory: Array
     simTime: float
+    egoTrajectory: np.ndarray
+    objectTrajectory: np.ndarray
     otherParams: Dict
     pass
 
@@ -16,9 +22,7 @@ class Simulator:
     simTime: int = 30
 
     @staticmethod
-    def simulateOSC(self, oscFilePath: str) -> SimulationOutput:
+    def simulateOSC(self, oscFilePath: str, simTime: float) -> SimulationOutput:
         pass
 
-    @staticmethod
-    def simulate(self, scenario: ScenarioInstance) -> SimulationOutput:
-        pass
+    

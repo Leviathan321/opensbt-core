@@ -59,10 +59,15 @@ toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=BOUND_LOW, up=BOUND
 toolbox.register("mutate", tools.mutPolynomialBounded, low=BOUND_LOW, up=BOUND_UP, eta=20.0, indpb=1.0/NDIM)
 toolbox.register("select", tools.selNSGA2)
 
+ind = toolbox.individual()
+print(ind)
+print(ind.fitness.valid)
+exit()
+
 def main(seed=None):
     random.seed(seed)
 
-    NGEN = 250
+    NGEN = 50
     MU = 100
     CXPB = 0.9
 
@@ -124,22 +129,22 @@ def main(seed=None):
 if __name__ == "__main__":
     # with open("pareto_front/zdt1_front.json") as optimal_front_data:
     #     optimal_front = json.load(optimal_front_data)
-    # Use 500 of the 1000 points in the json file
+    # #Use 500 of the 1000 points in the json file
     # optimal_front = sorted(optimal_front[i] for i in range(0, len(optimal_front), 2))
 
     pop, stats = main()
-    # pop.sort(key=lambda x: x.fitness.values)
+    pop.sort(key=lambda x: x.fitness.values)
 
-    # print(stats)
+    print(stats)
     # print("Convergence: ", convergence(pop, optimal_front))
     # print("Diversity: ", diversity(pop, optimal_front[0], optimal_front[-1]))
 
-    # import matplotlib.pyplot as plt
-    # import numpy
+    import matplotlib.pyplot as plt
+    import numpy
 
-    # front = numpy.array([ind.fitness.values for ind in pop])
+    front = numpy.array([ind.fitness.values for ind in pop])
     # optimal_front = numpy.array(optimal_front)
     # plt.scatter(optimal_front[:,0], optimal_front[:,1], c="r")
-    # plt.scatter(front[:,0], front[:,1], c="b")
-    # plt.axis("tight")
-    # plt.show()
+    plt.scatter(front[:,0], front[:,1], c="b")
+    plt.axis("tight")
+    plt.show()

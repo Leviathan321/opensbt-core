@@ -1,1 +1,7 @@
 deap
+numpy
+scipy
+matplotlib
+sklearn
+pydotplus
+graphviz

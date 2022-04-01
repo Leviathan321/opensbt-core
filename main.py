@@ -1,5 +1,3 @@
-
-
 # read scenario (from scenario objects, osc file, ...)
 
 # read fitness functions
