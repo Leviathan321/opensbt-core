@@ -4,16 +4,19 @@
 trap "kill 0" EXIT
 
 # Set up the environment
-export CARLA_ROOT=~/Software/CARLA
+# export CARLA_ROOT=~/Software/CARLA
+export CARLA_ROOT=c/CARLA_Latest/WindowsNoEditor
 export PYTHONPATH=${CARLA_ROOT}/PythonAPI/carla/dist/carla-0.9.13-py3.7-linux-x86_64.egg:${CARLA_ROOT}/PythonAPI/carla/agents:${CARLA_ROOT}/PythonAPI/carla
-export SCENARIO_RUNNER_ROOT=${CARLA_ROOT}/ScenarioRunner
+
+# export SCENARIO_RUNNER_ROOT=${CARLA_ROOT}/ScenarioRunner
+export SCENARIO_RUNNER_ROOT=/c/scenario_runner-0.9.13/scenario_runner-0.9.13
 
 # Set up test parameters
 WORLD_NAME=Town01
 SCENARIO_NAME=FollowLeadingVehicle
 
 # Start the simulator
-${CARLA_ROOT}/CarlaUE4.sh \
+${CARLA_ROOT}/CarlaUE4.exe \
     ${WORLD_NAME} \
     -quality-level=Low \
     -RenderOffScreen \
