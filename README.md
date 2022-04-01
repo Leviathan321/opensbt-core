@@ -31,10 +31,10 @@ py nsgaII_testcase.py
 
 ### TODO
 
-[] Simulate scenario provided as .xosc file in CARLA.
-[] Simulate scenario provided as .peb file to in PRESCAN.
-[] Create an interface for calling an optimizer.
-[] Fix bugs in nsgaII_dt.py
+- [ ] Simulate scenario provided as .xosc file in CARLA.
+- [ ] Simulate scenario provided as .peb file in PRESCAN.
+- [ ] Create an interface for calling an optimizer.
+- [ ] Fix bugs in nsgaII_dt.py (Tournament selection fails sometime, NAN in result of fitness evaluation)
 
 ## Pipecleaner
 
