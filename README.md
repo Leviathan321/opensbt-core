@@ -1,4 +1,40 @@
 # Search-based Test Case Generation
+## Optimizer
+
+
+Following test case generation algorithms are implemented:
+
+- NSGAII (nsgaII_testcase.py)
+
+- NSGAII with decision tree; only one iteration of critical region search (nsgaII_dt.py)
+
+Following information needs to be passed to the algorithm:
+
+- fitness functions
+- crtiticality functions
+- bounds of variables to be optimized
+- simulator (currently DummySimulator)
+
+Optional:
+
+- optimizer specific parameters
+
+### Example
+
+Run a scenario where ego and other vehicle are moving with constant speed linearly.
+The fitness function is defined by the smallest distance between ego and other vehicle.
+The criticality function is defined arbitrarily to test the approach.
+
+```
+py nsgaII_testcase.py
+```
+
+### TODO
+
+[] Simulate scenario provided as .xosc file in CARLA.
+[] Simulate scenario provided as .peb file to in PRESCAN.
+[] Create an interface for calling an optimizer.
+[] Fix bugs in nsgaII_dt.py
 
 ## Pipecleaner
 

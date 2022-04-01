@@ -10,7 +10,7 @@ import os
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DEBUG = True
+DEBUG = False
 
 def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
         if all(elem == 1 for elem in y):
@@ -61,7 +61,7 @@ def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
             print("feature: "+ str(feature))
             print("threshold: "+ str(threshold))
             print("n_node_samples: "+ str(n_node_samples))
-            print("values: " + str(values))
+            #print("values: " + str(values))
 
         node_depth = np.zeros(shape=n_nodes, dtype=np.int64)
         is_leaves = np.zeros(shape=n_nodes, dtype=bool)

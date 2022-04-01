@@ -47,7 +47,7 @@ criticalDict = {}
 # genetic algorithm parameters
 
 nGenerations = 10 # 22
-initialPopulationSize = 1000
+initialPopulationSize = 200
 crossoverProbability = 0.6
 numberDimensions = 8
 mutationRate = 0.01/numberDimensions
@@ -171,7 +171,7 @@ def nsgaII_testcase(initial_pop=[], initialPopulationSize = initialPopulationSiz
     # Begin the generational process
     for gen in range(1, NGEN):
         # Vary the population
-        offspring = tools.selTournamentDCD(pop, len(pop))
+        offspring = tools.selTournamentDCD(pop, len(pop)-2)
         offspring = [toolbox.clone(ind) for ind in offspring]
 
         for ind1, ind2 in zip(offspring[::2], offspring[1::2]):

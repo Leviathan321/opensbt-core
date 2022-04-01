@@ -1,7 +1,6 @@
 from ctypes import Array
 from dataclasses import dataclass
 from typing import Dict, List
-from models.scenario import ScenarioInstance
 import numpy as np
 import os
 import sys
