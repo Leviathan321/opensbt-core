@@ -11,6 +11,8 @@ from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
 from srunner.scenariomanager.scenario_manager import ScenarioManager
 from srunner.metrics.tools.metrics_log import MetricsLog
 
+from controllers.human import HumanAgent
+
 HOST = 'localhost'
 PORT = 2000
 TIMEOUT = 10
@@ -50,6 +52,10 @@ config = OpenScenarioConfiguration(
     {}
 )
 
+agent = HumanAgent("")
+
+CarlaDataProvider.set_traffic_manager_port(int(8000))
+
 vehicles = []
 for vehicle in config.ego_vehicles:
     vehicles.append(
@@ -62,13 +68,11 @@ for vehicle in config.ego_vehicles:
         )
     )
 
-CarlaDataProvider.set_traffic_manager_port(int(8000))
-
 scenario = OpenScenario(world,
                         vehicles, config, scenario_file)
 
 manager = ScenarioManager()
-manager.load_scenario(scenario)
+manager.load_scenario(scenario, agent)
 client.start_recorder(recording_file, True)
 manager.run_scenario()
 client.stop_recorder()
