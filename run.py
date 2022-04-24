@@ -1,84 +1,68 @@
-import importlib
-import carla
 import os
-import sys
-import importlib
-import inspect
 
-from srunner.scenarios.open_scenario import OpenScenario
-from srunner.scenarioconfigs.openscenario_configuration import OpenScenarioConfiguration
-from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
-from srunner.scenariomanager.scenario_manager import ScenarioManager
-from srunner.metrics.tools.metrics_log import MetricsLog
+import matplotlib.pyplot as plt
 
+from simulator import Simulator
+from scenario import Scenario
+from recorder import Recorder
+
+from metrics.distance import DistanceBetweenVehicles
 from controllers.human import HumanAgent
 
-HOST = 'localhost'
-PORT = 2000
-TIMEOUT = 10
 
-RECORDINGS = '/tmp/recordings'
-SCENARIOS = 'scenarios'
-METRICS = 'metrics'
+HOST_CARLA = 'localhost'
+PORT_CARLA = 2000
+TIMEOUT_CARLA = 10
 
-def get_metrics_class(file):
-    module_name = os.path.basename(file).split('.')[0]
-    sys.path.insert(0, os.path.dirname(file))
-    metric_module = importlib.import_module(module_name)
-    for member in inspect.getmembers(metric_module, inspect.isclass):
-        member_parent = member[1].__bases__[0]
-        if 'BasicMetric' in str(member_parent):
-            return member[1]
+RECORDING_DIR = '/tmp/recordings'
+SCENARIO_DIR = 'scenarios'
+METRICS_DIR = 'metrics'
 
+def get_simulator(host, port, timeout):
+    return Simulator(host, port, timeout)
 
-client = carla.Client(HOST, PORT)
-client.set_timeout(TIMEOUT)
+def get_scenarios(directory):
+    scenarios = None
+    with os.scandir(directory) as entries:
+        scenarios = [
+            Scenario(entry)
+                for entry in entries
+                    if entry.name.endswith('.xosc') and entry.is_file()
+        ]
+    return scenarios
 
-world = client.get_world()
+def get_evaluator():
+    return DistanceBetweenVehicles()
 
-CarlaDataProvider.set_client(client)
-CarlaDataProvider.set_world(world)
+def get_controller():
+    return HumanAgent
 
-current_scenario = "test"
-current_metric = "test"
+def get_recorder(directory):
+    return Recorder(directory)
 
-scenario_file = "{}/{}.xosc".format(SCENARIOS, current_scenario)
-recording_file = "{}/{}.log".format(RECORDINGS, current_scenario)
-metric_file = "{}/{}.py".format(METRICS, current_metric)
+simulator = get_simulator(HOST_CARLA, PORT_CARLA, TIMEOUT_CARLA)
+scenarios = get_scenarios(SCENARIO_DIR)
+recorder = get_recorder(RECORDING_DIR)
+evaluator = get_evaluator()
+agent = get_controller()
 
-config = OpenScenarioConfiguration(
-    scenario_file,
-    client,
-    {}
-)
+for scenario in scenarios:
+    scenario.simulate(simulator, agent, recorder)
 
-agent = HumanAgent("")
+recordings = recorder.get_recordings()
 
-CarlaDataProvider.set_traffic_manager_port(int(8000))
-
-vehicles = []
-for vehicle in config.ego_vehicles:
-    vehicles.append(
-        CarlaDataProvider.request_new_actor(
-            vehicle.model,
-            vehicle.transform,
-            vehicle.rolename,
-            color=vehicle.color,
-            actor_category=vehicle.category
+evaluations = list()
+for recording in recordings:
+    evaluations.append(
+        evaluator.evaluate(
+            simulator,
+            recording
         )
     )
 
-scenario = OpenScenario(world,
-                        vehicles, config, scenario_file)
-
-manager = ScenarioManager()
-manager.load_scenario(scenario, agent)
-client.start_recorder(recording_file, True)
-manager.run_scenario()
-client.stop_recorder()
-
-recording_info = client.show_recorder_file_info(recording_file, True)
-metric_log = MetricsLog(recording_info)
-
-metrics_class = get_metrics_class(metric_file)
-metrics_class(client.get_world().get_map(), metric_log, None)
+for (frame, dist) in evaluations:
+    plt.plot(frame, dist)
+    plt.ylabel('Distance [m]')
+    plt.xlabel('Frame number')
+    plt.title('Distance')
+    plt.show()
