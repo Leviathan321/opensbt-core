@@ -1,6 +1,5 @@
 from datetime import datetime
 from distutils.log import error
-from tkinter import Y
 from matplotlib.pyplot import ylim
 from sklearn import tree
 import numpy as np
@@ -10,7 +9,7 @@ import os
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DEBUG = False
+DEBUG = True
 
 def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
         if all(elem == 1 for elem in y):

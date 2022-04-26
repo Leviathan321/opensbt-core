@@ -2,8 +2,6 @@ from tokenize import String
 from typing import Dict
 import os
 
-cwd = os.getcwd()
-
 def substitute(filename: String, dict: Dict):
     # Read in the file
     with open(filename, 'r') as file :

@@ -49,20 +49,18 @@ mutationRate = 1.0/numberDimensions
 # fitness fcts and critical fct
 
 def evaluateFcn(individual):
-    fit, simout= fitness.fitness_basic_two_actors(individual,
-                                            simTime=simTime,
-                                            samplingTime=samplingTime,
-                                            simulateFcn=simulateFcn)
+    simout = simulateFcn(individual,simTime=simTime,samplingTime=samplingTime)
+    fit = fitness.fitness_basic_two_actors(simout)
 
     # dummy, add criticality information in evaluation function
-    random.seed(datetime.now())
-    notCritical = randrange(3)
+    time = int(round(datetime.now().timestamp()))
+    random.seed(time)
     criticalDict[str(individual)] = isCritical([fit],simout)
     
     return fit,
 
-def isCritical(Fit, simout: SimulationOutput):
-    if((simout.otherParams['isCollision'] == True) or (Fit[0] < 1)):
+def isCritical(fit, simout: SimulationOutput):
+    if((simout.otherParams['isCollision'] == True) or (fit[0] > 2 and fit[0] < 7  or  fit[0] < 0.9)):
         return True
     else:
         return False

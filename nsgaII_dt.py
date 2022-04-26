@@ -19,7 +19,7 @@ from deap import tools
 
 from fitness_functions import fitness
 from dynamics import basic_dynamics as bd
-from simulation.dummy_simulation import DummySimulator as DS
+from simulation.dummy_simulation import DummySimulator
 from simulation.simulator import SimulationOutput
 from visualization import plotter
 from random import randrange
@@ -40,14 +40,14 @@ var_max = [ 0, 100, 99, 100, 120, 160,180,10]
 
 simTime=60
 samplingTime = 1
-simulateFcn = DS.simulate
+simulateFcn = DummySimulator.simulate
 nFitnessFcts = 1
 criticalDict = {}
 
 # genetic algorithm parameters
 
 nGenerations = 10 # 22
-initialPopulationSize = 200
+initialPopulationSize = 600
 crossoverProbability = 0.6
 numberDimensions = 8
 mutationRate = 0.01/numberDimensions
@@ -57,21 +57,18 @@ createDT = True
 # fitness fcts and critical fct
 
 def evaluateFcn(individual):
-    fit, simout= fitness.fitness_basic_two_actors(individual,
-                                            simTime=simTime,
-                                            samplingTime=samplingTime,
-                                            simulateFcn=simulateFcn)
+    simout = simulateFcn(individual,simTime=simTime,samplingTime=samplingTime)
+    fit = fitness.fitness_basic_two_actors(simout)
 
     # dummy, add criticality information in evaluation function
     time = int(round(datetime.now().timestamp()))
     random.seed(time)
-    notCritical = randrange(3)
     criticalDict[str(individual)] = isCritical([fit],simout)
     
     return fit,
 
-def isCritical(Fit, simout: SimulationOutput):
-    if((simout.otherParams['isCollision'] == True) or (Fit[0] > 2 and Fit[0] < 7  or  Fit[0] < 0.9)):
+def isCritical(fit, simout: SimulationOutput):
+    if((simout.otherParams['isCollision'] == True) or (fit[0] > 2 and fit[0] < 7  or  fit[0] < 0.9)):
         return True
     else:
         return False
@@ -91,9 +88,13 @@ def nsgaII_testcase(initial_pop=[], initialPopulationSize = initialPopulationSiz
 
     print("NSGAII - STARTED")
     print("population size: " + str(len(initial_pop)))
+    print("lower bound: " + str(BOUND_LOW))
+    print("upper bound: " + str(BOUND_UP))
 
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0*nFitnessFcts,))
-    creator.create("Individual", list, typecode='d', fitness=creator.FitnessMin)
+    if( not hasattr(creator,"FitnessMin")):
+            creator.create("FitnessMin", base.Fitness, weights=(-1.0*nFitnessFcts,))
+    if( not hasattr(creator,"Individual")):
+        creator.create("Individual", list, typecode='d', fitness=creator.FitnessMin)
 
     toolbox = base.Toolbox()
 
@@ -171,7 +172,8 @@ def nsgaII_testcase(initial_pop=[], initialPopulationSize = initialPopulationSiz
     # Begin the generational process
     for gen in range(1, NGEN):
         # Vary the population
-        offspring = tools.selTournamentDCD(pop, len(pop)-2)
+        offspring = tools.selNSGA2(pop,int(len(pop)/2))
+        # offspring = tools.selTournamentDCD(pop, len(pop)-2)
         offspring = [toolbox.clone(ind) for ind in offspring]
 
         for ind1, ind2 in zip(offspring[::2], offspring[1::2]):

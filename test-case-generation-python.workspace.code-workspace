@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\Experiments\\Experiment_1"
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\..\\scenario_runner-0.9.13\\scenario_runner-0.9.13"
+		},
+		{
+			"path": "..\\..\\BEST\\OS_Translation\\ScenariosCarla"
+		}
+	]
+}
