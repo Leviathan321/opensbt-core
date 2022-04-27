@@ -16,7 +16,9 @@ from deap import tools
 
 from fitness_functions import fitness
 from dynamics import basic_dynamics as bd
-from simulation.dummy_simulation import DummySimulator as DS
+from simulation.dummy_simulation import DS
+from simulation.carla_simulation import CS
+
 from simulation.simulator import SimulationOutput
 from visualization import plotter
 from random import randrange
@@ -34,9 +36,11 @@ var_max = [ 0, 0, 20, 50, 100, 100,20,10]
 
 simTime=60
 samplingTime = 1
-simulateFcn = DS.simulate
+simulateFcn = CS.simulate
 nFitnessFcts = 1
 criticalDict = {}
+
+featureNames = {}
 
 # genetic algorithm parameters
 
@@ -206,4 +210,4 @@ if __name__ == "__main__":
     print("# critical individuals: "+ str(nCritical))
     print("# not critical individuals: "+ str(len(pop) - nCritical))
 
-    plotter.plotScenario(pop[0],simTime=simTime,samplingTime=samplingTime)
+    #plotter.plotScenario(pop[0],simTime=simTime,samplingTime=samplingTime)

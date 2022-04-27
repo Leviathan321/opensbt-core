@@ -15,8 +15,11 @@ def substitute(filename: String, dict: Dict):
 
     # Write the file out again
     splitFilename =  os.path.splitext(filename)
-    with open(splitFilename[0] + suffix + "." + splitFilename[1], 'w') as file:
+    newFilename = splitFilename[0] + suffix + "." + splitFilename[1]
+    with open(newFilename, 'w') as file:
         file.write(filedata)
+
+    return newFilename
 
 # test
 instanceValues = {
