@@ -4,9 +4,25 @@ import numpy
 from matplotlib.patches import Rectangle
 from simulation.dummy_simulation import DummySimulator
 
-def plotSim(simout: SimulationOutput, map=None):
+def plotSim(simout: SimulationOutput,featureValues, features=None, map=None):
     fig = plt.figure()
-    plt.title("Simulation of scenario X") 
+    if features is None:
+        features = [
+                "egoX",
+                "egoY",
+                "orientationEgo",
+                "velocityEgo",
+                "objX",
+                "objY",
+                "orientationObj",
+                "velocityObj"]
+    scenario = ""
+    for i in range(0,len(featureValues)):
+        scenario = scenario + features[i] + "=" + str( "{:.2f}".format(featureValues[i]))
+        if i < len(featureValues) - 1:
+            scenario = scenario + "\n"
+    fig.text(.5, .15, scenario, ha='center')
+    plt.title("Simulation of scenario")
     plt.xlabel("x [m]") 
     plt.ylabel("y [m]")
     ego = simout.egoTrajectory
@@ -38,7 +54,7 @@ def plotMap(fig, x,y,width,height):
                         ec ='g',
                         lw = 1))
 
-def plotScenario(vars,simTime,samplingTime):
-    simout = DummySimulator.simulate(vars, simTime=simTime, samplingTime=samplingTime)
-    plotSim(simout)
+def plotScenario(simulateFcn,vars,simTime,samplingTime,featureNames=None):
+    simout = simulateFcn(vars, simTime=simTime, samplingTime=samplingTime)
+    plotSim(simout,vars,featureNames)
     

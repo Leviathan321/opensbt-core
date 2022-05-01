@@ -1,18 +1,43 @@
-<OpenSCENARIO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="osc-schema.xsd">
+<?xml version="1.0"?>
+<OpenSCENARIO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="OpenSCENARIO_v0.9.1.xsd">
 	<FileHeader author="esmini-team" date="2020-10-09T10:00:00" description="Basic cut-in with interactive controller" revMajor="1" revMinor="0" />
 	<ParameterDeclarations>
-		<ParameterDeclaration name="EgoStartS" parameterType="double" value="2" />
-		<ParameterDeclaration name="EgoLaneChangeStart" parameterType="double" value="10" />
-		<ParameterDeclaration name="EgoTargetSpeed" parameterType="double" value="90" />
+		<ParameterDeclaration name="EgoStartS" parameterType="double" value="20" />
+		<ParameterDeclaration name="EgoLaneChangeStart" parameterType="double" value="90" />
+		<ParameterDeclaration name="EgoTargetSpeed" parameterType="double" value="70" />
 	<ParameterDeclaration name="SimulationDuration" parameterType="double" value="30" /></ParameterDeclarations>
 	<CatalogLocations>
-		</CatalogLocations>
+		    <VehicleCatalog>
+      <Directory path="Catalogs/VehicleCatalogs"/>
+    </VehicleCatalog>
+    <ControllerCatalog>
+      <Directory path="Catalogs/DriverCatalogs"/>
+    </ControllerCatalog>
+    <PedestrianCatalog>
+      <Directory path="Catalogs/ObserverCatalogs"/>
+    </PedestrianCatalog>
+    <MiscObjectCatalog>
+      <Directory path="Catalogs/MiscObjectCatalogs"/>
+    </MiscObjectCatalog>
+    <EnvironmentCatalog>
+      <Directory path="Catalogs/EnvironmentCatalogs"/>
+    </EnvironmentCatalog>
+    <ManeuverCatalog>
+      <Directory path="Catalogs/ManeuverCatalogs"/>
+    </ManeuverCatalog>
+    <TrajectoryCatalog>
+      <Directory path="Catalogs/TrajectoryCatalog"/>
+    </TrajectoryCatalog>
+    <RouteCatalog>
+      <Directory path="Catalogs/RoutingCatalog"/>
+    </RouteCatalog>
+  </CatalogLocations>
 	<RoadNetwork>
 		<LogicFile filepath="catalogs/roads/2lane-motorway.xodr" />
 	</RoadNetwork>
 	<Entities>
-		<ScenarioObject name="hero">
-			<Vehicle name="vehicle.tesla.model3" vehicleCategory="car">
+		<ScenarioObject name="Ego">
+			<Vehicle name="Audi_A3_2009_black" vehicleCategory="car">
 				<ParameterDeclarations />
 				<Performance maxAcceleration="200" maxDeceleration="10.0" maxSpeed="69.444" />
 				<BoundingBox>
@@ -24,18 +49,29 @@
 					<RearAxle maxSteering="0.0" positionX="0.0" positionZ="0.3" trackWidth="1.8" wheelDiameter="0.6" />
 				</Axles>
 				<Properties>
-					<Property name="type" value="ego_vehicle" />
+					<Property name="control" value="external" />
 				</Properties>
 			</Vehicle>
+			  <ObjectController>
+        <Controller name="DefaultDriver">
+          <Properties>
+            <Property name="weight" value="60"/>
+            <Property name="height" value="1.8"/>
+            <Property name="eyeDistance" value="0.065"/>
+            <Property name="age" value="28"/>
+            <Property name="sex" value="male"/>
+          </Properties>
+        </Controller>
+      </ObjectController>
 		</ScenarioObject></Entities>
 	<Storyboard>
 		<Init>
 			<Actions>
-				<Private entityRef="hero">
+				<Private entityRef="Ego">
 					<PrivateAction>
 						<TeleportAction>
 							<Position>
-								<LanePosition laneId="-3" offset="0" roadId="0" s="2" />
+								<LanePosition laneId="-3" offset="0" roadId="0" s="$EgoStartS" />
 							</Position>
 						</TeleportAction>
 					</PrivateAction>
@@ -44,7 +80,7 @@
 							<SpeedAction>
 								<SpeedActionDynamics dynamicsDimension="time" dynamicsShape="step" value="1" />
 								<SpeedActionTarget>
-									<AbsoluteTargetSpeed value="90" />
+									<AbsoluteTargetSpeed value="$EgoTargetSpeed" />
 								</SpeedActionTarget>
 							</SpeedAction>
 						</LongitudinalAction>
@@ -59,7 +95,7 @@
 			<Act name="EgoAct">
 				<ManeuverGroup maximumExecutionCount="1" name="Maneuver">
 					<Actors selectTriggeringEntities="false">
-						<EntityRef entityRef="hero" />
+						<EntityRef entityRef="Ego" />
 					</Actors>
 					<Maneuver name="TheManeuver">
 						<Event maximumExecutionCount="1" name="Event" priority="overwrite">
@@ -69,14 +105,14 @@
 										<LaneChangeAction>
 											<LaneChangeActionDynamics dynamicsDimension="time" dynamicsShape="linear" value="3" />
 											<LaneChangeTarget>
-												<RelativeTargetLane entityRef="hero" value="1" /></LaneChangeTarget>
+												<RelativeTargetLane entityRef="Ego" value="1" /></LaneChangeTarget>
 										</LaneChangeAction>
 									</LateralAction>
 								</PrivateAction>
 							</Action>
 							<StartTrigger>
 								<ConditionGroup>
-									<Condition conditionEdge="none" delay="10" name="Lane change condition">
+									<Condition conditionEdge="none" delay="$EgoLaneChangeStart" name="Lane change condition">
 										<ByValueCondition>
 											<SimulationTimeCondition rule="greaterThan" value="0" />
 										</ByValueCondition>
@@ -110,6 +146,14 @@
 				</StartTrigger>
 			</Act>
 		</Story>
-		<StopTrigger />
+		    <StopTrigger>
+      <ConditionGroup>
+        <Condition name="Scenario end time" delay="0" conditionEdge="rising">
+          <ByValueCondition>
+            <SimulationTimeCondition value="$SimulationDuration" rule="greaterThan"/>
+          </ByValueCondition>
+        </Condition>
+      </ConditionGroup>
+    </StopTrigger>
 	</Storyboard>
 </OpenSCENARIO>

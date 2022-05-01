@@ -1,4 +1,3 @@
-from ctypes import Array
 from dataclasses import dataclass
 from typing import Dict, List
 import numpy as np
@@ -15,13 +14,3 @@ class SimulationOutput(object):
     objectTrajectory: np.ndarray
     otherParams: Dict
     pass
-
-@dataclass
-class Simulator:
-    simTime: int = 30
-
-    @staticmethod
-    def simulateOSC(self, oscFilePath: str, simTime: float) -> SimulationOutput:
-        pass
-
-    

@@ -1,15 +1,14 @@
 from cmath import pi, sin
 from math import cos
 from simulation.simulator import SimulationOutput
-from dynamics import basic_dynamics
+from dummySimulation.dynamics import basic_dynamics
 from utils import geometric
-import numpy.linalg as linalg
 
 class DummySimulator(object):
     samplingTime = 1
     
     @staticmethod
-    def simulate(vars, simTime: float, samplingTime=samplingTime) -> SimulationOutput:
+    def simulate(vars, featureNames, filepath, simTime: float, samplingTime=samplingTime) -> SimulationOutput:
         # print("*** INPUT SIMULATE ***")
         # print("vars: " + str(vars))
         # print("simTime: " + str(simTime))

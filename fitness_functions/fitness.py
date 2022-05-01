@@ -1,17 +1,17 @@
 import sys
-import os
-
 from simulation.simulator import SimulationOutput 
 
-# sys.path.insert(0, '../simulation')
-# SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# sys.path.append(os.path.dirname(SCRIPT_DIR))
-
 import numpy as np
+import math
 from simulation import dummy_simulation as ds
-import visualization.plotter as plt
 from scipy.spatial.distance import cdist
 from utils import geometric
+
+
+def fitness_min_distance_two_actors(simout):
+    dist = simout.otherparams["distanceEgo"]
+    v = math.min(dist[1])
+    return v
 
 
 def fitness_basic_two_actors(simout):

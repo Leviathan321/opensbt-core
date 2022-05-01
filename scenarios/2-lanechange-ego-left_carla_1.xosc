@@ -2,9 +2,9 @@
 <OpenSCENARIO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="OpenSCENARIO_v0.9.1.xsd">
 	<FileHeader author="esmini-team" date="2020-10-09T10:00:00" description="Basic cut-in with interactive controller" revMajor="1" revMinor="0" />
 	<ParameterDeclarations>
-		<ParameterDeclaration name="EgoStartS" parameterType="double" value="$EgoStartS" />
-		<ParameterDeclaration name="EgoLaneChangeStart" parameterType="double" value="$EgoLaneChangeStart" />
-		<ParameterDeclaration name="EgoTargetSpeed" parameterType="double" value="$EgoTargetSpeed" />
+		<ParameterDeclaration name="EgoStartS" parameterType="double" value="20" />
+		<ParameterDeclaration name="EgoLaneChangeStart" parameterType="double" value="1" />
+		<ParameterDeclaration name="EgoTargetSpeed" parameterType="double" value="30" />
 		<ParameterDeclaration name="SimulationDuration" parameterType="double" value="30" /></ParameterDeclarations>
 	<CatalogLocations>
 		    <VehicleCatalog>
