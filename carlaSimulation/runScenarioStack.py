@@ -12,8 +12,7 @@ from carlaSimulation.controllers.human import HumanAgent
 
 HOST_CARLA = 'localhost'
 PORT_CARLA = 2000
-TIMEOUT_CARLA = 10
-
+TIMEOUT_CARLA = 15
 RECORDING_DIR = '/tmp/carla/recordings'
 SCENARIO_DIR = 'scenarios'
 METRICS_DIR = 'metrics'

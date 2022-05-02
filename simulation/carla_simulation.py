@@ -1,6 +1,7 @@
 from curses import flash
 import numpy as np
 from pathlib import Path
+from carlaSimulation.scenario import Scenario
 from utils.text_operations import createScenarioInstanceXOSC
 from carlaSimulation import runScenarioStack, runSingle
 from simulation.simulator import SimulationOutput
@@ -42,17 +43,18 @@ class CarlaSimulator(object):
                 otherParams["velocitiyAdv"] = out[4]
                 otherParams["distanceEgo"] = out[5]
 
-                otherParams = {}
-                collisions = out[6]
+                steps =  len(otherParams["samples"])
+
+                #collisions = out[6]
                 
                 # if otherParams["collisions"] != []:
                 #     otherParams["isCollision"] = True
                 # else:
                 #     otherParams["isCollision"] = False
                 
-                steps =  len(otherParams["samples"])
-
                 # TODO use real values
+
+                otherParams["isCollision"] = True
                 egoTrajectory = np.ones((4,steps))
                 objectTrajectory = np.ones((4,steps))
 
@@ -62,9 +64,9 @@ class CarlaSimulator(object):
             raise e
         finally:
             print("++ removing temporary scenarios ++")
-            filelist = [ f for f in os.listdir(scenario_dir) if f.endswith(".xosc") ]
+            filelist = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".xosc") ]
             for f in filelist:
-                os.remove(os.path.join(scenario_dir, f))
+                os.remove(os.path.join(SCENARIO_DIR, f))
         return results
     
     ## Simulates one scenario and returns the output
@@ -72,7 +74,7 @@ class CarlaSimulator(object):
     def simulate(individual, featureNames, xosc: str, simTime: float,samplingTime = samplingTime):
         
         instanceValues = CarlaSimulator.getParameterDict(featureNames,individual)
-        scenarioInstancePath = createScenarioInstanceXOSC(xosc,instanceValues,outfolder=scenario_dir)
+        scenarioInstancePath = createScenarioInstanceXOSC(xosc,instanceValues,outfolder=SCENARIO_DIR)
 
         out = runSingle.run(scenarioInstancePath)
         
@@ -95,6 +97,9 @@ class CarlaSimulator(object):
     
     @staticmethod
     def getParameterDict(featureNames, values):
+        print("provided following values:")
+        print(featureNames)
+        print(values)
         instanceValues = {}
         i = 0
         for name in featureNames:

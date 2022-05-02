@@ -9,8 +9,8 @@ from utils import geometric
 
 
 def fitness_min_distance_two_actors(simout):
-    dist = simout.otherparams["distanceEgo"]
-    v = math.min(dist[1])
+    dist = simout.otherParams["distanceEgo"]
+    v = min(dist)
     return v
 
 

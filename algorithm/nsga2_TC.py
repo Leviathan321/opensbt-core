@@ -98,6 +98,7 @@ def nsga2_TC(initialPopulationSize,
     NDIM = len(var_min)
 
     print("NSGAII - STARTED")
+    print("logical scenario: " + str(xosc))
     print("population size: " + str(len(initial_pop)))
     print("lower bound: " + str(BOUND_LOW))
     print("upper bound: " + str(BOUND_UP))

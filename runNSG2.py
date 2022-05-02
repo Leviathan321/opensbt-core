@@ -49,13 +49,14 @@ def setExp2():
     simulateFcn = CarlaSimulator.simulateBatch
 
 def setExp3():
+    # example to test integration (provided scenario is already an instance)
     global xosc,var_min,var_max,featureNames,simulateFcn
-    xosc = os.getcwd() + "/scenarios/2-lanechange-ego-left_carla_1.xosc"
+    xosc = os.getcwd() + "/scenarios/test_1_short.xosc"
     featureNames = ["dummy"]
     var_min = [0]
     var_max = [10]
     fitnessFcn = fitness.fitness_min_distance_two_actors
-    simulateFcn = CarlaSimulator.simulate
+    simulateFcn = CarlaSimulator.simulateBatch
     
 def setExp4():
     global xosc,var_min,var_max,featureNames,simulateFcn
@@ -80,7 +81,8 @@ nGenerations = 10
 ###### set experiment
 
 #setExp1()
-setExp2()
+#setExp2()
+setExp3()
 
 #######
 
