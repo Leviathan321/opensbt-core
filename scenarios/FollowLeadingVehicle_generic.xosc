@@ -192,7 +192,7 @@
                   <EntityRef entityRef="hero"/>
                 </TriggeringEntities>
                 <EntityCondition>
-                  <TraveledDistanceCondition value="1.0"/>
+                  <TraveledDistanceCondition value="200.0"/>
                 </EntityCondition>
               </ByEntityCondition>
             </Condition>

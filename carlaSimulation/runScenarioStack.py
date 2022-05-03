@@ -1,13 +1,13 @@
 import os
 
 import matplotlib.pyplot as plt
+from carlaSimulation.controllers.npc import NpcAgent
 
 from carlaSimulation.simulator import Simulator
 from carlaSimulation.scenario import Scenario
 from carlaSimulation.recorder import Recorder
 
 from carlaSimulation.metrics.raw import RawData
-from carlaSimulation.controllers.human import HumanAgent
 
 
 HOST_CARLA = 'localhost'
@@ -34,7 +34,7 @@ def get_evaluator():
     return RawData()
 
 def get_controller():
-    return HumanAgent
+    return NpcAgent
 
 def get_recorder(directory):
     return Recorder(directory)
@@ -72,5 +72,5 @@ def run(scenario_dir=SCENARIO_DIR,recording_dir=RECORDING_DIR):
     # for (frame, dist) in evaluations:
     #     print(frame)
     #     print(dist)
-        
+
     return evaluations
