@@ -19,6 +19,8 @@ class Scenario:
         CarlaDataProvider.set_client(client)
         CarlaDataProvider.set_world(world)
 
+        world.tick()
+
         config = OpenScenarioConfiguration(
             self.xosc,
             client,
@@ -40,6 +42,8 @@ class Scenario:
                     actor_category=vehicle.category
                 )
             )
+
+        world.tick()
 
         scenario = OpenScenario(
             world,

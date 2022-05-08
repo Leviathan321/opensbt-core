@@ -57,7 +57,7 @@ def setExp3():
     var_max = [10]
     fitnessFcn = fitness.fitness_min_distance_two_actors
     simulateFcn = CarlaSimulator.simulateBatch
-    
+
 def setExp4():
     global xosc,var_min,var_max,featureNames,simulateFcn
     pass
@@ -72,28 +72,28 @@ def criticalFcn(fit,simout):
         return True
     else:
         return False
-        
+
 criticalFcn = criticalFcn
 nFitnessFcts = 1
-initialPopulationSize = 1
-nGenerations = 10
+initialPopulationSize = 5
+nGenerations = 5
 
 ###### set experiment
 
 #setExp1()
-#setExp2()
-setExp3()
+setExp2()
+#setExp3()
 
 #######
 
 if __name__ == "__main__":
-    pop, critical, stats = nsga2_TC(initialPopulationSize, 
+    pop, critical, stats = nsga2_TC(initialPopulationSize,
                     nGenerations,
-                    var_min, 
-                    var_max, 
-                    fitnessFcn, 
-                    nFitnessFcts, 
-                    criticalFcn, 
+                    var_min,
+                    var_max,
+                    fitnessFcn,
+                    nFitnessFcts,
+                    criticalFcn,
                     simulateFcn,
                     featureNames,
                     xosc,
@@ -104,4 +104,4 @@ if __name__ == "__main__":
     print("# individuals: "+ str(len(pop)))
     print("# most critical:" + str([str(entry) for entry in zip(featureNames,pop[0])]))
     print("# most critical fitness: " + str(pop[0].fitness.values) )
-    
+
