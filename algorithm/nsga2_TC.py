@@ -1,6 +1,5 @@
 #from simulation import prescan_simulation
 from datetime import datetime
-from logging import critical
 from pickle import TRUE
 
 import random
@@ -74,8 +73,8 @@ def nsga2_TC(initialPopulationSize,
                 criticalDict[str(individual)] = isCritical([fit],simout)
 
             value = fit,
-            fits.append(value)
-
+            fits.append(value)        
+        
         return fits
 
     def evaluateFcn(individual):
@@ -125,6 +124,7 @@ def nsga2_TC(initialPopulationSize,
     
     toolbox.register("mutate", tools.mutPolynomialBounded, eta=80,low=BOUND_LOW, up=BOUND_UP, indpb=mutationRate)
     toolbox.register("select", tools.selNSGA2)
+    # selected individuals using selNSGA2 occure only once in the result */
 
     seed=None
     random.seed(seed)
@@ -177,7 +177,8 @@ def nsga2_TC(initialPopulationSize,
     # Begin the generational process
     for gen in range(1, NGEN):
         # Vary the population
-        #offspring = tools.selNSGA2(pop,int(len(pop)/2))
+        # offspring = tools.selNSGA2(pop,int(len(pop)/2))
+        # "Each individual from the input list won’t be selected more than twice using tournament selection."
         offspring = tools.selTournamentDCD(pop, len(pop)-2)
         offspring = [toolbox.clone(ind) for ind in offspring]
 
@@ -191,17 +192,37 @@ def nsga2_TC(initialPopulationSize,
 
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+        
+        # Evaluate invalid individuuals only once
+        occurred = {}
+        unique_invalid_ind = []
+        duplicates = []
+        for ind in invalid_ind:
+            str_ind = str(ind)
+            if str_ind not in occurred:
+                unique_invalid_ind.append(ind)
+                occurred[str_ind] = True
+            else:
+                duplicates.append(ind)
 
         if EVALUATE_IN_BATCH:
-            fitnesses = evaluateFcnBatch(invalid_ind)
+            fitnesses = evaluateFcnBatch(unique_invalid_ind)
         else:
-            fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+            fitnesses = toolbox.map(toolbox.evaluate, unique_invalid_ind)
 
-        for ind, fit in zip(invalid_ind, fitnesses):
+        for ind, fit in zip(unique_invalid_ind, fitnesses):
             ind.fitness.values = fit
+            # set fitness of all duplicates that have not been evaluated
+            for dup in duplicates:
+                if str(dup) == str(ind):
+                    dup.fitness.values = fit
 
         # Select the next generation population
         # MU <= |pop + offspring| <= 2MU
+        #print(f"+++ Individuals with fitness after CX in population: {[(ind.fitness.values,ind) for ind in pop]}")
+        #print(f"+++ Individuals with fitness after CX in offsprings: {[(ind.fitness.values,ind) for ind in offspring]}")
+        #print(f"+++ Size of candidate set with offsprings: {len(pop)+ len(offspring)}")
+
         pop = toolbox.select(pop + offspring, MU)
         record = stats.compile(pop)
         logbook.record(gen=gen, evals=len(invalid_ind), **record)
