@@ -18,12 +18,17 @@ class NpcAgent(AutonomousAgent):
     _route_assigned = False
     _visual = None
 
-    def setup(self, path_to_conf_file):
-        self._agent = None
-        self._visual = visualization.start()
+    def __init__(self, has_visualization):
+        super().__init__("")
+        if has_visualization:
+            self._visual = visualization.start()
 
-    def run_step(self, input_data, timestamp):
-        self._visual.update(timestamp)
+    def setup(self, _):
+        self._agent = None
+
+    def run_step(self, _, timestamp):
+        if self._visual is not None:
+            self._visual.update(timestamp)
         if not self._agent:
             hero_actor = None
             for actor in CarlaDataProvider.get_world().get_actors():
@@ -37,4 +42,5 @@ class NpcAgent(AutonomousAgent):
             return self._agent.run_step()
 
     def destroy(self):
-        self._visual.stop()
+        if self._visual is not None:
+            self._visual.stop()

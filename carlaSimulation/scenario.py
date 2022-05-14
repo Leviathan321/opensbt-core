@@ -39,7 +39,7 @@ class Scenario:
                 )
             )
 
-        agent = controller("")
+        agent = controller(True)
 
         scenario = OpenScenario(
             world,

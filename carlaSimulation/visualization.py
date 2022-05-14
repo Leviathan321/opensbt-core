@@ -1513,7 +1513,7 @@ class Loop(object):
         self.world.simulation_time = timestamp
 
         # Tick client
-        self.clock.tick_busy_loop(30)
+        self.clock.tick()
 
         # Tick all modules
         self.world.tick(self.clock)
