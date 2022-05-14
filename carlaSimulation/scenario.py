@@ -16,18 +16,18 @@ class Scenario:
 
         world = client.get_world()
 
+        settings = world.get_settings()
+        settings.no_rendering_mode = True
+        world.apply_settings(settings)
+
         CarlaDataProvider.set_client(client)
         CarlaDataProvider.set_world(world)
-
-        world.tick()
 
         config = OpenScenarioConfiguration(
             self.xosc,
             client,
             {}
         )
-
-        agent = controller("")
 
         CarlaDataProvider.set_traffic_manager_port(int(8000))
 
@@ -43,7 +43,7 @@ class Scenario:
                 )
             )
 
-        world.tick()
+        agent = controller("")
 
         scenario = OpenScenario(
             world,
