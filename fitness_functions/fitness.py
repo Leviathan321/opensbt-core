@@ -6,13 +6,16 @@ import math
 from simulation import dummy_simulation as ds
 from scipy.spatial.distance import cdist
 from utils import geometric
-
+import random
+import logging
 
 def fitness_min_distance_two_actors(simout):
     dist = simout.otherParams["distanceEgo"]
     v = min(dist)
     return v
 
+def fitness_random(simout):
+    return random.random()
 
 def fitness_basic_two_actors(simout):
     # consider the distance at last sim step between ego and pedestrian in a non collision situations as 

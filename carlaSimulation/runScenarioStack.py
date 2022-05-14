@@ -9,11 +9,10 @@ from carlaSimulation.recorder import Recorder
 
 from carlaSimulation.metrics.raw import RawData
 
-
 HOST_CARLA = 'localhost'
 PORT_CARLA = 2000
 TIMEOUT_CARLA = 15
-RECORDING_DIR = '/tmp/carla/recordings'
+RECORDING_DIR = '/tmp/carla_recordings'
 SCENARIO_DIR = 'scenarios'
 METRICS_DIR = 'metrics'
 
