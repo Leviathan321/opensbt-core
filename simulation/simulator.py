@@ -17,7 +17,7 @@ class SimulationOutput(object):
     distance: List
     collisions: List
     actors: Dict
-    others:Dict
+    otherParams:Dict
 
     def to_json(self):
         return json.dumps(self.__dict__)

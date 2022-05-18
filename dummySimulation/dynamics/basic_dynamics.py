@@ -20,7 +20,8 @@ def planMotion(startingPosition,orientation,velocity,simTime,samplingTime):
     arrayV = v * np.ones(asize, dtype=np.int64)
 
     return np.concatenate((arrayTime,arrayX,arrayY,arrayV)).reshape(4,asize)
-
+    
+    #return list(arrayTime), list(arrayX), list(arrayY), list(arrayV)
 # motion = planMotion(np.array([1,1]),0,10,10,1)
 
 # print(motion)

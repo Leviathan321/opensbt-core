@@ -35,7 +35,7 @@ mutationRate = 0.1
 
 SUPPRESS_PLT = True
 
-EVALUATE_IN_BATCH = True
+EVALUATE_IN_BATCH = False
 
 def nsga2_TC(initialPopulationSize,
             nGenerations, 

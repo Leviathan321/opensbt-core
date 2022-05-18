@@ -81,6 +81,9 @@ def nsga2_DT(initialPopulationSize,
                     var_max=bound[1])
 
             all_pops.extend(pop_run_bi)
+
+            # TODO
+            # the crititcalDict needs to be passed to TC
             critical.update(critical_bound)
         
             all_pops.sort(key=lambda x: x.fitness.values)
