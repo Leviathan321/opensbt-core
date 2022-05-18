@@ -5,6 +5,7 @@ from carlaSimulation.scenario import Scenario
 from utils.text_operations import createScenarioInstanceXOSC
 from carlaSimulation import runScenarioStack, runSingle
 from simulation.simulator import SimulationOutput
+import json
 import os
 
 SCENARIO_DIR = str(os.getcwd()) + os.sep + "carlaSimulation" + os.sep + "temp"
@@ -33,6 +34,7 @@ class CarlaSimulator(object):
                 # TODO decide to do evaluation in optimizer oder directly by carla
                 # put here the recording results of carla, or the postprocessed results
                 # use dummy values for now
+
                 otherParams = {}
 
                 otherParams["samples"] = out[0]
@@ -41,24 +43,22 @@ class CarlaSimulator(object):
                 otherParams["velocityEgo"] = out[3]
                 otherParams["velocitiyAdv"] = out[4]
                 otherParams["distanceEgo"] = out[5]
-
+                otherParams["collisions"] = out[6]
+                
                 steps =  len(otherParams["samples"])
-
-                #collisions = out[6]
                 
-                # if otherParams["collisions"] != []:
-                #     otherParams["isCollision"] = True
-                # else:
-                #     otherParams["isCollision"] = False
-                
-                # TODO use real values
+                if len(otherParams["collisions"]) != 0:
+                    otherParams["isCollision"] = True
 
-                otherParams["isCollision"] = True
-                egoTrajectory = np.ones((4,steps))
-                objectTrajectory = np.ones((4,steps))
+                # egoTrajectory = np.ones((4,steps))
+                # objectTrajectory = np.ones((4,steps))
 
-                simout = SimulationOutput(simTime,egoTrajectory,objectTrajectory,otherParams=otherParams)
+                # simout = SimulationOutput(simTime,egoTrajectory,objectTrajectory,otherParams=otherParams)
+                # results.append(simout)
+                simout = SimulationOutput.from_json(json.dumps(out))
                 results.append(simout)
+                print("parsed simout")
+                
         except Exception as e: 
             raise e
         finally:
