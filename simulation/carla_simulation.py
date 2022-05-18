@@ -26,7 +26,6 @@ class CarlaSimulator(object):
             # TODO consider output from carla stored in dictionary or class
 
             for out in outs:
-
                 # TODO get real metrics calculation
                 # TODO decide to do evaluation in optimizer oder directly by carla
                 # put here the recording results of carla, or the postprocessed results

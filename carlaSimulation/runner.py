@@ -8,7 +8,6 @@ from carlaSimulation.recorder import Recorder
 
 from carlaSimulation.metrics.raw import RawData
 
-
 HOST_CARLA = 'localhost'
 PORT_CARLA = 2000
 TIMEOUT_CARLA = 15

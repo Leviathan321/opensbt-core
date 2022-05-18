@@ -3,10 +3,20 @@ from math import cos
 from simulation.simulator import SimulationOutput
 from dummySimulation.dynamics import basic_dynamics
 from utils import geometric
+import numpy as np
 
 class DummySimulator(object):
     samplingTime = 1
-    
+
+    ## Simulates a set of scenarios and returns the output
+    @staticmethod
+    def simulateBatch(listIndividuals, featureNames, xosc: str, simTime: float,samplingTime = samplingTime):
+        results = []
+        for ind in listIndividuals:
+            simout =  DummySimulator.simulate(ind, featureNames, filepath=xosc, simTime=simTime, samplingTime=samplingTime) 
+            results.append(simout)
+        return results
+
     @staticmethod
     def simulate(vars, featureNames, filepath, simTime: float, samplingTime=samplingTime) -> SimulationOutput:
         # print("*** INPUT SIMULATE ***")
