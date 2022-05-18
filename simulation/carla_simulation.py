@@ -1,9 +1,6 @@
-from curses import flash
 import numpy as np
-from pathlib import Path
-from carlaSimulation.scenario import Scenario
 from utils.text_operations import createScenarioInstanceXOSC
-from carlaSimulation import runScenarioStack, runSingle
+from carlaSimulation import runner
 from simulation.simulator import SimulationOutput
 import os
 
@@ -20,10 +17,10 @@ class CarlaSimulator(object):
             for ind in listIndividuals:
                 instanceValues = CarlaSimulator.getParameterDict(featureNames,ind)
                 createScenarioInstanceXOSC(xosc,instanceValues,outfolder=SCENARIO_DIR)
-            
-            print("++ running scenarios with carla ++ ")    
-                
-            outs = runScenarioStack.run(scenario_dir=SCENARIO_DIR)
+
+            print("++ running scenarios with carla ++ ")
+
+            outs = runner.run_scenarios(scenario_dir=SCENARIO_DIR)
             results = []
 
             # TODO consider output from carla stored in dictionary or class
@@ -45,12 +42,12 @@ class CarlaSimulator(object):
                 steps =  len(otherParams["samples"])
 
                 #collisions = out[6]
-                
+
                 # if otherParams["collisions"] != []:
                 #     otherParams["isCollision"] = True
                 # else:
                 #     otherParams["isCollision"] = False
-                
+
                 # TODO use real values
 
                 otherParams["isCollision"] = True
@@ -59,7 +56,7 @@ class CarlaSimulator(object):
 
                 simout = SimulationOutput(simTime,egoTrajectory,objectTrajectory,otherParams=otherParams)
                 results.append(simout)
-        except Exception as e: 
+        except Exception as e:
             raise e
         finally:
             print("++ removing temporary scenarios ++")
@@ -67,33 +64,7 @@ class CarlaSimulator(object):
             for f in filelist:
                 os.remove(os.path.join(SCENARIO_DIR, f))
         return results
-    
-    ## Simulates one scenario and returns the output
-    @staticmethod
-    def simulate(individual, featureNames, xosc: str, simTime: float,samplingTime = samplingTime):
-        
-        instanceValues = CarlaSimulator.getParameterDict(featureNames,individual)
-        scenarioInstancePath = createScenarioInstanceXOSC(xosc,instanceValues,outfolder=SCENARIO_DIR)
 
-        out = runSingle.run(scenarioInstancePath)
-        
-        # remove scenarioinstance
-        os.remove(scenarioInstancePath)
-
-        # TODO get real metrics calculation
-        # TODO decide to do evaluation in optimizer oder directly by carla
-        # put here the recording results of carla, or the postprocessed results
-        # use dummy values for now
-
-        otherParams = {}
-        otherParams["isCollision"] = False
- 
-        steps = int(simTime/samplingTime)
-        egoTrajectory = np.ones((4,steps))
-        objectTrajectory = np.ones((4,steps))
-
-        return SimulationOutput(simTime,egoTrajectory,objectTrajectory,otherParams=otherParams)
-    
     @staticmethod
     def getParameterDict(featureNames, values):
         print("provided following values:")
