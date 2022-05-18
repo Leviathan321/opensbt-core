@@ -15,6 +15,11 @@ class RawData:
 
         dist_list = []
         frames_time_list = []
+        ego_location_profile = []
+        ego_speed_profile = []
+        adv_location_profile = []
+        adv_speed_profile = []
+
 
         start_ego, end_ego = log.get_actor_alive_frames(ego_id)
         start_adv, end_adv = log.get_actor_alive_frames(adv_id)
@@ -24,7 +29,7 @@ class RawData:
         
         collisions = log.get_actor_collisions(ego_id)
 
-        simTime = log.get_elapsed_time(log.get_total_frame_count())
+        simTime = log.get_elapsed_time(log.get_total_frame_count()-1)
 
         for i in range(start, end):
             frames_time_list.append(log.get_elapsed_time(i))
@@ -36,37 +41,47 @@ class RawData:
 
             dist = math.sqrt(dist_v.x * dist_v.x + dist_v.y * dist_v.y + dist_v.z * dist_v.z)
             dist_list.append(dist)
-       
+            
+            ego_location_profile.append((ego_location.x, ego_location.y))
+            adv_location_profile.append((adv_location.x,adv_location.y))
+
+           
             ego_speed = log.get_actor_velocity(ego_id,i)
-            adv_speed = log.get_actor_velocity(adv_id,i)
+            adv_speed = log.get_actor_velocity(adv_id,i) 
+            
+            ego_speed_profile.append(ego_speed.length())
+            adv_speed_profile.append(adv_speed.length())
         
         result = {
              "simTime" : 0,
              "times": [],
              "location": { "ego" : [],
-                           "adversary" : []},
+                           "adversary" : []
+                           },
 
              "velocity": { "ego" : [],
                             "adversary" : []
                             },
-             "distance" : [],
              "collisions": [],
              "actors" : {},
-             "other" : {}
+             "otherParams" : {}
         }
 
         result["simTime"] = simTime
         result["times"] = frames_time_list
-        result["location"]["ego"] = ego_location
-        result["location"]["adversary"] = adv_location
-        result["velocity"]["ego"] = ego_speed
-        result["velocity"]["adversary"] = adv_speed
-        result["distance"] = dist_list
+        result["location"]["ego"] = ego_location_profile
+        result["location"]["adversary"] = adv_location_profile
+        result["velocity"]["ego"] = ego_speed_profile
+        result["velocity"]["adversary"] = adv_speed_profile
         result["collisions"] = collisions
         result["actors"] = {ego_id: "ego",
                             adv_id: "adversary"
                           }
+        result["otherParams"]["distance"] = dist_list
 
+
+            
+        print(adv_location_profile)
         # TODO list all actors
         return result 
 

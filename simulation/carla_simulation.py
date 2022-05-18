@@ -25,40 +25,19 @@ class CarlaSimulator(object):
             print("++ running scenarios with carla ++ ")    
                 
             outs = runScenarioStack.run(scenario_dir=SCENARIO_DIR)
+
             results = []
 
-            # TODO consider output from carla stored in dictionary or class
-
             for out in outs:
-                # TODO get real metrics calculation
-                # TODO decide to do evaluation in optimizer oder directly by carla
-                # put here the recording results of carla, or the postprocessed results
-                # use dummy values for now
+                # TODO decide to do evaluation in optimizer oder directly by carla 
+                #print(f"Simulation output: {out}")
 
-                otherParams = {}
-
-                otherParams["samples"] = out[0]
-                otherParams["positionEgo"] = out[1]
-                otherParams["positionAdv"] = out[2]
-                otherParams["velocityEgo"] = out[3]
-                otherParams["velocitiyAdv"] = out[4]
-                otherParams["distanceEgo"] = out[5]
-                otherParams["collisions"] = out[6]
-                
-                steps =  len(otherParams["samples"])
-                
-                if len(otherParams["collisions"]) != 0:
-                    otherParams["isCollision"] = True
-
-                # egoTrajectory = np.ones((4,steps))
-                # objectTrajectory = np.ones((4,steps))
-
-                # simout = SimulationOutput(simTime,egoTrajectory,objectTrajectory,otherParams=otherParams)
-                # results.append(simout)
                 simout = SimulationOutput.from_json(json.dumps(out))
+                if len(simout.collisions) != 0:
+                    simout.otherParams["isCollision"] = True
+                else:
+                    simout.otherParams["isCollision"] = False
                 results.append(simout)
-                print("parsed simout")
-                
         except Exception as e: 
             raise e
         finally:
@@ -80,20 +59,13 @@ class CarlaSimulator(object):
         # remove scenarioinstance
         os.remove(scenarioInstancePath)
 
-        # TODO get real metrics calculation
-        # TODO decide to do evaluation in optimizer oder directly by carla
-        # put here the recording results of carla, or the postprocessed results
-        # use dummy values for now
-
-        otherParams = {}
-        otherParams["isCollision"] = False
- 
-        steps = int(simTime/samplingTime)
-        egoTrajectory = np.ones((4,steps))
-        objectTrajectory = np.ones((4,steps))
-
-        return SimulationOutput(simTime,egoTrajectory,objectTrajectory,otherParams=otherParams)
-    
+        simout = SimulationOutput.from_json(json.dumps(out))
+        if len(simout.collisions) != 0:
+            simout.otherParams["isCollision"] = True
+        else:
+            simout.otherParams["isCollision"] = False
+        return simout
+            
     @staticmethod
     def getParameterDict(featureNames, values):
         print("provided following values:")

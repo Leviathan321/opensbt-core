@@ -14,7 +14,6 @@ class SimulationOutput(object):
     times: List
     location: Dict
     velocity: Dict
-    distance: List
     collisions: List
     actors: Dict
     otherParams:Dict

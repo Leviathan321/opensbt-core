@@ -49,7 +49,6 @@ class DummySimulator(object):
                 "velocity": { "ego" : list(egoTrajectory[3,:]),
                                 "adversary" : list(objectTrajectory[3,:]),
                                 },
-                "distance" : [],
                 "collisions": [],
                 "actors" : {1: "ego",
                                 2: "adversary"

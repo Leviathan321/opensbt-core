@@ -10,7 +10,7 @@ import random
 import logging
 
 def fitness_min_distance_two_actors(simout: SimulationOutput):
-    dist = simout.otherParams["distanceEgo"]
+    dist = simout.otherParams["distance"]
     v = min(dist)
     return v
 
