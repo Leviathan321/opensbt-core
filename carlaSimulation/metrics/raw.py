@@ -1,4 +1,5 @@
 import math
+from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
 from simulation.simulator import SimulationOutput
 
 from srunner.metrics.tools.metrics_log import MetricsLog
@@ -79,11 +80,5 @@ class RawData:
                           }
         result["otherParams"]["distance"] = dist_list
 
-
-            
-        print(adv_location_profile)
         # TODO list all actors
         return result 
-
-        #(frames_time_list, ego_location, adv_location, adv_speed, ego_speed, dist_list, collisions)
-    
