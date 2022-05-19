@@ -25,8 +25,6 @@ class Scenario:
             {}
         )
 
-        agent = controller("")
-
         CarlaDataProvider.set_traffic_manager_port(int(8000))
 
         vehicles = []
@@ -40,6 +38,8 @@ class Scenario:
                     actor_category=vehicle.category
                 )
             )
+
+        agent = controller(True)
 
         scenario = OpenScenario(
             world,

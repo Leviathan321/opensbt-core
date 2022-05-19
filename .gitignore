@@ -1,6 +1,13 @@
 # IDE
 .vscode/
+*.code-workspace
 
 # Python
 env/
 **/__pycache__/
+
+# CARLA
+cache/
+
+#Logging
+log.txt
