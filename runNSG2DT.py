@@ -20,7 +20,7 @@ samplingTime = 1
 def setExp1():
     # (x,y, orientation, velocity) for both actors -> 8 genoms
     # if  lower and upper boundary are equal mutation throws error
-    global xosc,var_min,var_max,featureNames,simulateFcn
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcn
     xosc = None
     var_min = [ 0, 0, 0,1, 100, 100, 0,5]
     var_max = [ 100, 200, 200, 50, 110, 200,20,10]
@@ -35,21 +35,21 @@ def setExp1():
                 "orientationObj",
                 "velocityObj"
     ]
-
-    simulateFcn = DummySimulator.simulate
+    fitnessFcn = fitness.fitness_basic_two_actors
+    simulateFcn = DummySimulator.simulateBatch
 
 ## EXAMPLE CARLA SIMULATOR
 def setExp2():
-    global xosc,var_min,var_max,featureNames,simulateFcn
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcn
     xosc = os.getcwd() + "/scenarios/FollowLeadingVehicle_generic.xosc"
     var_min = [0]
     var_max = [10]
     featureNames = ["leadingSpeed"]
-
+    fitnessFcn = fitness.fitness_min_distance_two_actors
     simulateFcn = CarlaSimulator.simulateBatch
 
 def setExp3():
-    global xosc,var_min,var_max,featureNames,simulateFcn
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcn
     xosc = os.getcwd() + "/scenarios/2-lanechange-ego-left_carla_1.xosc"
     featureNames = ["dummy"]
     var_min = [0]
@@ -58,13 +58,10 @@ def setExp3():
     simulateFcn = CarlaSimulator.simulate
     
 def setExp4():
-    global xosc,var_min,var_max,featureNames,simulateFcn
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitness
     pass
     # TODO
     #simulateFcn = PrescanSimulator.simulate
-
-fitnessFcn = fitness.fitness_min_distance_two_actors
-
 
 def criticalFcn(fit,simout):
     if((simout.otherParams['isCollision'] == True) or (fit[0] > 2 and fit[0] < 7  or  fit[0] < 0.9)):
@@ -73,13 +70,15 @@ def criticalFcn(fit,simout):
         return False
         
 nFitnessFcts = 1
-initialPopulationSize = 1
-nGenerations = 10
+initialPopulationSize = 4
+nGenerations = 4
 
 ###### set experiment
 
-setExp1()
-#setExp2()
+#setExp1()
+setExp2()
+#setExp3()
+
 #######
 
 if __name__ == "__main__":
@@ -93,8 +92,8 @@ if __name__ == "__main__":
                     simulateFcn,
                     featureNames,
                     xosc,
-                    initial_pop=[]
-                    )
+                    initial_pop=[],
+                    criticalDict={})
 
     print("# individuals: "+ str(len(pop)))
     print("# most critical:" + str([str(entry) for entry in zip(featureNames,pop[0])]))

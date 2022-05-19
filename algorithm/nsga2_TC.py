@@ -49,11 +49,10 @@ def nsga2_TC(initialPopulationSize,
                     xosc,
                     initial_pop=[],
                     simTime=simTime,
-                    samplingTime=samplingTime):   
+                    samplingTime=samplingTime,
+                    criticalDict={}):   
                     
     assert np.less_equal(var_min,var_max).all()
-
-    criticalDict = {}
 
     ## HACK Use an extra function to execute scenarios in batch; in future use original evaluation function from deap 
     ## with an optimized threaded map processing function
