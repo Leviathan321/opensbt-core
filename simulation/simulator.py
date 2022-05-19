@@ -8,6 +8,30 @@ import json
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
+'''
+    Represent data output by a simulator
+
+    Example json representation of a SimulationOutput instance:
+
+    {
+        "simTime" : 3,
+        "times": [1.0,2.0,3.0],
+        "location": { "ego" : [(1,1),(2,2),(3,3)],
+                    "adversary" : [(4,1),(4,2),(4,3)},
+
+        "velocity": { "ego" : [0.5,0.5,0.5],
+                        "adversary" : [0.9,0.9,0.9],
+                        },
+        "collisions": [],
+        "actors" : {1: "ego",
+                        2: "adversary"
+                    },
+        "otherParams" : {
+            "isCollision": True
+        }
+    }
+        
+'''
 @dataclass
 class SimulationOutput(object):
     simTime: float

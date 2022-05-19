@@ -81,6 +81,5 @@ class DummySimulator(object):
             otherParams['isCollision'] = False
         
         result["otherParams"] = otherParams
-
-
+        
         return SimulationOutput.from_json(json.dumps(result))

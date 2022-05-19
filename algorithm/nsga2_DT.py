@@ -27,7 +27,7 @@ def nsga2_DT(initialPopulationSize,
                     xosc,
                     initial_pop=[]):   
 
-    pop, critical, stats = nsga2_TC(initialPopulationSize, 
+    pop, criticalDict, stats = nsga2_TC(initialPopulationSize, 
                     nGenerations,
                     var_min, 
                     var_max, 
@@ -41,7 +41,7 @@ def nsga2_DT(initialPopulationSize,
     critValues = []
 
     for ind in pop:
-        critValues.append(critical[str(ind)])
+        critValues.append(criticalDict[str(ind)])
 
     pop_regions_ind, newBounds = regions.getCriticalRegions(pop,critValues, var_min=var_min, var_max=var_max)
 
@@ -84,11 +84,11 @@ def nsga2_DT(initialPopulationSize,
 
             # TODO
             # the crititcalDict needs to be passed to TC
-            critical.update(critical_bound)
+            criticalDict.update(critical_bound)
         
             all_pops.sort(key=lambda x: x.fitness.values)
 
-        return all_pops,critical
+        return all_pops,criticalDict
 
 
 
