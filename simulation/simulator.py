@@ -27,7 +27,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
                         2: "adversary"
                     },
         "otherParams" : {
-            "isCollision": True
+            "isCollision": False
         }
     }
         
