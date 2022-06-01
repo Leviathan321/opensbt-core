@@ -1,6 +1,7 @@
 #from simulation import prescan_simulation
 from datetime import datetime
 from pickle import TRUE
+from pathlib import Path
 
 import random
 import matplotlib.pyplot as plt
@@ -22,7 +23,7 @@ from simulation.simulator import SimulationOutput
 
 from visualization import plotter
 from random import randrange
-
+import os
 ## simulation parameters
 simTime=10
 samplingTime=60
@@ -33,7 +34,8 @@ initialPopulationSize = 1 # should be % 4 == 0, when using tools.selTournamentDC
 crossoverProbability = 0.6
 mutationRate = 0.1
 
-SUPPRESS_PLT = True
+SUPPRESS_PLT = False
+N_PLOT = 3  # select how many scenarios instances from the best to plot
 
 EVALUATE_IN_BATCH = True
 
@@ -49,22 +51,24 @@ def nsga2_TC(initialPopulationSize,
                     xosc,
                     initial_pop=[],
                     simTime=simTime,
-                    samplingTime=samplingTime,
-                    criticalDict={}):   
+                    samplingTime=samplingTime):   
                     
     assert np.less_equal(var_min,var_max).all()
+
+    criticalDict = {}
 
     ## HACK Use an extra function to execute scenarios in batch; in future use original evaluation function from deap 
     ## with an optimized threaded map processing function
     ## fitness fcts and critical fct
+
+
     def evaluateFcnBatch(individuals):
         simouts = simulateFcn(individuals,featureNames, xosc, simTime=simTime,samplingTime=samplingTime)
         fits = []
         for individual,simout in zip(individuals,simouts):
             fit = fitnessFcn(simout)
-            #fit = fitness.fitness_min_distance_two_actors(simout)
 
-            # dummy, add criticality information in evaluation function
+            #fit = fitness.fitness_min_distance_two_actors(simout)
             time = int(round(datetime.now().timestamp()))
             random.seed(time)
 
@@ -72,6 +76,11 @@ def nsga2_TC(initialPopulationSize,
                 criticalDict[str(individual)] = isCritical([fit],simout)
 
             value = fit,
+            
+            # if not SUPPRESS_PLT:
+            #     savePath = str(os.getcwd()) + "/results/simoutput/" + "test" + "_" + str(individual) + "_fit_" + str(value) + ".png"
+            #     plotter.plotOutput(simout=simout,features=featureNames,featureValues=individual,savePath=savePath)
+
             fits.append(value)        
         
         return fits
@@ -178,7 +187,7 @@ def nsga2_TC(initialPopulationSize,
         # Vary the population
         # offspring = tools.selNSGA2(pop,int(len(pop)/2))
         # "Each individual from the input list won’t be selected more than twice using tournament selection."
-        offspring = tools.selTournamentDCD(pop, len(pop)-2)
+        offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [toolbox.clone(ind) for ind in offspring]
 
         for ind1, ind2 in zip(offspring[::2], offspring[1::2]):
@@ -237,8 +246,18 @@ def nsga2_TC(initialPopulationSize,
     print("# critical individuals: "+ str(nCritical))
     print("# not critical individuals: "+ str(len(pop) - nCritical))
 
-    
     if not SUPPRESS_PLT:
-        plotter.plotScenario(simulateFcn,pop[0],simTime=simTime,samplingTime=samplingTime)
+        for i in range(0,N_PLOT):
+            prunedIndividuum = [ "{:.3f}".format(chrom) for chrom in pop[i]]
+            prunedFitness =  ["{:.3f}".format(fit) for fit in pop[i].fitness.values]
+
+            directory = str(os.getcwd()) + "/results/simoutput/" + Path(xosc).stem 
+
+            if not os.path.isdir(directory):
+                os.mkdir(directory)
+
+            savePath = directory + os.sep + "loc_" + str(prunedIndividuum) + "_fit_" + str(prunedFitness)
+   
+            plotter.plotScenario(simulateFcn, featureNames=featureNames,xosc = xosc, candidates = [pop[i]], simTime=simTime,samplingTime=samplingTime,savePath=savePath)
 
     return pop, criticalDict, logbook

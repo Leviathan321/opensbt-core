@@ -1,5 +1,4 @@
 
-from logging import critical
 from algorithm.nsga2_TC import nsga2_TC
 import algorithm.regions as regions
 
@@ -26,10 +25,9 @@ def nsga2_DT(initialPopulationSize,
                     simulateFcn,
                     featureNames,
                     xosc,
-                    criticalDict,
-                    initial_pop=[]):
+                    initial_pop=[]):   
 
-    pop, critical, stats = nsga2_TC(initialPopulationSize, 
+    pop, criticalDict, stats = nsga2_TC(initialPopulationSize, 
                     nGenerations,
                     var_min, 
                     var_max, 
@@ -39,17 +37,13 @@ def nsga2_DT(initialPopulationSize,
                     simulateFcn,
                     featureNames,
                     xosc,
-                    initial_pop,
-                    criticalDict=criticalDict)
+                    initial_pop)
     critValues = []
 
     for ind in pop:
         critValues.append(criticalDict[str(ind)])
-        
+
     pop_regions_ind, newBounds = regions.getCriticalRegions(pop,critValues, var_min=var_min, var_max=var_max)
-    
-    all_pops = []
-    all_pops.extend(pop)
 
     if len(newBounds) > 0:
         pop_regions = []
@@ -61,6 +55,7 @@ def nsga2_DT(initialPopulationSize,
         
         #print(pop_regions)
         print("#critical regions found:" + str(len(newBounds)))
+        all_pops = []
 
         for i in range(0,len(newBounds)):
             bound = newBounds[i]
@@ -83,15 +78,17 @@ def nsga2_DT(initialPopulationSize,
                     xosc=xosc,
                     initial_pop=pop_regions[i], 
                     var_min=bound[0], 
-                    var_max=bound[1],
-                    criticalDict=criticalDict)
+                    var_max=bound[1])
 
             all_pops.extend(pop_run_bi)
-            critical.update(critical_bound)
+
+            # TODO
+            # the crititcalDict needs to be passed to TC
+            criticalDict.update(critical_bound)
         
             all_pops.sort(key=lambda x: x.fitness.values)
 
-    return all_pops,criticalDict
+        return all_pops,criticalDict
 
 
 
