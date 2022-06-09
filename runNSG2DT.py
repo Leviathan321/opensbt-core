@@ -43,7 +43,7 @@ def setExp1():
                 "velocityObj"
     ]
     fitnessFcn = fitness.fitness_basic_two_actors
-    simulateFcn = DummySimulator.simulate
+    simulateFcn = DummySimulator.simulateBatch
 
 ## EXAMPLE CARLA SIMULATOR
 def setExp2():
@@ -52,14 +52,12 @@ def setExp2():
     var_min = [0]
     var_max = [10]
     featureNames = ["leadingSpeed"]
-    #fitnessFcn = fitness.fitness_min_distance_two_actors
-    fitnessFcn = fitness.fitness_random
+    fitnessFcn = fitness.fitness_min_distance_two_actors
     simulateFcn = CarlaSimulator.simulateBatch
 
 def setExp3():
-    # example to test integration (provided scenario is already an instance)
     global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcn
-    xosc = os.getcwd() + "/scenarios/test_1_short.xosc"
+    xosc = os.getcwd() + "/scenarios/2-lanechange-ego-left_carla_1.xosc"
     featureNames = ["dummy"]
     var_min = [0]
     var_max = [10]
@@ -67,34 +65,12 @@ def setExp3():
     simulateFcn = CarlaSimulator.simulateBatch
     
 def setExp4():
-    global xosc,var_min,var_max,featureNames,simulateFcn
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitness
     pass
     # TODO
     #simulateFcn = PrescanSimulator.simulate
 
-
-def setExp5():
-    # (x,y, orientation, velocity) for both actors -> 8 genoms
-    # if  lower and upper boundary are equal mutation throws error
-    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcn
-    xosc = None
-    var_min = [ 0, 0, 0,1, 100, 100, 0,5]
-    var_max = [ 100, 200, 200, 50, 110, 200,20,10]
-
-    featureNames = [
-                "egoX",
-                "egoY",
-                "orientationEgo",
-                "velocityEgo",
-                "objX",
-                "objY",
-                "orientationObj",
-                "velocityObj"
-    ]
-    fitnessFcn = fitness.fitness_random
-    simulateFcn = DummySimulator.simulateBatch
-
-def criticalFcn(fit,simout: SimulationOutput):
+def criticalFcn(fit,simout):
     if((simout.otherParams['isCollision'] == True) or (fit[0] > 2 and fit[0] < 7  or  fit[0] < 0.9)):
         return True
     else:
@@ -124,8 +100,8 @@ if __name__ == "__main__":
                     simulateFcn,
                     featureNames,
                     xosc,
-                    initial_pop=[]
-                    )
+                    initial_pop=[],
+                    criticalDict={})
 
     print("# individuals: "+ str(len(pop)))
     print("# most critical:" + str([str(entry) for entry in zip(featureNames,pop[0])]))

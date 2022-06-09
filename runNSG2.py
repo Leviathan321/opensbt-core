@@ -100,12 +100,13 @@ def criticalFcn(fit,simout):
 criticalFcn = criticalFcn
 nFitnessFcts = 1
 initialPopulationSize = 4
-nGenerations = 2
+nGenerations = 4
+
 
 ###### set experiment
 
-#setExp1()
-setExp2()
+setExp1()
+#setExp2()
 #setExp3()
 
 #######
