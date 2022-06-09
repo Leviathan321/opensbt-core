@@ -51,6 +51,6 @@ class CarlaSimulator(object):
         instanceValues = {}
         i = 0
         for name in featureNames:
-            instanceValues[name] = "{:.3f}".format(values[i]) # HACK temporary pruning digits
+            instanceValues[name] = "{:.3f}".format(values[i]) # HACK temporary pruning digits TODO prune digits after individuum generation
             i = i+1
         return instanceValues

@@ -44,14 +44,14 @@ class DummySimulator(object):
                 "simTime" : 0,
                 "times": list(egoTrajectory[0,:]),
                 "location": { "ego" : ego_location,
-                            "adversary" : obj_location},
+                            "other" : obj_location},
 
                 "velocity": { "ego" : list(egoTrajectory[3,:]),
-                                "adversary" : list(objectTrajectory[3,:]),
+                                "other" : list(objectTrajectory[3,:]),
                                 },
                 "collisions": [],
                 "actors" : {1: "ego",
-                                2: "adversary"
+                                2: "other"
                             },
                 "otherParams" : {}
         }
