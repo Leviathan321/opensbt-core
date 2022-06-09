@@ -49,8 +49,8 @@ def setExp2():
     var_min = [0]
     var_max = [10]
     featureNames = ["leadingSpeed"]
-    #fitnessFcn = fitness.fitness_min_distance_two_actors
-    fitnessFcn = fitness.fitness_random
+    fitnessFcn = fitness.fitness_min_distance_two_actors
+    #fitnessFcn = fitness.fitness_random
     simulateFcn = CarlaSimulator.simulateBatch
 
 def setExp3():

@@ -4,6 +4,7 @@ from simulation.simulator import SimulationOutput
 from dummySimulation.dynamics import basic_dynamics
 from utils import geometric
 import numpy as np
+import json
 
 class DummySimulator(object):
     samplingTime = 1
@@ -35,7 +36,27 @@ class DummySimulator(object):
 
         colpoint = geometric.intersection(list(lineEgoPoints),list(linePedPoints))
 
-        otherparams = {}
+        ego_location = [pos for pos in zip(list(egoTrajectory[1,:]),list(egoTrajectory[2,:])) ]
+        
+        obj_location = [pos for pos in zip(list(objectTrajectory[1,:]),list(objectTrajectory[2,:])) ]
+
+        result = {
+                "simTime" : 0,
+                "times": list(egoTrajectory[0,:]),
+                "location": { "ego" : ego_location,
+                            "adversary" : obj_location},
+
+                "velocity": { "ego" : list(egoTrajectory[3,:]),
+                                "adversary" : list(objectTrajectory[3,:]),
+                                },
+                "collisions": [],
+                "actors" : {1: "ego",
+                                2: "adversary"
+                            },
+                "otherParams" : {}
+        }
+        
+        otherParams = {}
 
         if colpoint!=[]:          
             dist_ego_colpoint = geometric.dist(colpoint, list(egoTrajectory[1:3,0]))
@@ -48,19 +69,17 @@ class DummySimulator(object):
             # the same time (with some tolerance)
             
             t_tolerance = 1; #time tolerance for missed collision  
-
-            otherparams = {}
             if  (t_col_ego - t_col_ped) < t_tolerance:
-                otherparams['isCollision'] = True
+                otherParams['isCollision'] = True
             else:
-                otherparams['isCollision'] = False
+                otherParams['isCollision'] = False
 
-            # print(" *** GENERATED OUTPUT ***")
-            # # print("egoTrajectory: "+ str(egoTrajectory))
-            # # print("objectTrajectory: "+ str(objectTrajectory))
-            # print("otherparams: "+ str(otherparams))
+            result["collisions"] = [[2]]
+            result["otherParams"] = otherParams
 
         else:
-            otherparams['isCollision'] = False
-
-        return SimulationOutput(simTime,egoTrajectory=egoTrajectory,objectTrajectory=objectTrajectory, otherParams=otherparams)
+            otherParams['isCollision'] = False
+        
+        result["otherParams"] = otherParams
+        
+        return SimulationOutput.from_json(json.dumps(result))

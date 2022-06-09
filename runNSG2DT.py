@@ -1,8 +1,16 @@
+from cv2 import SimpleBlobDetector
 from algorithm.nsga2_DT import *
 from fitness_functions import fitness
 from simulation.carla_simulation import CarlaSimulator
 from simulation.dummy_simulation import DummySimulator
 import os
+import logging
+
+from simulation.simulator import SimulationOutput
+
+os.chmod(os.getcwd(),0o777)
+logging.basicConfig(filename="log.txt",filemode='w', level=logging.ERROR)
+
 ############
 ## Problem definition
 
@@ -10,7 +18,6 @@ xosc = None
 var_min = None
 var_max = None
 featureNames = None
-numberDimensions = 1
 simulateFcn = None
 ## scenario parameters
 simTime=10
@@ -55,7 +62,7 @@ def setExp3():
     var_min = [0]
     var_max = [10]
     fitnessFcn = fitness.fitness_min_distance_two_actors
-    simulateFcn = CarlaSimulator.simulate
+    simulateFcn = CarlaSimulator.simulateBatch
     
 def setExp4():
     global xosc,var_min,var_max,featureNames,simulateFcn,fitness
@@ -69,14 +76,15 @@ def criticalFcn(fit,simout):
     else:
         return False
         
+criticalFcn = criticalFcn
 nFitnessFcts = 1
 initialPopulationSize = 4
-nGenerations = 4
+nGenerations = 1
 
 ###### set experiment
 
-#setExp1()
-setExp2()
+setExp1()
+#setExp2()
 #setExp3()
 
 #######

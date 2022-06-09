@@ -57,6 +57,7 @@ def nsga2_TC(initialPopulationSize,
     ## HACK Use an extra function to execute scenarios in batch; in future use original evaluation function from deap 
     ## with an optimized threaded map processing function
     ## fitness fcts and critical fct
+
     def evaluateFcnBatch(individuals):
         simouts = simulateFcn(individuals,featureNames, xosc, simTime=simTime,samplingTime=samplingTime)
         fits = []

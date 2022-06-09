@@ -29,7 +29,7 @@ def nsga2_DT(initialPopulationSize,
                     criticalDict,
                     initial_pop=[]):
 
-    pop, critical, stats = nsga2_TC(initialPopulationSize, 
+    pop, criticalDict, stats = nsga2_TC(initialPopulationSize, 
                     nGenerations,
                     var_min, 
                     var_max, 
@@ -87,7 +87,10 @@ def nsga2_DT(initialPopulationSize,
                     criticalDict=criticalDict)
 
             all_pops.extend(pop_run_bi)
-            critical.update(critical_bound)
+
+            # TODO
+            # the crititcalDict needs to be passed to TC
+            criticalDict.update(critical_bound)
         
             all_pops.sort(key=lambda x: x.fitness.values)
 
