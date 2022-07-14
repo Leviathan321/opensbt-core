@@ -9,50 +9,38 @@ It supports pure search with NSGA2 as well additionally clustering based search 
 
 
 The tool can be used together with Prescan Simulator, but we are also working on the integration of the Carla Simulator. 
-Since this is not yet mature, we describe only the integration with Prescan.
-
 
 ### Preliminaries
 
 
-The search algorithm requires that Python (>= 3.7), Matlab, and Prescan is installed. The matlab engine needs to be exported to python ([s. here](https://de.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html)).
-
-Compatibility has been tested with Prescan 2019.b and MATLAB R2019.b (Versions should match.)
+The search algorithm requires that Python (>= 3.7), and Carla is installed. 
 
 Install dependencies by executing:
-
 
 ```
 pip install -r requirements.txt
 ```
 
-### Search
-
-Start MATLAB using the Prescan Process Manager and share the engine by executing in the terminal:
-
-```
-matlab.engine.shareEngine
-```
-
 ### Example
 
-To run search with an example experiment
-make sure **PrescanHeedsExperiment** is downloaded in a folder **experiments** that is placed next to this.
-
-Run the following to execute search:
+Run the following to execute search with uniform motion of an ego and an other actor:
 
 ```
 py run.py -e 1
 ```
-### New Experiment
 
-Make sure to have a file named **UpdateModel.m** in the experiments folder that reads from a json file **input.json** parameter values and sets the values in the experiment model.
-Consider as an example experiment **experiments/PrescanHeedsExperiment**
-
-Run the tool by providing the path to the experiment file, the upper and lower bounds, as well the names of the parameters to vary (should match with the ones set by **UpdateModel.m**):
+To run search with an example Carla scenario run:
 
 ```
-py run.py -f <experiment.pb> -min 1 1 1 -max 10 20 10 -m "par1 "par2" "par3"
+py run.py -e 2
+```
+
+### New Scenario
+
+Execute the followoring to run search for a scenario provided in OpenSCENARIO v1 format:
+
+```
+py run.py -f <scenario.xosc> -min 1 1 1 -max 10 20 10 -m "par1 "par2" "par3"
 ```
 
 ### Optional Parameters
@@ -78,12 +66,3 @@ All flags that can be set are (get options by -h flag):
   -m FEATURE_NAMES [FEATURE_NAMES ...]
                         The names of the features to modify.
 ```
-
-
-## Limitations
-
-Since OpenSCENARIO support of Prescan is not mature, Prescan experiment files have to be used.
-
-## Authors
-
-Lev Sorokin (sorokin@fortiss.org)
