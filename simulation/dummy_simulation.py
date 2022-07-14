@@ -7,7 +7,7 @@ import numpy as np
 import json
 
 class DummySimulator(object):
-    samplingTime = 1
+    samplingTime = 0.5
 
     ## Simulates a set of scenarios and returns the output
     @staticmethod
@@ -25,11 +25,11 @@ class DummySimulator(object):
         # print("simTime: " + str(simTime))
         # print("samplingTime: " +  str(samplingTime))
 
-        egoInitialVelocity = vars[3]
-        pedInitialVelocity = vars[7]
+        egoInitialVelocity = vars[1]
+        pedInitialVelocity = vars[3]
 
-        egoTrajectory = basic_dynamics.planMotion(vars[0:2], vars[2], vars[3],simTime,samplingTime)
-        objectTrajectory = basic_dynamics.planMotion(vars[4:6], vars[6], vars[7],simTime,samplingTime)
+        egoTrajectory = basic_dynamics.planMotion([0,0], vars[0], vars[1],simTime,samplingTime)
+        objectTrajectory = basic_dynamics.planMotion([100,100], vars[2], vars[3],simTime,samplingTime)
 
         lineEgoPoints = (egoTrajectory[1:3,0],egoTrajectory[1:3,1])
         linePedPoints = (objectTrajectory[1:3,0],objectTrajectory[1:3,1])

@@ -5,9 +5,18 @@
 # Python
 env/
 **/__pycache__/
+build/
+**/*.pyc
+dist
 
 # CARLA
 cache/
 
-#Logging
+# Logging
 log.txt
+
+# Results
+results/simoutput
+
+# Egg
+test_case_generation.egg-info

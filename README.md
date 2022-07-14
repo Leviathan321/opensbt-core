@@ -1,54 +1,89 @@
 # Search-based Test Case Generation
-## Optimizer
+## Intro
 
 
-Following test case generation algorithms are implemented:
+The tool implements search-based critical test case generation based on this [approach](https://orbilu.uni.lu/bitstream/10993/33706/1/ICSE-Main-24.pdf).
+It supports pure search with NSGA2 as well additionally clustering based search with DT.
 
-- NSGAII (runNSG2.py)
+## Usage
 
-- NSGAII with decision tree; only one iteration of critical region search (runNSG2DT.py)
 
-Following information needs to be passed to the algorithm:
+The tool can be used together with Prescan Simulator, but we are also working on the integration of the Carla Simulator. 
+Since this is not yet mature, we describe only the integration with Prescan.
 
-- fitness functions
-- crtiticality functions
-- bounds of variables to be optimized
-- simulator (currently DummySimulator)
-- xosc file (if OpenSCENARIO) is supported
-- names of the features to be explored
 
-Optional:
+### Preliminaries
 
-- optimizer specific parameters
+
+The search algorithm requires that Python (>= 3.7), Matlab, and Prescan is installed. The matlab engine needs to be exported to python ([s. here](https://de.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html)).
+
+Compatibility has been tested with Prescan 2019.b and MATLAB R2019.b (Versions should match.)
+
+Install dependencies by executing:
+
+
+```
+pip install -r requirements.txt
+```
+
+### Search
+
+Start MATLAB using the Prescan Process Manager and share the engine by executing in the terminal:
+
+```
+matlab.engine.shareEngine
+```
 
 ### Example
 
-a) 
+To run search with an example experiment
+make sure **PrescanHeedsExperiment** is downloaded in a folder **experiments** that is placed next to this.
 
-To run a scenario where ego and other vehicle are moving with constant speed linearly,
-uncomment *setExp1* in runNSG2.py.
-
-The fitness function is defined by the smallest distance between ego and other vehicle.
-The criticality function is defined arbitrarily to test the approach:
-
-Execute
+Run the following to execute search:
 
 ```
-py runNSG2.py
+py run.py -e 1
+```
+### New Experiment
+
+Make sure to have a file named **UpdateModel.m** in the experiments folder that reads from a json file **input.json** parameter values and sets the values in the experiment model.
+Consider as an example experiment **experiments/PrescanHeedsExperiment**
+
+Run the tool by providing the path to the experiment file, the upper and lower bounds, as well the names of the parameters to vary (should match with the ones set by **UpdateModel.m**):
+
+```
+py run.py -f <experiment.pb> -min 1 1 1 -max 10 20 10 -m "par1 "par2" "par3"
 ```
 
-b)
+### Optional Parameters
 
-To run a carla scenario
-uncomment *setExp2* in runNSG2.py.
-
-Execute
+All flags that can be set are (get options by -h flag):
 
 ```
-py runNSG2.py
+  -e EXPNUMBER          Hardcoded example scenario to use (possible 1, 9).
+  -i NITERATIONS        Number iterations to perform.
+  -n SIZEPOPULATION     The size of the initial population of scenario
+                        candidates.
+  -a ALGORITHM          The algorithm to use for search, 0 for nsga2, 1 for
+                        nsga2dt.
+  -t TIMESEARCH         The time to use for search with nsga2-DT (actual
+                        search time can be above the threshold, since
+                        algorithm might perform nsga2 iterations, when time
+                        limit is already reached.
+  -f XOSC               The path to the .pb file of the Prescan Experiment.
+  -min VAR_MIN [VAR_MIN ...]
+                        The upper bound of each parameter.
+  -max VAR_MAX [VAR_MAX ...]
+                        The lower bound of each parameter.
+  -m FEATURE_NAMES [FEATURE_NAMES ...]
+                        The names of the features to modify.
 ```
 
 
-### TODO
+## Limitations
 
-- [ ] Create an interface for calling an optimizer.
+Since OpenSCENARIO support of Prescan is not mature, Prescan experiment files have to be used.
+
+## Authors
+
+Lev Sorokin (sorokin@fortiss.org)

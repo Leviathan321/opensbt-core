@@ -6,12 +6,25 @@ import numpy as np
 import copy
 import pydotplus  
 import os
+import csv
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DEBUG = False
+DEBUG = True
+PLOT_RESULTS = True
 
-def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
+MIN_SAMPLES_SPLIT = 200
+CRITICALITY_THRESHOLD = 0.9
+DELTA = 0.0
+
+def getCriticalRegions(all_solutions, all_critical_dict, var_min, var_max,  name, feature_names, outputPath=None, criticality_probability = CRITICALITY_THRESHOLD, min_samples_split=MIN_SAMPLES_SPLIT):
+
+        X = all_solutions
+        y = list(all_critical_dict.values())
+
+        assert np.array([str(all_solutions[i]) == list(all_critical_dict.keys())[i]  for i in range(len(all_solutions))]).all()
+        assert( len(all_solutions) == len(y))
+
         if all(elem == 1 for elem in y):
             print("all candidates are critical")
             bounds = [(var_min,var_max)]
@@ -22,13 +35,11 @@ def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
             bounds = []
             pop_regions = []           
             return pop_regions, bounds
-            
-        feature_names= ["x_ego", "y_ego", "angle_ego","v_ego","x_ped", "y_ped", "angle_ped","v_ped"]
 
         CP = criticality_probability
         pop_regions = 0
 
-        clf = tree.DecisionTreeClassifier(min_samples_split=20)
+        clf = tree.DecisionTreeClassifier(min_samples_split=min_samples_split, criterion="entropy", max_depth=10)
         clf = clf.fit(X, y)
 
         tree.plot_tree(clf)
@@ -36,14 +47,7 @@ def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
         r = tree.export_text(clf)
 
         if DEBUG:
-            dot_data = tree.export_graphviz(clf, out_file=None,filled=True, rounded=True,  # leaves_parallel=True, 
-                                special_characters=True,feature_names=feature_names)  
-            graph = pydotplus.graph_from_dot_data(dot_data)  
-            #date = int(round(datetime.now().timestamp()))
-            date =  datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-            graph.write_pdf(CURRENT_DIR  + os.path.sep +  "results" + os.path.sep + "crit_regions_{}.pdf".format(date))
-
-        print(r)
+            print(r)
 
         n_nodes = clf.tree_.node_count
         children_left = clf.tree_.children_left
@@ -60,7 +64,7 @@ def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
             print("feature: "+ str(feature))
             print("threshold: "+ str(threshold))
             print("n_node_samples: "+ str(n_node_samples))
-            #print("values: " + str(values))
+            print("values: " + str(values))
 
         node_depth = np.zeros(shape=n_nodes, dtype=np.int64)
         is_leaves = np.zeros(shape=n_nodes, dtype=bool)
@@ -85,47 +89,20 @@ def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
 
         indCrit = 1
         indNotCri = 0
+
         for i in range(0,n_nodes):
-            # print(node.get_label())
-            # print(node.get_name())
-            if  is_leaves[i]:
-                valuesNodeI = values[i][0]
-                leafsLib[i] = {"critical" : 0, "notCritical" : 0}
-                
-                # issue: if all are critical/non critical only one numbre is stored
-                if (len(valuesNodeI) > 1):
-                    leafsLib[i]["critical"]= valuesNodeI[indCrit]
-                    leafsLib[i]["notCritical"] = valuesNodeI[indNotCri]
-                else:
-                    leafsLib[i]["critical"]= valuesNodeI[0]
-                leafsLib[i]["notCritical"] = valuesNodeI[indNotCri]
-                if(leafsLib[i]["critical"]/(leafsLib[i]["notCritical"] +leafsLib[i]["critical"]) > CP):
+            if is_leaves[i]:
+                values_node_i =  values[i][0]
+                if values_node_i[indCrit] / ( values_node_i[indNotCri] +  values_node_i[indCrit]) > CP:
                     criticalReg.append(i)
 
-        def getParentsTree(ch_left, ch_right):
-            result = {}
-            for i in range(0,len(ch_left)):
-                if(ch_left[i]!=-1):
-                    result[ch_left[i]] = i
+        if DEBUG:
+            print("Critical regsions: " + str(criticalReg))
 
-            for i in range(0,len(ch_right)):
-                if(ch_right[i]!=-1):
-                    result[ch_right[i]] = i
-            return result
+        classResults = clf.apply(X)
 
-        parents = getParentsTree(children_left,children_right)
-
-        def getPredecessors(node_id):
-            result = []
-            node = node_id
-            while node != 0:
-                result.append(parents[node])
-                node = parents[node]
-            return result
-
-        def ind_in_node(node_id, pop):
+        def ind_in_node(node_id):
                 inds = []
-                classResults = clf.apply(pop)
                 for i in range(0,len(classResults)):
                     if classResults[i] == node_id:
                         inds.append(i)
@@ -133,39 +110,129 @@ def getCriticalRegions(X,y, var_min, var_max, criticality_probability = 0.6):
 
         # get features from critical regions to explore regions
         bounds= []
-        delta = 0.001
+        delta = DELTA
         pop_regions = []
 
+        node_indicator = clf.decision_path(X)
+        leave_id = classResults
+
         for i in criticalReg:
-            individuals_in_region = ind_in_node(i,pop=X)
+            individuals_in_region = ind_in_node(i)
+            # print(len(individuals_in_region))
             pop_regions.append(individuals_in_region)
 
             #sample in class i 
             upperReg = copy.deepcopy(var_max)
             lowerReg = copy.deepcopy(var_min)
+            
+            sample_id = individuals_in_region[0]
 
-            for j in getPredecessors(i):
-                if(j in children_left and j == 0 ):
-                    upperReg[feature[j]] = threshold[j]
-                    #print("at: "+ str(j))
+            node_index = node_indicator.indices[node_indicator.indptr[sample_id]:
+                                            node_indicator.indptr[sample_id + 1]]
 
-                    #print("feature {} <= {}".format(feature[j],threshold[j]))
-                else:
-                    lowerReg[feature[j]] = threshold[j] + delta
-                    #print("at: "+ str(j))
-                    #print("feature {} > {}".format(feature[j],threshold[j]))
+            print("node_index: " + str(node_index))
+            print("ind: " + str(X[sample_id]))
 
-            # validate
-            assert np.less_equal(np.array(lowerReg)[0] , np.array(upperReg)[0])
+            for node_id in node_index:
+                if leave_id[sample_id] == node_id:  # <-- changed != to ==
+                    #continue # <-- comment out
+                    print("leaf node {} reached, no decision here".format(leave_id[sample_id])) # <--
+                else: # < -- added else to iterate through decision nodes
+                    if (X[sample_id][feature[node_id]] <= threshold[node_id]):
+                        threshold_sign = "<=" 
+                        j = node_id
+                        # set upper bound
+                        # in a DT nodes might have same threshold features
+                        if threshold[j] < upperReg[feature[j]]:  
+                            upperReg[feature[j]] = threshold[j]
+                        if DEBUG:
+                            print("at left: "+ str(j))
+                            print("feature {} <= {}".format(feature[j],threshold[j]))
+                    else:
+                        threshold_sign = ">"
+                        j = node_id
+                        # set lower bound
+                        if threshold[j] > lowerReg[feature[j]]:  
+                            lowerReg[feature[j]] = threshold[j] + DELTA
+                        if DEBUG:
+                            if node_id == 0:
+                                print("at root node")
+                            print("at right: "+ str(j))
+                            print("feature {} > {}".format(feature[j],threshold[j]))
+                        
+                    print("decision id node %s : (X[%s, %s] (= %s) %s %s)"  % (node_id, 
+                            sample_id,
+                            feature[node_id],
+                            X[sample_id][feature[node_id]], 
+                            threshold_sign,
+                            threshold[node_id]))
 
+                                      # validate
+            assert np.less(np.array(lowerReg) , np.array(upperReg)).all
+           
             bounds.append((lowerReg,upperReg))
-
-  
-
-        print("n cr regions:" + str(len(criticalReg)))
 
         for i in range(0,len(bounds)):
             print("bound for region {} is {}".format(i,bounds[i]))
             #print("individuals of the region are : \n{}".format(pop_regions))
-            
-        return pop_regions, bounds
+
+        # get solutions instead only indices as output
+        solutions_in_region = []
+        for pop_region_ind in pop_regions:
+            temp = [all_solutions[ind] for ind in pop_region_ind]
+            solutions_in_region.append(temp)
+
+        assert len(bounds) == len(solutions_in_region)
+
+        if PLOT_RESULTS:
+            print("++ Plot decision tree ++")
+            dot_data = tree.export_graphviz(clf, out_file=None,filled=True, rounded=True,  # leaves_parallel=True, 
+                                special_characters=True,feature_names=feature_names)  
+            graph = pydotplus.graph_from_dot_data(dot_data)  
+            #date = int(round(datetime.now().timestamp()))
+            date =  datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+            if outputPath == None:
+                dir = CURRENT_DIR  + os.path.sep +  "results" + os.path.sep + date  
+            else:
+                dir = outputPath
+            if not os.path.isdir(dir):
+                os.makedirs(dir)
+            graph.write_pdf(dir +os.sep + name + "_regions.pdf" )
+
+            print("++ Write critical regions ++")
+
+                    # write report of execution
+
+            filename_bounds = dir +os.sep  + "bounds_regions.csv"
+            if not os.path.isfile(filename_bounds):
+                header = ['region', 'bounds'] 
+
+                with open(filename_bounds, 'w', encoding='UTF8', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(header) 
+                    for i in range(len(bounds)):
+                        writer.writerow([f"region {str(i)}" , bounds[i]])
+                    writer.writerow(["",""])
+            else:
+                with open(filename_bounds, 'a', encoding='UTF8', newline='') as f:
+                    writer = csv.writer(f)
+                    for i in range(len(bounds)):
+                        writer.writerow([f"region {str(i)}" , bounds[i]])
+                    writer.writerow(["",""])
+
+            # TODO
+
+        ''' Debugging '''
+        for i in range(len(solutions_in_region)):
+            for sol in solutions_in_region[i]:
+                try:
+                    assert np.less_equal(np.array(sol) ,np.array(bounds[i][1])).all()
+                    assert np.less_equal(np.array(bounds[i][0]),np.array(sol)).all()
+                except AssertionError as e:
+                    print(sol)
+                    print(bounds[i])
+                    ind = list(all_critical_dict.keys()).index(str(sol))
+                    print("index of solution: " + str(ind))
+                    raise e
+
+        return solutions_in_region, bounds

@@ -6,9 +6,42 @@ from matplotlib.patches import Rectangle
 from simulation.dummy_simulation import DummySimulator
 import os
 
-def plotOutput(simout: SimulationOutput, featureNames, featureValues, savePath = None):
+'''
+    Plot the fitness values of the calculated (optimal) solutions
+'''
+def plotSolutions(all_pops,scenario, num = 10,savePath = None):
+    if len(all_pops) < num:
+        num = len(all_pops)
     fig = plt.figure()
-    scenario = "Example"
+    if len(all_pops[0].fitness.values) == 2:
+        print("++ plotting solutions ++")
+        fit1 = []
+        fit2 = []
+        # plot the fitness
+        for i in range(num):
+            fit1.append(all_pops[i].fitness.values[0])
+            fit2.append(all_pops[i].fitness.values[1])
+
+        fig.text(.5, .15, scenario, ha='center')
+
+        plt.title(f"Solutions for scenario: {scenario}")
+        plt.xlabel("fitness value 1") 
+        plt.ylabel("fitness value 2")
+
+        plt.plot(fit1,fit2,'ro')
+
+    if savePath is not None:
+        fig.savefig(savePath + os.sep +  "pareto.pdf", format='pdf')
+        plt.show(block=False)
+        plt.close(fig)
+    else:
+        plt.show(block=False)
+
+    return fig
+
+def plotOutput(simout: SimulationOutput, featureNames, featureValues, fitness, savePath = None):
+    fig = plt.figure()
+    scenario = "Example_" + str(fitness)
     for i in range(0,len(featureValues)):
         scenario = scenario + featureNames[i] + "=" + str( "{:.2f}".format(featureValues[i]))
         if i < len(featureValues) - 1:
@@ -46,13 +79,12 @@ def plotOutput(simout: SimulationOutput, featureNames, featureValues, savePath =
     #     plotMap(fig,map[0],map[1],map[2],map[3])
 
     if savePath is not None:
-        os.makedirs(os.path.dirname(savePath), exist_ok=True)
-        fig.savefig(savePath + ".pdf", format='pdf')
+        fig.savefig(savePath + "_trajectory.pdf", format='pdf')
         plt.show(block=False)
         plt.close(fig)
     else:
         plt.show(block=False)
-    savePathDistancePlot = savePath
+
     plotDistance(simout,scenario=scenario,savePath=savePath)
 
     return
@@ -81,8 +113,7 @@ def plotDistance(simout: SimulationOutput,scenario,savePath = None):
     plt.plot(simout.times, distance)
 
     if savePath is not None:
-        os.makedirs(os.path.dirname(savePath), exist_ok=True)
-        fig.savefig(savePath + "_dist.pdf", format='pdf')
+        fig.savefig(savePath + "_distance.pdf", format='pdf')
         plt.show(block=False)
         plt.close(fig)
     else:
@@ -105,3 +136,10 @@ def plotScenario(simulateFcn,candidates,simTime,samplingTime,xosc, featureNames,
                  featureNames=featureNames,
                  savePath=savePath)
     
+
+def plotScenario(simulationOutput,candidate,xosc,featureNames,fitness,savePath):
+    plotOutput(simout=simulationOutput,
+                 featureValues=candidate,
+                 featureNames=featureNames,
+                 fitness=fitness,
+                 savePath=savePath)
