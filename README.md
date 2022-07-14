@@ -66,3 +66,9 @@ All flags that can be set are (get options by -h flag):
   -m FEATURE_NAMES [FEATURE_NAMES ...]
                         The names of the features to modify.
 ```
+
+### Issues
+
+There are prescan related imports in the run.py, which need to be removed when using a carla simulation setup. 
+
+TODO import libs dependent on the scenario format provided
