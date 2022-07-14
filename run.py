@@ -1,5 +1,5 @@
-import simulation.prescan_simulation
-from simulation.prescan_simulation import PrescanSimulator
+# import simulation.prescan_simulation
+# from simulation.prescan_simulation import PrescanSimulator
 
 from pickletools import optimize
 from algorithm.nsga2_TC import *
@@ -293,7 +293,6 @@ if not args.expNumber is None and not args.xosc is None:
 elif args.expNumber is None and args.xosc is None:
     print("Flags set not correctly: No file is provided or no example experiment selected.")
     sys.exit()
-
 if not args.sizePopulation is None:
     initialPopulationSize = args.sizePopulation
 if not args.nIterations is None:
@@ -302,8 +301,6 @@ if not args.algorithm is None:
     algorithm = args.algorithm
 if not args.timeSearch is None:
     timeSearch = args.timeSearch
-if not args.xosc is None:
-    xosc = args.xosc
 if not args.var_max is None:
     var_max = args.var_max
 if not args.var_min is None:
@@ -338,23 +335,37 @@ if not args.expNumber is None:
     experimentsSwitcher.get(int(selExpNumber))()
 
 elif (not args.xosc is None):
-    print("Experiment provided by file")
+    xosc = args.xosc
+
+    print("-- Experiment provided by file")
 
     if args.var_min is None:
-        print("Minimal bounds for search are not set.")
+        print("-- Minimal bounds for search are not set.")
         sys.exit()
     
     if args.var_max is None:
-        print("Maximal bounds for search are not set.")
+        print("-- Maximal bounds for search are not set.")
         sys.exit()
 
     # set feature_names 
     if args.feature_names is None:
-        feature_names = ["feature_"+ str(i) for i in range(len(var_min))]
+        featureNames = ["feature_"+ str(i) for i in range(len(var_min))]
     
     simTime = 10
-    fitnessFcn = fitness.fitness_min_distance_two_actors_prescan
-    simulateFcn = PrescanSimulator.simulateBatch
+
+    if xosc.endswith('.pb'):
+        fitnessFcn = fitness.fitness_min_distance_two_actors_prescan
+        simulateFcn = PrescanSimulator.simulateBatch
+    elif xosc.endswith('.xosc') :
+        #import libs 
+        from simulation.carla_simulation import CarlaSimulator
+
+        fitnessFcn = fitness.fitness_min_distance_two_actors_carla
+        simulateFcn = CarlaSimulator.simulateBatch
+    else:
+        print("-- File is not supported.")
+        sys.exit()
+
     criticalFcn = critical.criticalFcn
 #######
 
