@@ -58,7 +58,7 @@ All flags that can be set are (get options by -h flag):
                         search time can be above the threshold, since
                         algorithm might perform nsga2 iterations, when time
                         limit is already reached.
-  -f XOSC               The path to the .pb file of the Prescan Experiment.
+  -f XOSC               The path to the scenario file.
   -min VAR_MIN [VAR_MIN ...]
                         The upper bound of each parameter.
   -max VAR_MAX [VAR_MAX ...]
