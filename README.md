@@ -8,7 +8,7 @@ It supports pure search with NSGA2 as well additionally clustering based search 
 ## Usage
 
 
-The tool can be used together with Prescan Simulator, but we are also working on the integration of the Carla Simulator. 
+The tool can be used together with the Prescan Simulator and the Carla Simulator. We describe the usage with Carla.
 
 ### Preliminaries
 
@@ -55,14 +55,14 @@ All flags that can be set are (get options by -h flag):
   -a ALGORITHM          The algorithm to use for search, 0 for nsga2, 1 for
                         nsga2dt.
   -t TIMESEARCH         The time to use for search with nsga2-DT (actual
-                        search time can be above the threshold, since
+                        search time can be above the threshold, since the
                         algorithm might perform nsga2 iterations, when time
                         limit is already reached.
   -f XOSC               The path to the scenario file.
   -min VAR_MIN [VAR_MIN ...]
-                        The upper bound of each parameter.
-  -max VAR_MAX [VAR_MAX ...]
                         The lower bound of each parameter.
+  -max VAR_MAX [VAR_MAX ...]
+                        The upper bound of each parameter.
   -m FEATURE_NAMES [FEATURE_NAMES ...]
                         The names of the features to modify.
 ```
