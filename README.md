@@ -48,7 +48,7 @@ py run.py -f <scenario.xosc> -min 1 1 1 -max 10 20 10 -m "par1 "par2" "par3"
 All flags that can be set are (get options by -h flag):
 
 ```
-  -e EXPNUMBER          Hardcoded example scenario to use (possible 1, 9).
+  -e EXPNUMBER          Hardcoded example scenario to use (possible 1,2).
   -i NITERATIONS        Number iterations to perform.
   -n SIZEPOPULATION     The size of the initial population of scenario
                         candidates.
