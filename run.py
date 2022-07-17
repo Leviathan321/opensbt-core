@@ -1,5 +1,5 @@
-# import simulation.prescan_simulation
-# from simulation.prescan_simulation import PrescanSimulator
+import simulation.prescan_simulation
+from simulation.prescan_simulation import PrescanSimulator
 
 from pickletools import optimize
 from algorithm.nsga2_TC import *
@@ -42,7 +42,7 @@ fitnessFcn = None
 criticalFcn = None
 ## scenario parameters
 simTime=50
-samplingTime = 1
+samplingTime = 0.5
 optimize = []
 
 ''' 
@@ -211,8 +211,8 @@ def setExp9():
     xosc =  os.getcwd() + "/../experiments/Demo_AVP_cs_writeexe/Leuven_AVP_ori/Demo_AVP.pb"
     
     # dummy values
-    var_min = [1,1,0.4,1]
-    var_max = [1.2,3,0.5,3]
+    var_min = [1.4,1,0.4,1]
+    var_max = [1.6,3,0.5,3]
 
     # use prefix in featurename to define the actor correpondence (e.g. Other_<par>, Ego_<par>)
     featureNames = [ 
@@ -261,9 +261,10 @@ examplesType = {
 ######
 
 ''' Set default search parameters '''
+
 initialPopulationSize = 4
 nGenerations = 1
-algorithm= 0
+algorithm = 0
 timeSearch = 10
 
 ########
@@ -272,7 +273,7 @@ parser = argparse.ArgumentParser(description="Pass parameters for search.")
 parser.add_argument('-e', dest='expNumber', type=str, action='store', help='Hardcoded example scenario to use (possible 1, 9).')
 parser.add_argument('-i', dest='nIterations', type=int, default=nGenerations, action='store', help='Number iterations to perform.')
 parser.add_argument('-n', dest='sizePopulation', type=int, default=initialPopulationSize, action='store', help='The size of the initial population of scenario candidates.')
-parser.add_argument('-a', dest='algorithm', type=int, default=0, action='store', help='The algorithm to use for search, 0 for nsga2, 1 for nsga2dt')
+parser.add_argument('-a', dest='algorithm', type=int, default=algorithm, action='store', help='The algorithm to use for search, 0 for nsga2, 1 for nsga2dt')
 parser.add_argument('-t', dest='timeSearch', type=int, default=timeSearch, action='store', help='The time to use for search with nsga2-DT (actual search time can be above the threshold, since algorithm might perform nsga2 iterations, when time limit is already reached')
 parser.add_argument('-f', dest='xosc', type=str, action='store', help='The path to the .pb file of the Prescan Experiment')
 
@@ -285,30 +286,13 @@ args = parser.parse_args()
 
 #######
 
-# override params if set by user
-print(args)
 if not args.expNumber is None and not args.xosc is None:
     print("Flags set not correctly: Experiment file and example experiment cannot be set at the same time")
     sys.exit()
 elif args.expNumber is None and args.xosc is None:
     print("Flags set not correctly: No file is provided or no example experiment selected.")
     sys.exit()
-if not args.sizePopulation is None:
-    initialPopulationSize = args.sizePopulation
-if not args.nIterations is None:
-    nGenerations = args.nIterations
-if not args.algorithm is None:
-    algorithm = args.algorithm
-if not args.timeSearch is None:
-    timeSearch = args.timeSearch
-if not args.var_max is None:
-    var_max = args.var_max
-if not args.var_min is None:
-    var_min = args.var_min
-if not args.var_min is None:
-    var_min = args.var_min
-if not args.feature_names is None:
-    feature_names = args.feature_names
+
 ###### set experiment
 # pass as first argument the number of the experiment to use
 
@@ -349,7 +333,7 @@ elif (not args.xosc is None):
 
     # set feature_names 
     if args.feature_names is None:
-        featureNames = ["feature_"+ str(i) for i in range(len(var_min))]
+        feature_names = ["feature_"+ str(i) for i in range(len(var_min))]
     
     simTime = 10
 
@@ -357,21 +341,36 @@ elif (not args.xosc is None):
         fitnessFcn = fitness.fitness_min_distance_two_actors_prescan
         simulateFcn = PrescanSimulator.simulateBatch
     elif xosc.endswith('.xosc') :
-        #import libs 
-        from simulation.carla_simulation import CarlaSimulator
-
         fitnessFcn = fitness.fitness_min_distance_two_actors_carla
         simulateFcn = CarlaSimulator.simulateBatch
     else:
         print("-- File is not supported.")
         sys.exit()
 
-    criticalFcn = critical.criticalFcn
+'''
+override params if set by user
+'''
+
+if not args.sizePopulation is None:
+    initialPopulationSize = args.sizePopulation
+if not args.nIterations is None:
+    nGenerations = args.nIterations
+if not args.algorithm is None:
+    algorithm = args.algorithm
+if not args.timeSearch is None:
+    timeSearch = args.timeSearch
+if not args.var_max is None:
+    var_max = args.var_max
+if not args.var_min is None:
+    var_min = args.var_min
+if not args.var_min is None:
+    var_min = args.var_min
+if not args.feature_names is None:
+    feature_names = args.feature_names
 #######
 
 if __name__ == "__main__":
     pop = None
-    critial = None
     execTime = None
     
     if algorithm == 0:
@@ -402,6 +401,7 @@ if __name__ == "__main__":
                     featureNames,
                     xosc,
                     simTime=simTime,
+                    samplingTime=samplingTime,
                     time_search=timeSearch
                     )
 

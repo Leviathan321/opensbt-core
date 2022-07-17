@@ -8,14 +8,10 @@ def write_results(simulationOutputAll,algorithmName,pop,xosc,featureNames,execTi
     if not os.path.isdir(path):
         os.makedirs(path)
     for i in range(0,n_plot):
-        # prunedIndividuum = [ "{:.3f}".format(chrom) for chrom in pop[i]]
-        # prunedFitness =  ["{:.3f}".format(fit) for fit in pop[i].fitness.values]
- 
         simout = simulationOutputAll[str(pop[i])]
         index = i + 1
         
         plotter.plotScenario(simout, featureNames=featureNames,xosc = xosc, candidate = pop[i],fitness=pop[i].fitness.values,savePath=path + os.sep  + str(index))
-       
         plotter.plotSolutions(all_pops,scenario,num=100,savePath=path)
         #plotter.plotScenario(simulateFcn, featureNames=featureNames,xosc = xosc, candidates = [pop[i]], simTime=simTime,samplingTime=samplingTime,savePath=savePath)
     

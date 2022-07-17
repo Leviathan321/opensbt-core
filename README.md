@@ -8,39 +8,52 @@ It supports pure search with NSGA2 as well additionally clustering based search 
 ## Usage
 
 
-The tool can be used together with the Prescan Simulator and the Carla Simulator. We describe the usage with Carla.
+The tool can be used together with Prescan Simulator, but we are also working on the integration of the Carla Simulator. 
+Since this is not yet mature, we describe only the integration with Prescan.
+
 
 ### Preliminaries
 
 
-The search algorithm requires that Python (>= 3.7), and Carla is installed. 
+The search algorithm requires that Python (>= 3.7), Matlab, and Prescan is installed. The matlab engine needs to be exported to python ([s. here](https://de.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html)).
+
+Compatibility has been tested with Prescan 2019.b and MATLAB R2019.b (Versions should match.)
 
 Install dependencies by executing:
+
 
 ```
 pip install -r requirements.txt
 ```
 
+### Search
+
+Start MATLAB using the Prescan Process Manager and share the engine by executing in the terminal:
+
+```
+matlab.engine.shareEngine
+```
+
 ### Example
 
-Run the following to execute search with uniform motion of an ego and an other actor:
+To run search with an example experiment
+make sure **PrescanHeedsExperiment** is downloaded in a folder **experiments** that is placed next to this.
+
+Run the following to execute search:
 
 ```
-py run.py -e 1
+py run.py -e 8
 ```
 
-To run search with an example Carla scenario run:
+### New Experiment
+
+Make sure to have a file named **UpdateModel.m** in the experiments folder that reads from a json file **input.json** parameter values and sets the values in the experiment model.
+Consider as an example experiment **experiments/PrescanHeedsExperiment**
+
+Run the tool by providing the path to the experiment file, the upper and lower bounds, as well the names of the parameters to vary (should match with the ones set by **UpdateModel.m**):
 
 ```
-py run.py -e 2
-```
-
-### New Scenario
-
-Execute the followoring to run search for a scenario provided in OpenSCENARIO v1 format:
-
-```
-py run.py -f <scenario.xosc> -min 1 1 1 -max 10 20 10 -m "par1 "par2" "par3"
+py run.py -f <experiment.pb> -min 1 1 1 -max 10 20 10 -m "par1 "par2" "par3"
 ```
 
 ### Optional Parameters
@@ -48,17 +61,17 @@ py run.py -f <scenario.xosc> -min 1 1 1 -max 10 20 10 -m "par1 "par2" "par3"
 All flags that can be set are (get options by -h flag):
 
 ```
-  -e EXPNUMBER          Hardcoded example scenario to use (possible 1,2).
+  -e EXPNUMBER          Hardcoded example scenario to use (possible 1, 9).
   -i NITERATIONS        Number iterations to perform.
   -n SIZEPOPULATION     The size of the initial population of scenario
                         candidates.
   -a ALGORITHM          The algorithm to use for search, 0 for nsga2, 1 for
                         nsga2dt.
   -t TIMESEARCH         The time to use for search with nsga2-DT (actual
-                        search time can be above the threshold, since the
+                        search time can be above the threshold, since
                         algorithm might perform nsga2 iterations, when time
                         limit is already reached.
-  -f XOSC               The path to the scenario file.
+  -f XOSC               The path to the .pb file of the Prescan Experiment.
   -min VAR_MIN [VAR_MIN ...]
                         The lower bound of each parameter.
   -max VAR_MAX [VAR_MAX ...]
@@ -67,8 +80,11 @@ All flags that can be set are (get options by -h flag):
                         The names of the features to modify.
 ```
 
-### Issues
 
-There are prescan related imports in the run.py, which need to be removed when using a carla simulation setup. 
+## Limitations
 
-TODO import libs dependent on the scenario format provided
+Since OpenSCENARIO support of Prescan is not mature, Prescan experiment files have to be used.
+
+## Authors
+
+Lev Sorokin (sorokin@fortiss.org)

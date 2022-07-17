@@ -2,6 +2,7 @@
 from cmath import e
 from datetime import datetime
 from pathlib import Path
+from pickle import FALSE
 
 import random
 import matplotlib.pyplot as plt
@@ -28,19 +29,14 @@ from visualization import plotter
 from random import randrange
 import os
 import time
-import csv
-
-## simulation parameters
-simTime=10
-samplingTime=60
 
 ## genetic algorithm parameters
-nGenerations = 2 # 22
-initialPopulationSize = 1 # should be % 4 == 0, when using tools.selTournamentDCD
 crossoverProbability = 0.6
 mutationRate = 0.2
 
 EVALUATE_IN_BATCH = True
+DEBUG = False
+RESULTS_FOLDER = "/results/"
 
 def nsga2_TC(initialPopulationSize,
             nGenerations, 
@@ -52,9 +48,9 @@ def nsga2_TC(initialPopulationSize,
                     simulateFcn,
                     featureNames,
                     xosc,
-                    initial_pop=[],
-                    simTime=simTime,
-                    samplingTime=samplingTime,
+                    initial_pop,
+                    simTime,
+                    samplingTime,
                     mode="standalone",
                     simulationOutputAll = {}):   
 
@@ -112,6 +108,7 @@ def nsga2_TC(initialPopulationSize,
     print("lower bound: " + str(BOUND_LOW))
     print("upper bound: " + str(BOUND_UP))
 
+
     if( not hasattr(creator,"FitnessMin")):
         # set which variable has to be minimized or maximized, default: minimize
         weights = ()
@@ -158,6 +155,8 @@ def nsga2_TC(initialPopulationSize,
     logbook = tools.Logbook()
     logbook.header = "gen", "evals", "std", "min", "avg", "max"
 
+
+
     if len(initial_pop)==0:
         MU = initialPopulationSize
         print("population initialized")
@@ -165,12 +164,13 @@ def nsga2_TC(initialPopulationSize,
     else:
         MU = len(initial_pop)
         pop = initial_pop
-    
-    # TODO consider case when population size is very low
 
     # Evaluate the individuals with an invalid fitness
     invalid_ind = [ind for ind in pop if not ind.fitness.valid]
     
+    if DEBUG:
+        print("invalid_ind: " + str(invalid_ind))
+
     if EVALUATE_IN_BATCH:
         fitnesses = evaluateFcnBatch(invalid_ind)
     else:
@@ -304,7 +304,7 @@ def nsga2_TC(initialPopulationSize,
     if mode=="standalone":   
         print("++ Writing results (from the best) ++") 
         subFolderName = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-        path = str(os.getcwd()) + "/results/simoutput/" + Path(xosc).stem + os.sep + subFolderName
+        path = str(os.getcwd()) + RESULTS_FOLDER + Path(xosc).stem + os.sep + subFolderName
         writer.write_results(simulationOutputAll,algorithmName,pop,xosc,featureNames,execTime,path,scenario=xosc,all_pops=pop)
     
     assert np.array([str(all_solutions[i]) == list(criticalDict.keys())[i]  for i in range(len(all_solutions))]).all()

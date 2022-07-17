@@ -10,17 +10,18 @@ import csv
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DEBUG = True
-PLOT_RESULTS = True
+DEBUG = False
 
 MIN_SAMPLES_SPLIT = 200
 CRITICALITY_THRESHOLD = 0.9
 DELTA = 0.0
 
-def getCriticalRegions(all_solutions, all_critical_dict, var_min, var_max,  name, feature_names, outputPath=None, criticality_probability = CRITICALITY_THRESHOLD, min_samples_split=MIN_SAMPLES_SPLIT):
+def getCriticalRegions(all_solutions, all_critical_dict, var_min, var_max,  name, feature_names, outputPath=None, criticality_probability = CRITICALITY_THRESHOLD, min_samples_split=MIN_SAMPLES_SPLIT, plot_results=True):
 
         X = all_solutions
-        y = list(all_critical_dict.values())
+        y = list(all_critical_dict.values())        
+        solutions_in_region = []
+
 
         assert np.array([str(all_solutions[i]) == list(all_critical_dict.keys())[i]  for i in range(len(all_solutions))]).all()
         assert( len(all_solutions) == len(y))
@@ -28,17 +29,15 @@ def getCriticalRegions(all_solutions, all_critical_dict, var_min, var_max,  name
         if all(elem == 1 for elem in y):
             print("all candidates are critical")
             bounds = [(var_min,var_max)]
-            pop_regions = [range(0,len(X))]  
-            return pop_regions, bounds
+            solutions_in_region = [all_solutions]  
+            return solutions_in_region, bounds
         elif (all(elem == 0 for elem in y)):
             print("all candidates are non critical")
             bounds = []
-            pop_regions = []           
-            return pop_regions, bounds
+            solutions_in_region = []           
+            return solutions_in_region, bounds
 
         CP = criticality_probability
-        pop_regions = 0
-
         clf = tree.DecisionTreeClassifier(min_samples_split=min_samples_split, criterion="entropy", max_depth=10)
         clf = clf.fit(X, y)
 
@@ -177,14 +176,13 @@ def getCriticalRegions(all_solutions, all_critical_dict, var_min, var_max,  name
             #print("individuals of the region are : \n{}".format(pop_regions))
 
         # get solutions instead only indices as output
-        solutions_in_region = []
         for pop_region_ind in pop_regions:
             temp = [all_solutions[ind] for ind in pop_region_ind]
             solutions_in_region.append(temp)
 
         assert len(bounds) == len(solutions_in_region)
 
-        if PLOT_RESULTS:
+        if plot_results:
             print("++ Plot decision tree ++")
             dot_data = tree.export_graphviz(clf, out_file=None,filled=True, rounded=True,  # leaves_parallel=True, 
                                 special_characters=True,feature_names=feature_names)  

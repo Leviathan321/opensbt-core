@@ -1,4 +1,4 @@
-from cmath import sqrt
+from math import sqrt
 from simulation.simulator import SimulationOutput
 from matplotlib import pyplot as plt
 import numpy 
@@ -107,7 +107,7 @@ def plotDistance(simout: SimulationOutput,scenario,savePath = None):
 
     distance = []
     for i in range(0,len(x_ego)):
-        dif = pow(x_ego[i] - x_other[i],2) + pow(y_ego[i] - y_other[i],2)
+        dif = abs(x_ego[i] - x_other[i]) ** 2  + abs(y_ego[i] - y_other[i])**2
         distance.append(sqrt(dif))
     
     plt.plot(simout.times, distance)
