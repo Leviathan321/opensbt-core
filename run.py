@@ -1,5 +1,5 @@
-import simulation.prescan_simulation
-from simulation.prescan_simulation import PrescanSimulator
+# import simulation.prescan_simulation
+# from simulation.prescan_simulation import PrescanSimulator
 
 from pickletools import optimize
 from algorithm.nsga2_TC import *
