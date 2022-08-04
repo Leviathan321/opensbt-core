@@ -1,5 +1,5 @@
 import sys
-from simulation.simulator import SimulationOutput 
+from simulation.simulator import SimulationOutput
 
 import numpy as np
 import math
@@ -35,7 +35,7 @@ def fitness_min_distance_two_actors_prescan(simout: SimulationOutput):
         result = min(dist)
     else:
         traceEgo = simout.location["ego"]
-        tracePed = simout.location["other"]
+        tracePed = simout.location["adversary"]
         result = np.min(geometric.distPair(traceEgo,tracePed))
     return result
 
@@ -46,7 +46,7 @@ def fitness_vimpact(simout: SimulationOutput):
     return simout.otherParams["ego_vimpact"]
 
 def fitness_min_ttc_vimpact(simout: SimulationOutput):
-    return  -fitness_vimpact(simout), fitness_min_ttc(simout) 
+    return  -fitness_vimpact(simout), fitness_min_ttc(simout)
 
 def fitness_random(simout):
     return random.random()

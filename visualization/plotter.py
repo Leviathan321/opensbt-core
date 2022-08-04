@@ -1,7 +1,7 @@
 from math import sqrt
 from simulation.simulator import SimulationOutput
 from matplotlib import pyplot as plt
-import numpy 
+import numpy
 from matplotlib.patches import Rectangle
 from simulation.dummy_simulation import DummySimulator
 import os
@@ -25,7 +25,7 @@ def plotSolutions(all_pops,scenario, num = 10,savePath = None):
         fig.text(.5, .15, scenario, ha='center')
 
         plt.title(f"Solutions for scenario: {scenario}")
-        plt.xlabel("fitness value 1") 
+        plt.xlabel("fitness value 1")
         plt.ylabel("fitness value 2")
 
         plt.plot(fit1,fit2,'ro')
@@ -49,12 +49,12 @@ def plotOutput(simout: SimulationOutput, featureNames, featureValues, fitness, s
     fig.text(.5, .15, scenario, ha='center')
 
     plt.title("Simulation of scenario")
-    plt.xlabel("x [m]") 
+    plt.xlabel("x [m]")
     plt.ylabel("y [m]")
 
     # plot paths
     ego = simout.location["ego"]
-    other =  simout.location["other"]
+    other =  simout.location["adversary"]
 
     sizeE = len(ego)
     sizeP = len(other)
@@ -94,11 +94,11 @@ def plotDistance(simout: SimulationOutput,scenario,savePath = None):
     fig.text(.5, .15, scenario, ha='center')
 
     plt.title("Distance Profile ego - other vehicle")
-    plt.xlabel("t [s]") 
+    plt.xlabel("t [s]")
     plt.ylabel("d [m]")
 
     ego = simout.location["ego"]
-    other =  simout.location["other"]
+    other =  simout.location["adversary"]
 
     x_ego = [v[0] for v in ego]
     y_ego = [v[1] for v in ego]
@@ -109,7 +109,7 @@ def plotDistance(simout: SimulationOutput,scenario,savePath = None):
     for i in range(0,len(x_ego)):
         dif = abs(x_ego[i] - x_other[i]) ** 2  + abs(y_ego[i] - y_other[i])**2
         distance.append(sqrt(dif))
-    
+
     plt.plot(simout.times, distance)
 
     if savePath is not None:
@@ -121,10 +121,9 @@ def plotDistance(simout: SimulationOutput,scenario,savePath = None):
 
     return fig
 
-
 def plotMap(fig, x,y,width,height):
     ax = fig.add_subplot(111)
-    ax.add_patch(Rectangle((x, y), width, height,color="black", fc ='none', 
+    ax.add_patch(Rectangle((x, y), width, height,color="black", fc ='none',
                         ec ='g',
                         lw = 1))
 
@@ -135,7 +134,6 @@ def plotScenario(simulateFcn,candidates,simTime,samplingTime,xosc, featureNames,
                  featureValues=candidate,
                  featureNames=featureNames,
                  savePath=savePath)
-    
 
 def plotScenario(simulationOutput,candidate,xosc,featureNames,fitness,savePath):
     plotOutput(simout=simulationOutput,
