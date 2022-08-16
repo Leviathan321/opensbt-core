@@ -55,13 +55,13 @@ except IndexError:
 import carla
 from carla import TrafficLightState as tls
 
-import argparse
 import logging
 import datetime
 import weakref
 import math
 import random
 import hashlib
+from types import SimpleNamespace
 
 try:
     import pygame
@@ -1541,62 +1541,21 @@ def exit_game():
 
 
 def start():
-    """Parses the arguments received from commandline and runs the game loop"""
+    """Runs the game loop"""
 
-    # Define arguments that will be received and parsed
-    argparser = argparse.ArgumentParser(
-        description='CARLA No Rendering Mode Visualizer')
-    argparser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        dest='debug',
-        help='print debug information')
-    argparser.add_argument(
-        '--host',
-        metavar='H',
-        default='127.0.0.1',
-        help='IP of the host server (default: 127.0.0.1)')
-    argparser.add_argument(
-        '-p', '--port',
-        metavar='P',
-        default=2000,
-        type=int,
-        help='TCP port to listen to (default: 2000)')
-    argparser.add_argument(
-        '--res',
-        metavar='WIDTHxHEIGHT',
-        default='1280x720',
-        help='window resolution (default: 1280x720)')
-    argparser.add_argument(
-        '--filter',
-        metavar='PATTERN',
-        default='vehicle.*',
-        help='actor filter (default: "vehicle.*")')
-    argparser.add_argument(
-        '--map',
-        metavar='TOWN',
-        default=None,
-        help='start a new episode at the given TOWN')
-    argparser.add_argument(
-        '--no-rendering',
-        action='store_true',
-        help='switch off server rendering')
-    argparser.add_argument(
-        '--show-triggers',
-        action='store_true',
-        help='show trigger boxes of traffic signs')
-    argparser.add_argument(
-        '--show-connections',
-        action='store_true',
-        help='show waypoint connections')
-    argparser.add_argument(
-        '--show-spawn-points',
-        action='store_true',
-        help='show recommended spawn points')
-
-    # Parse arguments
-    args = argparser.parse_args()
-    args.description = argparser.description
+    # Define arguments
+    args = SimpleNamespace(
+        description='CARLA 2D Visualization',
+        debug=False,
+        host='127.0.0.1',
+        port=2000,
+        res='1280x720',
+        filter='vehicle.*',
+        map=None,
+        show_triggers=False,
+        show_connections=False,
+        show_spawn_points=False
+    )
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
     # Print server information
