@@ -21,6 +21,7 @@ import time
 ## genetic algorithm parameters
 crossoverProbability = 0.6
 mutationRate = 0.2
+PRECISION = 3
 
 EVALUATE_IN_BATCH = True
 DEBUG = False
@@ -118,13 +119,15 @@ def nsga2_TC(initialPopulationSize,
             else:
                 weights = weights + (-1,)
         creator.create("FitnessMin", base.Fitness, weights=weights)
+
     if( not hasattr(creator,"Individual")):
         creator.create("Individual", list, typecode='d', fitness=creator.FitnessMin)
 
     toolbox = base.Toolbox()
 
     def uniform(low, up):
-        return [random.uniform(a, b) for a, b in zip(low, up)]
+        return [round(random.uniform(a, b),PRECISION) for a, b in zip(low, up)]
+    
     
     toolbox.register("attr_float", uniform, BOUND_LOW, BOUND_UP)
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_float)
@@ -295,7 +298,8 @@ def nsga2_TC(initialPopulationSize,
         path = str(os.getcwd()) + RESULTS_FOLDER + Path(xosc).stem + os.sep + subFolderName
         fitnessFcnsNames = str([fcn.__name__ for fcn in fitnessFcns])
         writer.write_results(all_simoutput,algorithmName,fitnessFcnsNames,pop,xosc,featureNames,execTime,path,scenario=xosc,all_pops=pop)
-    
+        writer.write_simoutput(all_simoutput,algorithmName,fitnessFcnsNames,pop,xosc,featureNames,execTime,path,scenario=xosc,all_pops=pop)
+
     assert np.array([str(all_solutions[i]) == list(criticalDict.keys())[i]  for i in range(len(all_solutions))]).all()
 
     return pop, all_solutions, criticalDict, all_simoutput, logbook, execTime

@@ -1,73 +1,88 @@
-import os
+# Copyright (c) 2022 fortiss GmbH
+#
+# This work is licensed under the terms of the MIT license.
+# For a copy, see <https://opensource.org/licenses/MIT>.
 
-import matplotlib.pyplot as plt
+import os
 
 from carlaSimulation.simulator import Simulator
 from carlaSimulation.scenario import Scenario
 from carlaSimulation.recorder import Recorder
 
-from carlaSimulation.metrics.distance import DistanceBetweenVehicles
+class Runner:
+    _host_carla = None
+    _port_carla = 2000
+    _timeout_carla = 15
+    _rendering_carla = False
+    _resolution_carla = 0.1
 
-from carlaSimulation.controllers.npc import NpcAgent
+    _recording_dir = '/tmp/recordings'
+    _metrics_dir = 'metrics'
 
-HOST_CARLA = 'localhost'
-PORT_CARLA = 2000
-TIMEOUT_CARLA = 10
+    _agent_class = None
+    _metric_class = None
 
-RECORDING_DIR = '/tmp/recordings'
-SCENARIO_DIR = 'temp'
-METRICS_DIR = 'metrics'
+    def __init__(self, host, agent, metric):
+        self._host_carla = host
+        self._agent_class = agent
+        self._metric_class = metric
 
-def get_simulator(host, port, timeout):
-    return Simulator(host, port, timeout)
+    def run(self, directory, queue, evaluations):
+        while not queue.empty():
+            pattern = queue.get()
 
-def get_scenarios(directory):
-    scenarios = None
-    print(directory)
-    with os.scandir(directory) as entries:
-        scenarios = [
-            Scenario(entry)
-                for entry in entries
-                    if entry.name.endswith('.xosc') and entry.is_file()
-        ]
-    return scenarios
-
-def get_evaluator():
-    return DistanceBetweenVehicles()
-
-def get_controller():
-    return NpcAgent
-
-def get_recorder(directory):
-    return Recorder(directory)
-
-def run_scenarios(scenario_dir=SCENARIO_DIR,recording_dir=RECORDING_DIR):
-    
-    simulator = get_simulator(HOST_CARLA, PORT_CARLA, TIMEOUT_CARLA)
-    scenarios = get_scenarios(scenario_dir)
-    recorder = get_recorder(recording_dir)
-    evaluator = get_evaluator()
-    agent = get_controller()
-
-    for scenario in scenarios:
-        scenario.simulate(simulator, agent, recorder)
-
-    recordings = recorder.get_recordings()
-
-    evaluations = list()
-    for recording in recordings:
-        evaluations.append(
-            evaluator.evaluate(
-                simulator,
-                recording
+            simulator = self.get_simulator(
+                self._host_carla,
+                self._port_carla,
+                self._timeout_carla,
+                self._rendering_carla,
+                self._resolution_carla
             )
+            scenarios = self.get_scenarios(directory, pattern)
+            recorder = self.get_recorder(self._recording_dir)
+            evaluator = self.get_evaluator()
+            agent = self.get_agent()
+
+            for scenario in scenarios:
+                scenario.simulate(simulator, agent, recorder)
+
+            recordings = recorder.get_recordings()
+
+            for recording in recordings:
+                evaluations.append(
+                    evaluator.evaluate(
+                        simulator,
+                        recording
+                    )
+                )
+                os.remove(recording)
+
+            queue.task_done()
+
+    def get_simulator(self, host, port, timeout, rendering = True, resolution = 0.1):
+        return Simulator(
+            host = host,
+            port = port,
+            timeout = timeout,
+            rendering = rendering,
+            resolution = resolution
         )
 
-    for (frame, dist) in evaluations:
-        plt.plot(frame, dist)
-        plt.ylabel('Distance [m]')
-        plt.xlabel('Frame number')
-        plt.title('Distance')
-        plt.show()
+    def get_scenarios(self, directory, pattern):
+        scenarios = None
+        with os.scandir(directory) as entries:
+            scenarios = [
+                Scenario(entry)
+                    for entry in entries
+                        if entry.name.endswith(pattern) and entry.is_file()
+            ]
+        return scenarios
 
-    return evaluations
+    def get_evaluator(self):
+        return self._metric_class()
+
+    def get_agent(self):
+        return self._agent_class
+
+    def get_recorder(self, directory):
+        return Recorder(directory)

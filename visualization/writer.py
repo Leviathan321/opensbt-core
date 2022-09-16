@@ -2,7 +2,7 @@ from visualization import plotter
 import os
 import csv
 
-N_PLOT = 3  # select how many scenarios instances from the best to plot
+N_PLOT = 4  # select how many scenarios instances from the best to plot
 
 def write_results(simulationOutputAll,algorithmName,fitnessFcnNames,pop,xosc,featureNames,execTime,path,scenario,all_pops,n_plot=N_PLOT):  
     if not os.path.isdir(path):
@@ -45,3 +45,23 @@ def write_results(simulationOutputAll,algorithmName,fitnessFcnNames,pop,xosc,fea
             writer.writerow(row)
             i = i + 1 
 
+
+def write_simoutput(simulationOutputAll,algorithmName,fitnessFcnNames,pop,xosc,featureNames,execTime,path,scenario,all_pops,n_write=N_PLOT):  
+    if not os.path.isdir(path):
+        os.makedirs(path)
+    for i in range(0,N_PLOT):
+        simout = simulationOutputAll[str(pop[i])]
+                 # write report of execution
+        header = ['time','location', 'velocity_ego', 'velocity_actor'] 
+
+        with open(path + os.sep + 'simulation_output_'+ str(i) + '.csv', 'w', encoding='UTF8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(header)
+
+            for j in range(0,len(simout.times)):
+                row = [simout.times[j], simout.location["ego"][j], simout.velocity['ego'][j], simout.velocity['adversary'][j]]
+                writer.writerow(row)
+            
+                
+        
+    

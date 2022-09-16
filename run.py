@@ -1,5 +1,5 @@
-#import simulation.prescan_simulation
-#from simulation.prescan_simulation import PrescanSimulator
+# import simulation.prescan_simulation
+# from simulation.prescan_simulation import PrescanSimulator
 
 from pickletools import optimize
 from algorithm.nsga2_TC import *
@@ -38,7 +38,6 @@ var_min = None
 var_max = None
 featureNames = None
 simulateFcn = None
-fitnessFcn = None
 fitnessFcns = None
 criticalFcn = None
 ## scenario parameters
@@ -56,7 +55,8 @@ def setExp1():
     global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,optimize,criticalFcn
     xosc = "DummyExperiment"
     var_min = [ 0,1, 0,5]
-    var_max = [ 360, 50,360,10]
+    var_max = [ 360, 10,360,10]
+
     featureNames = [
                 "orientationEgo",
                 "velocityEgo",
@@ -75,26 +75,116 @@ EXAMPLE CARLA SIMULATOR
 def setExp2():
     global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,optimize,criticalFcn
     xosc = os.getcwd() + "/scenarios/FollowLeadingVehicle_generic.xosc"
-    var_min = [0]
+    var_min = [5]
     var_max = [10]
     featureNames = ["leadingSpeed"]
     fitnessFcns = [fitness.fitness_min_distance_two_actors_carla]
     optimize = ['min']
+    #fitnessFcn = fitness.fitness_random
+    simulateFcn = CarlaSimulator.simulateBatch
+    criticalFcn = critical.criticalFcn
+
+
+def setExp3():
+    # example to test integration (provided scenario is already an instance)
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,criticalFcn, optimize
+    xosc = os.getcwd() + "/scenarios/PedestrianCrossing.xosc"
+    featureNames = ["FinalHostSpeed","PedestrianSpeed"]
+    var_min = [1,1]
+    var_max = [100,1.5]
+    optimize = [min]
+    fitnessFcns = [fitness.fitness_min_distance_two_actors_carla]
     simulateFcn = CarlaSimulator.simulateBatch
     criticalFcn = critical.criticalFcn
 
 '''
-EXAMPLE PRESCAN SIMULATOR
+    Prescan simulation
+'''
+def setExp4():
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,simTime,criticalFcn
+    xosc =  os.getcwd() + "/../experiments/Experiment_1/Experiment_1.pb"
+
+    # dummy values
+    var_min = [ 0, 0]
+    var_max = [ 100, 200]
+
+    featureNames = [
+                "objY",
+                "orientationObj",
+    ]
+    simTime = 2
+    fitnessFcns = [fitness.fitness_min_distance_two_actors_prescan]
+    simulateFcn = PrescanSimulator.simulateBatch
+    criticalFcn = critical.criticalFcn
+
+
+def setExp5():
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,simTime,criticalFcn
+    #xosc =  os.getcwd() + "/../Experiments/ACC_ISO_test_005\ACC_ISO_test_005.pb"
+    xosc = "C:/Users/Public/Documents/Experiments/TestScenarios/ACC/ACC_ISO_test_005/ACC_ISO_test_005.pb"
+    # dummy values
+    var_min = [10,20]
+    var_max = [40,100]
+
+    featureNames = [
+                "otherVelocity", # in m/s
+                "otherStartPosition" # in m
+    ]
+    simTime = 5
+    fitnessFcns = [fitness.fitness_min_distance_two_actors_prescan]
+    simulateFcn = PrescanSimulator.simulateBatch
+    criticalFcn = critical.criticalFcn
+
+
+def setExp6():
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,simTime,criticalFcn
+    xosc =  os.getcwd() + "/../experiments/Demo_AVP_sc1/Demo_AVP_sc1.pb"
+
+    # dummy values
+    var_min = [1,1,1]
+    var_max = [10,10,10]
+
+    featureNames = [
+                "otherVelocity", # in m/s
+                "otherStartBackingOutTime" # in s,
+                "egoVelocity" # in m/s
+    ]
+    simTime = 10
+    fitnessFcns = [fitness.fitness_min_distance_two_actors_prescan]
+    simulateFcn = PrescanSimulator.simulateBatch
+    criticalFcn = critical.criticalFcn
+
+
+def setExp7():
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,simTime,criticalFcn
+    xosc =  os.getcwd() + "/../experiments/Demo_AVP_sc2/Demo_AVP_sc2.pb"
+
+    # dummy values
+    var_min = [1,1,1]
+    var_max = [3,10,10]
+
+    featureNames = [
+                "otherVelocity", # in m/s
+                "otherStartMovementTime" # in s,
+                "egoVelocity" # in m/s
+    ]
+    simTime = 10
+    fitnessFcns = [fitness.fitness_min_distance_two_actors_prescan]
+    simulateFcn = PrescanSimulator.simulateBatch
+    criticalFcn = critical.criticalFcn
+
+
+'''
+    HEEDS PRESCAN EXPERIMENT (COMPILED)
 '''
 
-''' Experiment from DENSO with writing trajectories at runtime in .csv file'''
-def setExp3():
+def setExp8():
     global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,simTime,optimize,criticalFcn
-    xosc =  os.getcwd() + "/../experiments/Leuven_AVP_ori_18b_210722/Leuven_AVP_ori/Demo_AVP.pb"
+    xosc =  os.getcwd() + "/../experiments/HeedsWorkshopExperiment/Demo_AVP_cs/Leuven_AVP_ori/Demo_AVP.pb"
     
     # dummy values
-    var_min = [0.5,0,0,1]
-    var_max = [0.6,1,0.2,3]
+    var_min = [1,1,0.1,1]
+    var_max = [1.5,3,0.5,3]
 
     # use prefix in featurename to define the actor correpondence (e.g. Other_<par>, Ego_<par>)
     featureNames = [ 
@@ -104,10 +194,39 @@ def setExp3():
                 "Other_Accel_mpss"
     ]
 
+    # TODO modify simulink model to store all trajectories of all actors (trajectory.mat is stored only for ego?)
+    # TODO modify simulink model to set max simulation time
+
     #simTime = 10
-    fitnessFcns = [fitness.fitness_min_distance_two_actors_prescan]
+    fitnessFcns = [fitness.fitness_vimpact, fitness.fitness_min_ttc]
+    optimize = ['min','max']
+    simulateFcn = PrescanSimulator.simulateBatch_compiled
+    criticalFcn = critical.criticalFcn
+
+''' Experiment from DENSO with writing trajectories at runtime in .csv file'''
+def setExp9():
+    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,simTime,optimize,criticalFcn
+    xosc =  os.getcwd() + "/../experiments/Demo_AVP_cs_writeexe/Leuven_AVP_ori/Demo_AVP.pb"
+    
+    # dummy values
+    var_min = [1.4,1,0.4,1]
+    var_max = [1.6,3,0.5,3]
+
+    # use prefix in featurename to define the actor correpondence (e.g. Other_<par>, Ego_<par>)
+    featureNames = [ 
+                "Ego_HostVelGain", # in m/s
+                "Other_Velocity_mps", # in m/s
+                "Other_Time_s", # in s,
+                "Other_Accel_mpss"
+    ]
+
+    # TODO modify simulink model to store all trajectories of all actors (trajectory.mat is stored only for ego?)
+    # TODO modify simulink model to set max simulation time
+
+    #simTime = 10
+    fitnessFcns = [fitness.fitness_basic_two_actors]
     optimize = ['min']
-    simulateFcn = PrescanSimulator.simulateBatch_compiled_csv
+    simulateFcn = PrescanSimulator.simulateBatch_workspace_output
     criticalFcn = critical.criticalFcn
 
 
@@ -116,15 +235,26 @@ def setExp3():
 experimentsSwitcher = {
    1: setExp1,
    2: setExp2,
-   3: setExp3
+   3: setExp3,
+   4: setExp4,
+   5: setExp5,
+   6: setExp6,
+   7: setExp7,
+   8: setExp8,
+   9: setExp9
 }
 
 examplesType = {
   1: SimulationType.DUMMY,
    2: SimulationType.CARLA,
-   3: SimulationType.PRESCAN
+   3: SimulationType.CARLA,
+   4: SimulationType.PRESCAN,
+   5: SimulationType.PRESCAN,
+   6: SimulationType.PRESCAN,
+   7: SimulationType.PRESCAN,
+   8: SimulationType.PRESCAN,
+   9: SimulationType.PRESCAN
 }
-
 
 ######
 
@@ -138,7 +268,7 @@ timeSearch = 10
 ########
 
 parser = argparse.ArgumentParser(description="Pass parameters for search.")
-parser.add_argument('-e', dest='expNumber', type=str, default="1", action='store', help='Hardcoded example scenario to use (possible 1, 3).')
+parser.add_argument('-e', dest='expNumber', type=str, default="3", action='store', help='Hardcoded example scenario to use (possible 1, 8).')
 parser.add_argument('-i', dest='nIterations', type=int, default=nGenerations, action='store', help='Number iterations to perform.')
 parser.add_argument('-n', dest='sizePopulation', type=int, default=initialPopulationSize, action='store', help='The size of the initial population of scenario candidates.')
 parser.add_argument('-a', dest='algorithm', type=int, default=algorithm, action='store', help='The algorithm to use for search, 0 for nsga2, 1 for nsga2dt.')

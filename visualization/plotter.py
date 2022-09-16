@@ -1,12 +1,8 @@
 from math import sqrt
 from simulation.simulator import SimulationOutput
 from matplotlib import pyplot as plt
-from matplotlib.transforms import Affine2D
 from matplotlib.animation import FuncAnimation, PillowWriter
-import numpy
 from matplotlib.patches import Rectangle
-from matplotlib.collections import PatchCollection
-from simulation.dummy_simulation import DummySimulator
 import os
 import numpy as np
 
@@ -38,8 +34,10 @@ def plotSolutions(all_pops, scenario, num=10, savePath=None):
 
     if savePath is not None:
         fig.savefig(savePath + os.sep + "pareto.pdf", format='pdf')
-        #plt.show(block=False)
+        plt.show(block=False)
         plt.close(fig)
+    else:
+        plt.show(block=False)
 
     return fig
 
@@ -66,12 +64,7 @@ def plotOutput(simout: SimulationOutput, featureNames, featureValues, fitness, s
     plt.ylabel("y [m]")
 
     trace_ego = np.array(simout.location["ego"])  # time series of Ego position
-
-    if "adversary" in simout.location:
-        other = simout.location["adversary"]
-    else:
-        other = simout.location["other"]
-    trace_adv = np.array(other)  # time series of Ped position
+    trace_adv = np.array(simout.location["adversary"])  # time series of Ped position
 
     x_ego = trace_ego[:, 0]
     y_ego = trace_ego[:, 1]
@@ -118,7 +111,7 @@ def plotOutput(simout: SimulationOutput, featureNames, featureValues, fitness, s
 
         return
 
-    ani = FuncAnimation(fig, update, interval=len(simout.times))
+    ani = FuncAnimation(fig, update, frames=len(simout.times))
 
     writer = PillowWriter(fps=60)
 
@@ -137,11 +130,7 @@ def plotDistance(simout: SimulationOutput, scenario, savePath=None):
     plt.ylabel("d [m]")
 
     ego = simout.location["ego"]
-    if "adversary" in simout.location:
-        other = simout.location["adversary"]
-    else:
-        other = simout.location["other"]
-
+    other = simout.location["adversary"]
 
     x_ego = [v[0] for v in ego]
     y_ego = [v[1] for v in ego]
@@ -157,8 +146,10 @@ def plotDistance(simout: SimulationOutput, scenario, savePath=None):
 
     if savePath is not None:
         fig.savefig(savePath + "_distance.pdf", format='pdf')
-        #plt.show(block=False)
+        plt.show(block=False)
         plt.close(fig)
+    else:
+        plt.show(block=False)
 
     return fig
 
@@ -185,3 +176,5 @@ def plotScenario(simulationOutput, candidate, xosc, featureNames, fitness, saveP
                featureNames=featureNames,
                fitness=fitness,
                savePath=savePath)
+
+

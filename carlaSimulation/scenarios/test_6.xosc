@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <OpenSCENARIO>
-  <FileHeader revMajor="1" revMinor="0" date="2020-07-30T12:00:00" description="CARLA:Slalom" author="Dimitri Scheftelowitsch"/>
+  <FileHeader revMajor="1" revMinor="0" date="2020-03-24T12:00:00" description="CARLA:SynchronizeIntersectionEntry" author=""/>
   <ParameterDeclarations/>
   <CatalogLocations/>
   <RoadNetwork>
@@ -9,7 +9,7 @@
   </RoadNetwork>
   <Entities>
     <ScenarioObject name="hero">
-      <Vehicle name="vehicle.nissan.micra" vehicleCategory="car">
+      <Vehicle name="vehicle.tesla.model3" vehicleCategory="car">
         <ParameterDeclarations/>
         <Performance maxSpeed="69.444" maxAcceleration="200" maxDeceleration="10.0"/>
         <BoundingBox>
@@ -25,65 +25,22 @@
         </Properties>
       </Vehicle>
     </ScenarioObject>
-    <ScenarioObject name="c1">
-      <MiscObject mass="500.0" name="static.prop.container" miscObjectCategory="obstacle">
+    <ScenarioObject name="adversary">
+      <Vehicle name="vehicle.audi.tt" vehicleCategory="bicycle">
         <ParameterDeclarations/>
+        <Performance maxSpeed="69.444" maxAcceleration="200" maxDeceleration="10.0"/>
         <BoundingBox>
-          <Center x="-1.0" y="0.0" z="0.85"/>
-          <Dimensions width="1.0" length="2.0" height="1.7"/>
+          <Center x="1.5" y="0.0" z="0.9"/>
+          <Dimensions width="2.1" length="4.5" height="1.8"/>
         </BoundingBox>
+        <Axles>
+          <FrontAxle maxSteering="0.5" wheelDiameter="0.6" trackWidth="1.8" positionX="3.1" positionZ="0.3"/>
+          <RearAxle maxSteering="0.0" wheelDiameter="0.6" trackWidth="1.8" positionX="0.0" positionZ="0.3"/>
+        </Axles>
         <Properties>
           <Property name="type" value="simulation"/>
         </Properties>
-      </MiscObject>
-    </ScenarioObject>
-     <ScenarioObject name="c2">
-      <MiscObject mass="500.0" name="static.prop.container" miscObjectCategory="obstacle">
-        <ParameterDeclarations/>
-        <BoundingBox>
-          <Center x="-1.0" y="0.0" z="0.85"/>
-          <Dimensions width="1.0" length="2.0" height="1.7"/>
-        </BoundingBox>
-        <Properties>
-          <Property name="type" value="simulation"/>
-        </Properties>
-      </MiscObject>
-    </ScenarioObject>
-     <ScenarioObject name="c3">
-      <MiscObject mass="500.0" name="static.prop.container" miscObjectCategory="obstacle">
-        <ParameterDeclarations/>
-        <BoundingBox>
-          <Center x="-1.0" y="0.0" z="0.85"/>
-          <Dimensions width="1.0" length="2.0" height="1.7"/>
-        </BoundingBox>
-        <Properties>
-          <Property name="type" value="simulation"/>
-        </Properties>
-      </MiscObject>
-    </ScenarioObject>
-     <ScenarioObject name="c4">
-      <MiscObject mass="500.0" name="static.prop.container" miscObjectCategory="obstacle">
-        <ParameterDeclarations/>
-        <BoundingBox>
-          <Center x="-1.0" y="0.0" z="0.85"/>
-          <Dimensions width="1.0" length="2.0" height="1.7"/>
-        </BoundingBox>
-        <Properties>
-          <Property name="type" value="simulation"/>
-        </Properties>
-      </MiscObject>
-    </ScenarioObject>
-    <ScenarioObject name="c5">
-      <MiscObject mass="500.0" name="static.prop.container" miscObjectCategory="obstacle">
-        <ParameterDeclarations/>
-        <BoundingBox>
-          <Center x="-1.0" y="0.0" z="0.85"/>
-          <Dimensions width="1.0" length="2.0" height="1.7"/>
-        </BoundingBox>
-        <Properties>
-          <Property name="type" value="simulation"/>
-        </Properties>
-      </MiscObject>
+      </Vehicle>
     </ScenarioObject>
   </Entities>
   <Storyboard>
@@ -94,9 +51,9 @@
             <Environment name="Environment1">
               <TimeOfDay animation="false" dateTime="2019-06-25T12:00:00"/>
               <Weather cloudState="free">
-                <Sun intensity="0.35" azimuth="0" elevation="1.31"/>
+                <Sun intensity="0.85" azimuth="0" elevation="1.31"/>
                 <Fog visualRange="100000.0"/>
-                <Precipitation precipitationType="rain" intensity="0.2"/>
+                <Precipitation precipitationType="dry" intensity="0.0"/>
               </Weather>
               <RoadCondition frictionScaleFactor="1.0"/>
             </Environment>
@@ -106,7 +63,7 @@
           <PrivateAction>
             <TeleportAction>
               <Position>
-                <WorldPosition x="92.44" y="314" z="0" h="-1.5707963267948966"/>
+                <WorldPosition x="140" y="55" z="0" h="3.14159265359"/>
               </Position>
             </TeleportAction>
           </PrivateAction>
@@ -130,75 +87,118 @@
             </ControllerAction>
           </PrivateAction>
         </Private>
-        <Private entityRef="c1">
+        <Private entityRef="adversary">
           <PrivateAction>
             <TeleportAction>
               <Position>
-                <WorldPosition x="90" y="308" z="0.0" h="-1.57079632679"/>
+                <WorldPosition x="92.5" y="91" z="0.2" h="-1.56"/>
               </Position>
             </TeleportAction>
           </PrivateAction>
-        </Private>
-        <Private entityRef="c2">
           <PrivateAction>
-            <TeleportAction>
-              <Position>
-                <WorldPosition x="95" y="298" z="0.3" h="1.57079632679"/>
-              </Position>
-            </TeleportAction>
-          </PrivateAction>
-        </Private>
-        <Private entityRef="c3">
-          <PrivateAction>
-            <TeleportAction>
-              <Position>
-                <WorldPosition x="91" y="288" z="0.3" h="0"/>
-              </Position>
-            </TeleportAction>
-          </PrivateAction>
-        </Private>
-        <Private entityRef="c4">
-          <PrivateAction>
-            <TeleportAction>
-              <Position>
-                <WorldPosition x="93" y="278" z="0.0" h="0"/>
-              </Position>
-            </TeleportAction>
-          </PrivateAction>
-        </Private>
-        <Private entityRef="c5">
-          <PrivateAction>
-            <TeleportAction>
-              <Position>
-                <WorldPosition x="91" y="268" z="0.0" h="0"/>
-              </Position>
-            </TeleportAction>
+            <ControllerAction>
+              <AssignControllerAction>
+                <Controller name="AdversaryAgent">
+                  <Properties>
+                    <Property name="module" value="npc_vehicle_control"/>
+                  </Properties>
+                </Controller>
+              </AssignControllerAction>
+              <OverrideControllerValueAction>
+                <Throttle value="0" active="false"/>
+                <Brake value="0" active="false"/>
+                <Clutch value="0" active="false"/>
+                <ParkingBrake value="0" active="false"/>
+                <SteeringWheel value="0" active="false"/>
+                <Gear number="0" active="false"/>
+              </OverrideControllerValueAction>
+            </ControllerAction>
           </PrivateAction>
         </Private>
       </Actions>
     </Init>
     <Story name="MyStory">
       <Act name="Behavior">
-        <ManeuverGroup name="NoManeuver" maximumExecutionCount="1">
+        <ManeuverGroup maximumExecutionCount="1" name="ManeuverSequence">
           <Actors selectTriggeringEntities="false">
-            <EntityRef entityRef="hero"/>
+            <EntityRef entityRef="adversary"/>
           </Actors>
+          <Maneuver name="SynchronizeManeuver">
+            <Event name="RouteCreation" priority="overwrite">
+              <Action name="RouteCreation">
+                <PrivateAction>
+                  <RoutingAction>
+                    <AcquirePositionAction>
+                      <Position>
+                        <WorldPosition x="92" y="13.5" z="0" h="0"/>
+                      </Position>
+                    </AcquirePositionAction>
+                  </RoutingAction>
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="StartCondition" delay="0" conditionEdge="rising">
+                    <ByValueCondition>
+                      <SimulationTimeCondition value="0.1" rule="greaterThan"/>
+                    </ByValueCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+            <Event name="ActorSynchronization" priority="overwrite">
+              <Action name="ActorSynchronization">
+                <PrivateAction>
+                  <SynchronizeAction masterEntityRef="hero">
+                    <TargetPositionMaster>
+                      <WorldPosition x="103" y="55" z="0" h="3.14159"/>
+                    </TargetPositionMaster>
+                    <TargetPosition>
+                      <WorldPosition x="92" y="63.8" z="0" h="-1.56"/>
+                    </TargetPosition>
+                    <FinalSpeed>
+                      <RelativeSpeedToMaster value='3' speedTargetValueType='delta'/>
+                    </FinalSpeed>
+                  </SynchronizeAction>
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="StartCondition" delay="0" conditionEdge="rising">
+                    <ByValueCondition>
+                      <SimulationTimeCondition value="0.1" rule="greaterThan"/>
+                    </ByValueCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+          </Maneuver>
         </ManeuverGroup>
         <StartTrigger>
           <ConditionGroup>
             <Condition name="OverallStartCondition" delay="0" conditionEdge="rising">
-              <ByValueCondition>
-                <SimulationTimeCondition value="120.0" rule="greaterThan"/>
-              </ByValueCondition>
+              <ByEntityCondition>
+                <TriggeringEntities triggeringEntitiesRule="any">
+                  <EntityRef entityRef="hero"/>
+                </TriggeringEntities>
+                <EntityCondition>
+                  <TraveledDistanceCondition value="0.1"/>
+                </EntityCondition>
+              </ByEntityCondition>
             </Condition>
           </ConditionGroup>
         </StartTrigger>
         <StopTrigger>
           <ConditionGroup>
-            <Condition name="EndCondition" delay="1" conditionEdge="rising">
-              <ByValueCondition>
-                <SimulationTimeCondition value="120.0" rule="greaterThan"/>
-              </ByValueCondition>
+            <Condition name="EndCondition" delay="0" conditionEdge="rising">
+              <ByEntityCondition>
+                <TriggeringEntities triggeringEntitiesRule="any">
+                  <EntityRef entityRef="hero"/>
+                </TriggeringEntities>
+                <EntityCondition>
+                  <TraveledDistanceCondition value="200.0"/>
+                </EntityCondition>
+              </ByEntityCondition>
             </Condition>
           </ConditionGroup>
         </StopTrigger>
@@ -238,7 +238,7 @@
         </Condition>
         <Condition name="criteria_DrivenDistanceTest" delay="0" conditionEdge="rising">
           <ByValueCondition>
-            <ParameterCondition parameterRef="distance_success" value="70" rule="lessThan"/>
+            <ParameterCondition parameterRef="distance_success" value="100" rule="lessThan"/>
           </ByValueCondition>
         </Condition>
       </ConditionGroup>

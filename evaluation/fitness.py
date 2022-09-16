@@ -58,11 +58,7 @@ def fitness_random(simout):
 
 def fitness_basic_two_actors(simout: SimulationOutput):
     traceEgo = simout.location["ego"]
-
-    if "adversary" in simout.location:
-        tracePed = simout.location["adversary"]
-    else:
-        tracePed = simout.location["other"]
+    tracePed = simout.location["adversary"]
 
     if simout.otherParams['isCollision']:
         # we dont want scenarios where collisions occure since we have no real driving model

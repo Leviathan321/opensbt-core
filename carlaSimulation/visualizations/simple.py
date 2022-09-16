@@ -905,12 +905,17 @@ class World(object):
             return (world, town_map)
 
         except RuntimeError as ex:
+            print(self.client.get_world())
+            print(self.timeout)
             logging.error(ex)
             exit_game()
 
     def start(self, hud, input_control):
         """Build the map image, stores the needed modules and prepares rendering in Hero Mode"""
         self.world, self.town_map = self._get_data_from_carla()
+
+        print(self.world)
+        print(self.town_map)
 
         # Create Surfaces
         self.map_image = MapImage(

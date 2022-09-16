@@ -25,7 +25,7 @@ mutationRate = 0.2
 
 DEBUG = False
 RESULTS_FOLDER =  "/results/"
-PRECISION = 10
+PRECISION = 3
 
 ''' Input:
         initialPopulationSize: number of best scenario instances to select each iteration

@@ -1,5 +1,5 @@
 import numpy as np
-from carlaSimulation import runner
+from carlaSimulation import balancer
 from utils.text_operations import createScenarioInstanceXOSC
 from simulation.simulator import SimulationOutput
 import json
@@ -8,7 +8,6 @@ import os
 SCENARIO_DIR = str(os.getcwd()) + os.sep + "carlaSimulation" + os.sep + "temp"
 
 class CarlaSimulator(object):
-    # TODO consider sampling time; check how to set sampling time via matlab
     samplingTime = 1
 
     ## Simulates a set of scenarios and returns the output
@@ -21,7 +20,7 @@ class CarlaSimulator(object):
 
             print("++ running scenarios with carla ++ ")
 
-            outs = runner.run_scenarios(scenario_dir=SCENARIO_DIR)
+            outs = balancer.run_scenarios(scenario_dir=SCENARIO_DIR)
             results = []
             
             for out in outs:
