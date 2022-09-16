@@ -4,7 +4,7 @@ import csv
 
 N_PLOT = 3  # select how many scenarios instances from the best to plot
 
-def write_results(simulationOutputAll,algorithmName,pop,xosc,featureNames,execTime,path,scenario,all_pops,n_plot=N_PLOT):  
+def write_results(simulationOutputAll,algorithmName,fitnessFcnNames,pop,xosc,featureNames,execTime,path,scenario,all_pops,n_plot=N_PLOT):  
     if not os.path.isdir(path):
         os.makedirs(path)
     for i in range(0,n_plot):
@@ -23,6 +23,7 @@ def write_results(simulationOutputAll,algorithmName,pop,xosc,featureNames,execTi
         writer.writerow(header)
 
         writer.writerow(["algorithm" , algorithmName])
+        writer.writerow(["fitness_functions_used" , fitnessFcnNames])
         writer.writerow(["n_individuals" , str(len(pop))])
         writer.writerow(["most_critical" , str([str(entry) for entry in zip(featureNames,pop[0])])])
         writer.writerow(["most_critical_fitness" , str(pop[0].fitness.values)] )

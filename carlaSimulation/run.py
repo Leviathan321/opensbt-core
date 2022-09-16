@@ -7,15 +7,19 @@ from scenario import Scenario
 from recorder import Recorder
 
 from metrics.distance import DistanceBetweenVehicles
-from controllers.human import HumanAgent
+
+from controllers.npc import NpcAgent
 
 
 HOST_CARLA = 'localhost'
 PORT_CARLA = 2000
-TIMEOUT_CARLA = 10
+TIMEOUT_CARLA = 15
 
 RECORDING_DIR = '/tmp/recordings'
-SCENARIO_DIR = 'scenarios'
+
+# SCENARIO_DIR = 'scenarios'
+SCENARIO_DIR = 'test_scenarios'
+
 METRICS_DIR = 'metrics'
 
 def get_simulator(host, port, timeout):
@@ -35,7 +39,7 @@ def get_evaluator():
     return DistanceBetweenVehicles()
 
 def get_controller():
-    return HumanAgent
+    return NpcAgent
 
 def get_recorder(directory):
     return Recorder(directory)

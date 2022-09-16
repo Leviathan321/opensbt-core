@@ -5,12 +5,14 @@
 
 import carla
 
+# import visualization
+from carlaSimulation import visualization
+
 from agents.navigation.behavior_agent import BehaviorAgent
 
 from srunner.autoagents.autonomous_agent import AutonomousAgent
 from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
 
-from carlaSimulation import visualization
 
 class NpcAgent(AutonomousAgent):
 

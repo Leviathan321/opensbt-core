@@ -1,6 +1,6 @@
 import numpy as np
-from utils.text_operations import createScenarioInstanceXOSC
 from carlaSimulation import runner
+from utils.text_operations import createScenarioInstanceXOSC
 from simulation.simulator import SimulationOutput
 import json
 import os

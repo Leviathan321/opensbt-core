@@ -1,18 +1,21 @@
 import os
 
-from carlaSimulation.controllers.npc import NpcAgent
+import matplotlib.pyplot as plt
 
 from carlaSimulation.simulator import Simulator
 from carlaSimulation.scenario import Scenario
 from carlaSimulation.recorder import Recorder
 
-from carlaSimulation.metrics.raw import RawData
+from carlaSimulation.metrics.distance import DistanceBetweenVehicles
+
+from carlaSimulation.controllers.npc import NpcAgent
 
 HOST_CARLA = 'localhost'
 PORT_CARLA = 2000
-TIMEOUT_CARLA = 15
+TIMEOUT_CARLA = 10
+
 RECORDING_DIR = '/tmp/recordings'
-SCENARIO_DIR = 'scenarios'
+SCENARIO_DIR = 'temp'
 METRICS_DIR = 'metrics'
 
 def get_simulator(host, port, timeout):
@@ -20,6 +23,7 @@ def get_simulator(host, port, timeout):
 
 def get_scenarios(directory):
     scenarios = None
+    print(directory)
     with os.scandir(directory) as entries:
         scenarios = [
             Scenario(entry)
@@ -29,7 +33,7 @@ def get_scenarios(directory):
     return scenarios
 
 def get_evaluator():
-    return RawData()
+    return DistanceBetweenVehicles()
 
 def get_controller():
     return NpcAgent
@@ -38,7 +42,7 @@ def get_recorder(directory):
     return Recorder(directory)
 
 def run_scenarios(scenario_dir=SCENARIO_DIR,recording_dir=RECORDING_DIR):
-
+    
     simulator = get_simulator(HOST_CARLA, PORT_CARLA, TIMEOUT_CARLA)
     scenarios = get_scenarios(scenario_dir)
     recorder = get_recorder(recording_dir)
@@ -58,5 +62,12 @@ def run_scenarios(scenario_dir=SCENARIO_DIR,recording_dir=RECORDING_DIR):
                 recording
             )
         )
+
+    for (frame, dist) in evaluations:
+        plt.plot(frame, dist)
+        plt.ylabel('Distance [m]')
+        plt.xlabel('Frame number')
+        plt.title('Distance')
+        plt.show()
 
     return evaluations
