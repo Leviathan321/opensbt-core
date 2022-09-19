@@ -25,7 +25,7 @@ mutationRate = 0.2
 
 DEBUG = False
 RESULTS_FOLDER =  "/results/"
-PRECISION = 10
+PRECISION = 3
 
 ''' Input:
         initialPopulationSize: number of best scenario instances to select each iteration
@@ -40,7 +40,6 @@ PRECISION = 10
         xosc: scenario name
         simTime: simulation time
         samplingTime: motion sampling time to be passed to the simulator
-        initial_pop=[]: initial population to start search
         time_search = 10: The time to use for search with nsga2-DT (actual search time can be above the threshold, 
                           since the algorithm might perform nsga2 iterations, when time limit is already reached
 
@@ -50,7 +49,7 @@ def nsga2_DT(initialPopulationSize,
             nGenerations,
                     var_min, 
                     var_max, 
-                    fitnessFcn, 
+                    fitnessFcns, 
                     optimize, 
                     criticalFcn, 
                     simulateFcn,
@@ -62,12 +61,11 @@ def nsga2_DT(initialPopulationSize,
     algorithmName="nsga2DT"
     subFolderName = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
     outputPath = str(os.getcwd()) + RESULTS_FOLDER + Path(xosc).stem + os.sep + subFolderName
-    simoutAll = {}
     
     all_critical_dict = {}
     all_solutions = []
     all_best = [] # store the population after a complete NSGA2 run
-
+    all_simoutput = {}
     #######
 
     toolbox = base.Toolbox()
@@ -125,10 +123,10 @@ def nsga2_DT(initialPopulationSize,
             assert len(pop_search) % 4 == 0
 
             # Search in critical reagion with nsga2
-            best_run, all_solutions_run, criticalDict_Sub, stats2,execTimeTc = nsga2_TC(
+            best_run, all_solutions_run, criticalDict_Sub, simoutput_run, stats2,execTimeTc = nsga2_TC(
                     initialPopulationSize=initialPopulationSize,
                     nGenerations=nGenerations,
-                    fitnessFcn=fitnessFcn, 
+                    fitnessFcns=fitnessFcns, 
                     optimize=optimize, 
                     criticalFcn=criticalFcn, 
                     simulateFcn=simulateFcn,
@@ -140,13 +138,14 @@ def nsga2_DT(initialPopulationSize,
                     mode="submode",
                     simTime=simTime,
                     samplingTime=samplingTime,
-                    simulationOutputAll=simoutAll)
+            )
 
             update_list_unique(all_best,best_run)
             update_list_unique(all_solutions,all_solutions_run)
 
             all_critical_dict.update(criticalDict_Sub)
-            
+            all_simoutput.update(simoutput_run)
+
             print(f"Size_critical_dict: {len(all_critical_dict)}")
             print(f"Size all_solutions: {len(all_solutions)}")
 
@@ -178,10 +177,10 @@ def nsga2_DT(initialPopulationSize,
     t_end = time.time()
     execTime = t_end - t_start_search
     print("++ Writing results ++") 
+    fitnessFcnNames =  str([fcn.__name__ for fcn in fitnessFcns])
+    writer.write_results(all_simoutput,algorithmName,fitnessFcnNames,all_best,xosc,featureNames,execTime,outputPath,xosc, all_best)   
 
-    writer.write_results(simoutAll,algorithmName,all_best,xosc,featureNames,execTime,outputPath,xosc, all_best)   
-
-    return all_best, all_solutions, all_critical_dict, execTime
+    return all_best, all_solutions, all_critical_dict, all_simoutput, execTime
 
 def findNextDivident(n,k):
     i = 1

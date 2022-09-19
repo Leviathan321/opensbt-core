@@ -12,9 +12,10 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = False
 
-MIN_SAMPLES_SPLIT = 200
-CRITICALITY_THRESHOLD = 0.9
+MIN_SAMPLES_SPLIT = 150
+CRITICALITY_THRESHOLD = 0.7
 DELTA = 0.0
+MAX_TREE_DEPTH = 3
 
 def getCriticalRegions(all_solutions, all_critical_dict, var_min, var_max,  name, feature_names, outputPath=None, criticality_probability = CRITICALITY_THRESHOLD, min_samples_split=MIN_SAMPLES_SPLIT, plot_results=True):
 
@@ -38,7 +39,7 @@ def getCriticalRegions(all_solutions, all_critical_dict, var_min, var_max,  name
             return solutions_in_region, bounds
 
         CP = criticality_probability
-        clf = tree.DecisionTreeClassifier(min_samples_split=min_samples_split, criterion="entropy", max_depth=10)
+        clf = tree.DecisionTreeClassifier(min_samples_split=min_samples_split, criterion="entropy", max_depth=MAX_TREE_DEPTH)
         clf = clf.fit(X, y)
 
         tree.plot_tree(clf)

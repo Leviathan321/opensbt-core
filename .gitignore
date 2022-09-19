@@ -17,6 +17,7 @@ log.txt
 
 # Results
 results/simoutput
+results/
 
 # Egg
 test_case_generation.egg-info

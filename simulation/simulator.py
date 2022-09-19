@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Optional, Dict, List
+from unittest import TestCase
 import numpy as np
 import os
 import sys
@@ -38,9 +39,15 @@ class SimulationOutput(object):
     times: List
     location: Dict
     velocity: Dict
+    acceleration: Optional[Dict]
+    yaw: Optional[Dict]
     collisions: List
     actors: Dict
     otherParams:Dict
+
+    def __init__(self, **kwargs):
+        for key,value in kwargs.items():
+            setattr(self,key,value)
 
     def to_json(self):
         return json.dumps(self.__dict__)
