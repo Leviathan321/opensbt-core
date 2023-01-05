@@ -4,11 +4,13 @@
   <ParameterDeclarations>
       <ParameterDeclaration name="SimulationTime" parameterType="double" value="5"/> 
       <ParameterDeclaration name="FinalHostSpeed" parameterType="double" value="$FinalHostSpeed"/> 
-      <ParameterDeclaration name="PedestrianSpeed" parameterType="double" value="$PedestrianSpeed"/>
+      <ParameterDeclaration name="PedestrianSpeed" parameterType="double" value="$PedestrianSpeed"/>	  
       <ParameterDeclaration name="PedestrianDistanceEgoX" parameterType="double" value="50"/>
       <ParameterDeclaration name="PedestrianDistanceEgoY" parameterType="double" value="3"/>
       <ParameterDeclaration name="OverallStartDrivenDistance" parameterType="double" value="19"/>
       <ParameterDeclaration name="PedestrianEgoDistanceStartWalk" parameterType="double" value="$PedestrianEgoDistanceStartWalk"/>
+	    <ParameterDeclaration name="FrictionScaleFactor" parameterType="double" value="$FrictionScaleFactor"/>
+	    <ParameterDeclaration name="PrecipitationIntensity" parameterType="double" value="$PrecipitationIntensity"/>
   </ParameterDeclarations>
   <CatalogLocations/>
   <RoadNetwork>
@@ -77,9 +79,9 @@
               <Weather cloudState="free">
                 <Sun intensity="0.35" azimuth="0" elevation="1.31"/>
                 <Fog visualRange="100000.0"/>
-                <Precipitation precipitationType="rain" intensity="0.2"/>
+                <Precipitation precipitationType="rain" intensity="$PrecipitationIntensity"/>
               </Weather>
-              <RoadCondition frictionScaleFactor="1.0"/>
+              <RoadCondition frictionScaleFactor="$FrictionScaleFactor"/>
             </Environment>
           </EnvironmentAction>
         </GlobalAction>
@@ -141,8 +143,8 @@
             <EntityRef entityRef="adversary"/>
           </Actors>
           <Maneuver name="PedestrianCrossingManeuver">
-            <Event name="PedestrianStartsWalkingEvent" priority="overwrite">
-              <Action name="PedestrianStartsWalkingAction">
+            <Event name="PedestrianStartsWalking" priority="overwrite">
+              <Action name="PedestrianStartsWalking">
                 <PrivateAction>
                   <LongitudinalAction>
                     <SpeedAction>
@@ -322,8 +324,7 @@
       </Act>
     </Story>
     <StopTrigger>
-      <!--
-        <ConditionGroup>
+      <ConditionGroup>
         <Condition name="criteria_RunningStopTest" delay="0" conditionEdge="rising">
           <ByValueCondition>
             <ParameterCondition parameterRef="" value="" rule="lessThan"/>
@@ -360,7 +361,6 @@
           </ByValueCondition>
         </Condition>
       </ConditionGroup>
-      -->
     </StopTrigger>
   </Storyboard>
 </OpenSCENARIO>

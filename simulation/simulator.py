@@ -1,7 +1,10 @@
+
 from dataclasses import dataclass
-from typing import Optional, Dict, List
-from unittest import TestCase
-import numpy as np
+from enum import Enum
+from typing import Dict, List
+from pymoo.core.individual import Individual
+from abc import ABC, abstractmethod, abstractstaticmethod
+
 import os
 import sys
 import json
@@ -39,15 +42,16 @@ class SimulationOutput(object):
     times: List
     location: Dict
     velocity: Dict
-    acceleration: Optional[Dict]
-    yaw: Optional[Dict]
+    speed: Dict
+    acceleration: Dict
+    yaw: Dict
     collisions: List
     actors: Dict
-    otherParams:Dict
+    otherParams: Dict
 
     def __init__(self, **kwargs):
         for key,value in kwargs.items():
-            setattr(self,key,value)
+            setattr(self, key, value)
 
     def to_json(self):
         return json.dumps(self.__dict__)
@@ -56,3 +60,24 @@ class SimulationOutput(object):
     def from_json(cls, json_str):
         json_dict = json.loads(json_str)
         return cls(**json_dict)
+
+
+class Simulator(ABC):
+    do_visualize = False
+    sim_time = 10
+    time_step = 0.01
+    
+    #TODO check whether to define sim time , time step as attribute here (instead in problem), show_visualization as well
+    @abstractstaticmethod
+    def simulate_batch(list_individuals: List[Individual], variable_names: List[str], scenario_path: str, sim_time: float, time_step: float) -> List[SimulationOutput]:
+        raise NotImplementedError("Implement the simulation of a batch of scenario instances.")
+
+    @abstractstaticmethod
+    def simulate_single(list_individuals: List[Individual], variable_names: List[str], scenario_path: str, sim_time:float, time_step:float) -> List[SimulationOutput]:
+        raise NotImplementedError("Implement the simulation of a scenario instance.")
+      
+class SimulationType(Enum):
+    DUMMY = 0
+    CARLA = 1
+    PRESCAN = 2
+    NONE = 3

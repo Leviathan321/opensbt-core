@@ -1,55 +1,75 @@
-import numpy as np
-from carlaSimulation import balancer
-from utils.text_operations import createScenarioInstanceXOSC
-from simulation.simulator import SimulationOutput
+from pathlib import Path
+from typing import List, Dict
+from carla_simulation import balancer
+from simulation.simulator import Simulator, SimulationOutput
+import logging
 import json
 import os
 
-SCENARIO_DIR = str(os.getcwd()) + os.sep + "carlaSimulation" + os.sep + "temp"
+SCENARIO_DIR = "/tmp/scenarios"
 
-class CarlaSimulator(object):
-    samplingTime = 1
+class CarlaSimulator(Simulator):
 
-    ## Simulates a set of scenarios and returns the output
+    ''' Simulates a set of scenarios and returns the output '''
     @staticmethod
-    def simulateBatch(listIndividuals, featureNames, xosc: str, simTime: float,samplingTime = samplingTime):
+    def simulate_batch(
+        list_individuals,
+        variable_names,
+        scenario_path: str,
+        sim_time: float,
+        time_step:float,
+        do_visualize:bool = False
+    ) -> List[SimulationOutput]:
+        xosc = scenario_path
         try:
-            for ind in listIndividuals:
-                instanceValues = CarlaSimulator.getParameterDict(featureNames,ind)
-                createScenarioInstanceXOSC(xosc,instanceValues,outfolder=SCENARIO_DIR)
-
-            print("++ running scenarios with carla ++ ")
-
-            outs = balancer.run_scenarios(scenario_dir=SCENARIO_DIR)
+            for ind in list_individuals:
+                logging.info("provided following values:")
+                instance_values = [v for v in zip(variable_names,ind)]
+                logging.info(instance_values)
+                CarlaSimulator.create_scenario_instance_xosc(xosc, dict(instance_values), outfolder=SCENARIO_DIR)
+            logging.info("++ running scenarios with carla ++ ")
+            outs = balancer.run_scenarios(scenario_dir=SCENARIO_DIR, visualization_flag=do_visualize)
             results = []
-            
             for out in outs:
-                # TODO decide to do evaluation in optimizer oder directly by carla 
-                #print(f"Simulation output: {out}")
-
                 simout = SimulationOutput.from_json(json.dumps(out))
-                if len(simout.collisions) != 0:
-                    simout.otherParams["isCollision"] = True
-                else:
-                    simout.otherParams["isCollision"] = False
+                simout.otherParams["isCollision"] = (len(simout.collisions) != 0)
                 results.append(simout)
         except Exception as e:
             raise e
         finally:
-            print("++ removing temporary scenarios ++")
-            filelist = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".xosc") ]
-            for f in filelist:
+            logging.info("++ removing temporary scenarios ++")
+            file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".xosc") ]
+            for f in file_list:
                 os.remove(os.path.join(SCENARIO_DIR, f))
         return results
-    
+
     @staticmethod
-    def getParameterDict(featureNames, values):
-        print("provided following values:")
-        print(featureNames)
-        print(values)
-        instanceValues = {}
-        i = 0
-        for name in featureNames:
-            instanceValues[name] = "{:.3f}".format(values[i]) # HACK temporary pruning digits TODO prune digits after individuum generation
-            i = i+1
-        return instanceValues
+    def create_scenario_instance_xosc(filename: str, values_dict: Dict, outfolder=None):
+        Path(outfolder).mkdir(parents=True, exist_ok=True)
+        parameterFlag = "$"
+
+        print(values_dict)
+        # Read in the file
+        with open(filename, 'r') as file :
+            filedata = file.read()
+
+        suffix = ""
+        # Replace the target string
+        for k,v in values_dict.items():
+            filedata = filedata.replace(parameterFlag + k, str(v))
+            suffix = suffix + "_" + str(v)
+
+        if outfolder is not None:
+            if not os.path.exists(outfolder):
+                os.mkdir(outfolder)
+            filename = outfolder + os.sep + os.path.split(filename)[1]
+
+        splitFilename =  os.path.splitext(filename)
+        newPathPrefix = splitFilename[0]
+
+        # Write the file out again
+        newFileName  = newPathPrefix + suffix + splitFilename[1]
+        with open(newFileName, 'w') as file:
+            file.write(filedata)
+
+        return newFileName

@@ -1,9 +1,0 @@
-# IDE
-.vscode/
-
-# Python
-env/
-**/__pycache__/
-
-# CARLA
-cache/

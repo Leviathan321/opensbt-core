@@ -1,261 +1,177 @@
-from pickletools import optimize
-from algorithm.nsga2_TC import *
-from algorithm.nsga2_DT import *
-from evaluation import fitness
-from evaluation import critical
+import pymoo
 
-from simulation.dummy_simulation import DummySimulator
-import os
-import logging
-import re
-from visualization import plotter
+from model_ga.individual import IndividualSimulated
+pymoo.core.individual.Individual = IndividualSimulated
+
+from model_ga.population import PopulationExtended
+pymoo.core.population.Population = PopulationExtended
+
+from model_ga.result  import ResultExtended
+pymoo.core.result.Result = ResultExtended
+
+from model_ga.problem import ProblemExtended
+pymoo.core.problem.Problem = ProblemExtended
+
 import argparse
-from enum import Enum
-
-os.chmod(os.getcwd(),0o777)
-logging.basicConfig(filename="log.txt",filemode='w', level=logging.ERROR)
-
+import logging
+import os
+import re
 import sys
 
-#########
+from algorithm.nsga2_dt_sim import *
+from algorithm.nsga2_sim import *
+from simulation.simulator import SimulationType
+from experiment.default_experiments import *
 
-# supported simulations
+os.chmod(os.getcwd(), 0o777)
+logging.basicConfig(filename="log.txt", filemode='w', level=logging.ERROR)
 
-class SimulationType(Enum):
-    DUMMY = 0, 
-    CARLA =  1,
-    PRESCAN = 2
+from pymoo.config import Config
 
+Config.warnings['not_compiled'] = False
 
-############
-## Problem definition
+results_folder = '/results/single/'
 
-xosc = None
-var_min = None
-var_max = None
-featureNames = None
-simulateFcn = None
-fitnessFcns = None
-criticalFcn = None
-## scenario parameters
-simTime=50
-samplingTime = 0.5
-optimize = []
-
-''' 
-EXAMPLE DUMMY SIMULATOR
-'''
-
-def setExp1():
-    # (x,y, orientation, velocity) for both actors -> 8 genoms
-    # if  lower and upper boundary are equal mutation throws error
-    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,optimize,criticalFcn
-    xosc = "DummyExperiment"
-    var_min = [ 0,1, 0,5]
-    var_max = [ 360, 10,360,10]
-
-    featureNames = [
-                "orientationEgo",
-                "velocityEgo",
-                "orientationObj",
-                "velocityObj"
-    ]
-    fitnessFcns = [fitness.fitness_basic_two_actors]
-    optimize = ['min']
-    simulateFcn = DummySimulator.simulateBatch
-    criticalFcn = critical.criticalFcn
-
-''' 
-EXAMPLE CARLA SIMULATOR
-'''
-
-def setExp2():
-    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,optimize,criticalFcn
-    xosc = os.getcwd() + "/scenarios/FollowLeadingVehicle_generic.xosc"
-    var_min = [5]
-    var_max = [10]
-    featureNames = ["leadingSpeed"]
-    fitnessFcns = [fitness.fitness_min_distance_two_actors_carla]
-    optimize = ['min']
-    #fitnessFcn = fitness.fitness_random
-    simulateFcn = CarlaSimulator.simulateBatch
-    criticalFcn = critical.criticalFcn
-
-
-def setExp3():
-    # example to test integration (provided scenario is already an instance)
-    global xosc,var_min,var_max,featureNames,simulateFcn,fitnessFcns,criticalFcn, optimize
-    xosc = os.getcwd() + "/scenarios/PedestrianCrossing.xosc"
-    featureNames = ["FinalHostSpeed","PedestrianSpeed"]
-    var_min = [1,1]
-    var_max = [100,1.5]
-    optimize = [min]
-    fitnessFcns = [fitness.fitness_min_distance_two_actors_carla]
-    simulateFcn = CarlaSimulator.simulateBatch
-    criticalFcn = critical.criticalFcn
-
-#######
-
-experimentsSwitcher = {
-   1: setExp1,
-   2: setExp2,
-   3: setExp3
-}
-
-examplesType = {
-  1: SimulationType.DUMMY,
-   2: SimulationType.CARLA,
-   3: SimulationType.CARLA
-}
-
-######
-
-''' Set default search parameters '''
-
-initialPopulationSize = 4
-nGenerations = 1
-algorithm = 0
-timeSearch = 10
+algorithm = None
+problem = None
+experiment = None
 
 ########
 
 parser = argparse.ArgumentParser(description="Pass parameters for search.")
-parser.add_argument('-e', dest='expNumber', type=str, default="3", action='store', help='Hardcoded example scenario to use (possible 1, 8).')
-parser.add_argument('-i', dest='nIterations', type=int, default=nGenerations, action='store', help='Number iterations to perform.')
-parser.add_argument('-n', dest='sizePopulation', type=int, default=initialPopulationSize, action='store', help='The size of the initial population of scenario candidates.')
-parser.add_argument('-a', dest='algorithm', type=int, default=algorithm, action='store', help='The algorithm to use for search, 0 for nsga2, 1 for nsga2dt.')
-parser.add_argument('-t', dest='timeSearch', type=int, default=timeSearch, action='store', help='The time to use for search with nsga2-DT (actual search time can be above the threshold, since algorithm might perform nsga2 iterations, when time limit is already reached.')
-parser.add_argument('-f', dest='xosc', type=str, action='store', help='The path to the .pb file of the Prescan Experiment.')
-
-parser.add_argument('-min', dest='var_min', nargs="+", type=float, action='store', help='The lower bound of each parameter.')
-parser.add_argument('-max', dest='var_max', nargs="+", type=float, action='store', help='The upper bound of each parameter.')
-parser.add_argument('-m', dest='feature_names', nargs="+", type=str, action='store', help='The names of the features to modify.')
-
+parser.add_argument('-e', dest='exp_number', type=str, action='store',
+                    help='Hardcoded example scenario to use [2 to 6].')
+parser.add_argument('-i', dest='n_generations', type=int, default=None, action='store',
+                    help='Number generations to perform.')
+parser.add_argument('-n', dest='size_population', type=int, default=None, action='store',
+                    help='The size of the initial population of scenario candidates.')
+parser.add_argument('-a', dest='algorithm', type=int, default=None, action='store',
+                    help='The algorithm to use for search, 1 for NSGA2, 2 for NSGA2-DT.')
+parser.add_argument('-t', dest='maximal_execution_time', type=str, default=None, action='store',
+                    help='The time to use for search with nsga2-DT (actual search time can be above the threshold, since algorithm might perform nsga2 iterations, when time limit is already reached.')
+parser.add_argument('-f', dest='scenario_path', type=str, action='store',
+                    help='The path to the scenario description file/experiment.')
+parser.add_argument('-min', dest='var_min', nargs="+", type=float, action='store',
+                    help='The lower bound of each parameter.')
+parser.add_argument('-max', dest='var_max', nargs="+", type=float, action='store',
+                    help='The upper bound of each parameter.')
+parser.add_argument('-m', dest='design_names', nargs="+", type=str, action='store',
+                    help='The names of the variables to modify.')
+parser.add_argument('-dt', dest='max_tree_iterations', type=int, action='store',
+                    help='The maximum number of total decision tree generations (when using NSGA2-DT algoritm).')
+parser.add_argument('-o', dest='results_folder', type=str, action='store', default=os.sep + "results" + os.sep,
+                    help='The name of the folder where the results of the search are stored (default: \\results\\single\\)')
+parser.add_argument('-v', dest='do_visualize', action='store_true',
+                    help='Whether to use the simuator\'s visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.')
 
 args = parser.parse_args()
 
 #######
 
-if not args.expNumber is None and not args.xosc is None:
+if args.exp_number and args.scenario_path:
     print("Flags set not correctly: Experiment file and example experiment cannot be set at the same time")
     sys.exit()
-elif args.expNumber is None and args.xosc is None:
+elif not (args.exp_number or args.scenario_path):
     print("Flags set not correctly: No file is provided or no example experiment selected.")
     sys.exit()
 
 ###### set experiment
-# pass as first argument the number of the experiment to use
+####### have indiviualized imports
+if args.exp_number:
+    # exp_number provided
+    selExpNumber = re.findall("[1-9]+", args.exp_number)[0]
+    print(f"Selected experiment number: {selExpNumber}")
+    experiment = experiment_switcher.get(int(selExpNumber))()
 
-selectedExperiment = "" 
+    config = experiment.search_configuration
+    problem = experiment.problem
+    algorithm = experiment.algorithm
 
-####### have indiviualized imports 
+elif (args.scenario_path):
+    scenario_path = args.scenario_path
+    var_min = []
+    var_max = []
 
-if not args.expNumber is None:
-    # expNumber provided
-    print("Using given experiment")
-    selExpNumber = re.findall("[1-9]+",args.expNumber)[0]
-    if (examplesType[int(selExpNumber)].value == SimulationType.CARLA.value ):
-        from simulation.carla_simulation import CarlaSimulator
-        print("carla libs imported")
-    elif (examplesType[int(selExpNumber)].value == SimulationType.PRESCAN.value ):
-        # import simulation.prescan_simulation
-        # from simulation.prescan_simulation import PrescanSimulator
-        # print("prescan libs imported")
-        pass
-    else:
-        pass
-
-    ####### set experiment
-    experimentsSwitcher.get(int(selExpNumber))()
-
-elif (not args.xosc is None):
-    xosc = args.xosc
+    #TODO create an experiment from user input
+    #TODO create an ADASProblem from user input
 
     print("-- Experiment provided by file")
 
     if args.var_min is None:
         print("-- Minimal bounds for search are not set.")
         sys.exit()
-    
+
     if args.var_max is None:
         print("-- Maximal bounds for search are not set.")
         sys.exit()
 
-    # set feature_names 
-    if args.feature_names is None:
-        feature_names = ["feature_"+ str(i) for i in range(len(var_min))]
-    
-    simTime = 10
+    print("Creating an experiment from user input not yet supported. Use default_experiments.py to create experiment")
+    sys.exit()
 
-    if xosc.endswith('.pb'):
-        fitnessFcns = [fitness.fitness_min_distance_two_actors_prescan]
-        simulateFcn = PrescanSimulator.simulateBatch
-    elif xosc.endswith('.xosc') :
-        fitnessFcns = [fitness.fitness_min_distance_two_actors_carla]
-        simulateFcn = CarlaSimulator.simulateBatch
-    else:
-        print("-- File is not supported.")
-        sys.exit()
+    # # set design names
+    # if  args.design_names is None:
+    #     design_names = ["feature_" + str(i) for i in range(len(var_min))]
+
+    # if scenario_path.endswith('.pb'):
+    #     fitnessFcn = fitness.fitness_min_distance_two_actors_prescan
+    #     simulateFcn = PrescanSimulator.simulateBatch_compiled_csv
+    # elif scenario_path.endswith('.scenario_path'):
+    #     fitnessFcn = fitness.fitness_min_distance_two_actors_carla
+    #     simulateFcn = CarlaSimulator.simulateBatch
+    # else:
+    #     print("-- File is not supported.")
+    #     sys.exit()
+    # experiment = Experiment()
+else:
+    print("-- No file provided and no experiment selected")
+    sys.exit()
 
 '''
 override params if set by user
 '''
 
-if not args.sizePopulation is None:
-    initialPopulationSize = args.sizePopulation
-if not args.nIterations is None:
-    nGenerations = args.nIterations
+if not args.size_population is None:
+    config.population_size = args.size_population
+if not args.n_generations is None:
+    config.n_generations = args.n_generations
+    config.inner_num_gen = args.n_generations #for NSGAII-DT
 if not args.algorithm is None:
-    algorithm = args.algorithm
-if not args.timeSearch is None:
-    timeSearch = args.timeSearch
+    algorithm = AlgorithmType(args.algorithm)
+if not args.maximal_execution_time is None:
+    config.maximal_execution_time = args.maximal_execution_time
+if not args.max_tree_iterations is None:
+    config.max_tree_iterations = args.max_tree_iterations
+if not args.max_tree_iterations is None:
+    results_folder = args.results_folder
+
 if not args.var_max is None:
-    var_max = args.var_max
+    problem.var_max = args.var_max
 if not args.var_min is None:
-    var_min = args.var_min
-if not args.var_min is None:
-    var_min = args.var_min
-if not args.feature_names is None:
-    feature_names = args.feature_names
-#######
+    problem.var_min = args.var_min
+if not args.design_names is None:
+    problem.design_names = args.design_names
+if not args.do_visualize is None:
+    problem.do_visualize = args.do_visualize
+
+####### Run algorithm
 
 if __name__ == "__main__":
-    pop = None
     execTime = None
-    
-    if algorithm == 0:
-        pop, all_solutions, critical, all_simoutput, stats, execTime = nsga2_TC(initialPopulationSize,
-                        nGenerations,
-                        var_min,
-                        var_max,
-                        fitnessFcns,
-                        optimize,
-                        criticalFcn,
-                        simulateFcn,
-                        featureNames,
-                        xosc,
-                        initial_pop=[],
-                        simTime=simTime,
-                        samplingTime=samplingTime,
-                        mode="standalone"
-                        )
-    elif algorithm == 1:
-           pop, all_solutions, critical, all_simoutput, execTime = nsga2_DT(initialPopulationSize, 
-                    nGenerations,
-                    var_min, 
-                    var_max, 
-                    fitnessFcns, 
-                    optimize, 
-                    criticalFcn, 
-                    simulateFcn,
-                    featureNames,
-                    xosc,
-                    simTime=simTime,
-                    samplingTime=samplingTime,
-                    time_search=timeSearch
-                    )
+    algo = None
+    if algorithm == AlgorithmType.NSGAII:
+        print("pymoo NSGA-II algorithm is used.")
+        algo = NSGAII_SIM(
+                              problem=problem,
+                              config=config)
+    elif algorithm == AlgorithmType.NSGAIIDT:
+        print("pymoo NSGA-II-DT algorithm is used.")
+        algo = NSGAII_DT_SIM(
+                              problem=problem,
+                              config=config)
+    else:
+        raise ValueError("Error: No algorithm with the given code: " + str(algorithm))
 
-    print("# individuals: "+ str(len(pop)))
-    print("# most critical:" + str([str(entry) for entry in zip(featureNames,pop[0])]))
-    print("# most critical fitness: " + str(pop[0].fitness.values) )
-    print("# execution time: " + str(execTime))
+    res = algo.run()
+    algo.write_results(results_folder=results_folder)
+
+    print("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")

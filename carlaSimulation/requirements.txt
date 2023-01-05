@@ -1,5 +1,0 @@
-pygame
-numpy
-matplotlib
-docker
-carla
