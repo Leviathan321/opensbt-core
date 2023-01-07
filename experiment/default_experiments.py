@@ -24,8 +24,8 @@ def getExp1() -> Experiment:
                               "PedestrianSpeed",
                               "FinalHostSpeed",
                               "PedestrianEgoDistanceStartWalk"],
-                          fitness_function=FitnessAdaptedDistanceSpeed(),
-                          simulate_function=CarlaSimulator.simulate_batch,
+                          fitness_function=FitnessMinDistanceVelocity(),
+                          simulate_function=CarlaSimulator.simulate,
                           critical_function=CriticalAdasFrontCollisions(),
                           simulation_time=10,
                           sampling_time=100,
@@ -36,8 +36,7 @@ def getExp1() -> Experiment:
     config = DefaultSearchConfiguration()
     experiment = Experiment(problem=problem,
                             algorithm=AlgorithmType.NSGAII,
-                            search_configuration=config,
-                            simulation_type=SimulationType.CARLA)
+                            search_configuration=config)
     return experiment
 
 '''
@@ -56,8 +55,7 @@ def getExp2() -> Experiment:
     config.maximal_execution_time = "00:00:01"
     experiment = Experiment(problem=problem,
                             algorithm=AlgorithmType.NSGAII,
-                            search_configuration=config,
-                            simulation_type=SimulationType.NONE)
+                            search_configuration=config)
 
     return experiment
 

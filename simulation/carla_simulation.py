@@ -12,7 +12,7 @@ class CarlaSimulator(Simulator):
 
     ''' Simulates a set of scenarios and returns the output '''
     @staticmethod
-    def simulate_batch(
+    def simulate(
         list_individuals,
         variable_names,
         scenario_path: str,
