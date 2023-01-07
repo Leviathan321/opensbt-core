@@ -23,10 +23,10 @@ from model_ga.result import *
 
 ALGORITHM_NAME = "NSGA-II"
 RESULTS_FOLDER = os.sep + "results" + os.sep
-WRITE_ALL_INDIVIDUALS = False
+WRITE_ALL_INDIVIDUALS = True
 
 class NSGAII_SIM(object):
-    
+
     algorithm_name = ALGORITHM_NAME
 
     def __init__(self,
@@ -82,9 +82,9 @@ class NSGAII_SIM(object):
             "Mutation probability" : str(config.prob_mutation),
             "Mutation eta" : str(config.eta_mutation)
         }
-        
+
         save_folder = output.create_save_folder(res.problem, results_folder, algorithm_name)
-        
+
         output.convergence_analysis(res, save_folder)
         output.hypervolume_analysis(res, save_folder)
         output.spread_analysis(res, save_folder)

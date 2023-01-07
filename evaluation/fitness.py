@@ -180,7 +180,7 @@ class FitnessMinTTCVelocity(FitnessBase):
 class FitnessAdaptedDistSpeedRelVelocity(FitnessBase):
     @property
     def min_or_max(self):
-        return "min", "max", "max"
+        return "max", "max", "max"
 
     @property
     def name(self):
@@ -313,7 +313,7 @@ class FitnessAdaptedDistSpeedRelVelocity(FitnessBase):
 class FitnessAdaptedDistanceSpeed(FitnessBase):
     @property
     def min_or_max(self):
-        return "min", "max"
+        return "max", "max"
 
     @property
     def name(self):
