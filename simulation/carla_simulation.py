@@ -32,6 +32,7 @@ class CarlaSimulator(Simulator):
             results = []
             for out in outs:
                 simout = SimulationOutput.from_json(json.dumps(out))
+                #print(f"len(simout.collisions): {len(simout.collisions)}")
                 simout.otherParams["isCollision"] = (len(simout.collisions) != 0)
                 results.append(simout)
         except Exception as e:

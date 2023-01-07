@@ -49,7 +49,7 @@ class CriticalAdasFrontCollisions(CriticalBase):
         else:
             isCollision = None
 
-        if (isCollision == True) and (vector_fitness[0] < -0.8) and (vector_fitness[1] < 0): 
+        if (isCollision == True) or (vector_fitness[0] < -0.6) and (vector_fitness[1] < 0): 
             return True
         else:
             return False

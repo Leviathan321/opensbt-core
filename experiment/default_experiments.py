@@ -34,8 +34,6 @@ def getExp1() -> Experiment:
                           do_visualize = False
                           )
     config = DefaultSearchConfiguration()
-    config.max_tree_iterations = 3  # in paper 5-7
-    # config.maximal_execution_time = None # limit the total time, to control the number of tree iterations
     experiment = Experiment(problem=problem,
                             algorithm=AlgorithmType.NSGAII,
                             search_configuration=config,
@@ -56,7 +54,6 @@ def getExp2() -> Experiment:
 
     config = DefaultSearchConfiguration()
     config.maximal_execution_time = "00:00:01"
-    config.max_tree_iterations = 4
     experiment = Experiment(problem=problem,
                             algorithm=AlgorithmType.NSGAII,
                             search_configuration=config,
