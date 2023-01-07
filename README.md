@@ -30,28 +30,38 @@ python -m pip install -r requirements.txt
 
 Follow the steps desribed  [here](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla) to integrate CARLA.
 
-### Usage
+### Example Usage: Testing a SUT in Carla Simulator 
 
+#### Creating the experiment
 
-The results are written in the *results* folder.
+1. Integrating the Simulator/SUT
 
-### Example 
+2. Defining a fitness function
 
+3. Defining a testing scenario
 
-### Testing a SUT in Carla Simulator 
+(3. Integrating a search method)
 
-To run search with a scenario in carla we have implemented two examples  where a pedestrian crosses the lane of the ego. In one the environment is modified, and the other only the pedestrians speed and host speed is modified.
-To
+#### Running the search
+
+We demonstrate the search with a scenario in carla where a pedestrian crosses the lane of the ego car. 
+
+To run search with the predefined search configuration use:
+
 ```
 python run.py -e 1
 ```
-### Running search on MOO Problem
 
-Run the following to execute search with a mathematical multobjective problem.
+The results are written in the *results* folder.
 
+To change the search space, the search method and termination creteria run the following.
 ```
-python run.py -e 2
+python run.py -e 1 -a 1 -min 0 0 -max 10 2 -m "SpeedEgo" "SpeedPed" -t "01:00:00"
 ```
+
+#### Analyzing the results
+
+TODO
 
 ### Optional Parameters TODO update
 
