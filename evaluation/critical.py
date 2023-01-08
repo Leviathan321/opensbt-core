@@ -14,6 +14,7 @@ class CriticalBase(ABC):
     def eval(self, vector_fitness: np.ndarray, simout: SimulationOutput) -> bool:
         pass
 
+
 class CriticalAdasExplicitRearCollision(CriticalBase):
 
     ''' ADAS problems ''' 
