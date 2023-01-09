@@ -10,7 +10,7 @@ from utils import geometric
 import random
 from abc import ABC, ABCMeta, abstractmethod
 
-class FitnessBase(ABC):
+class Fitness(ABC):
     @property
     @abstractmethod
     def min_or_max(self):
@@ -29,7 +29,7 @@ class FitnessBase(ABC):
     def eval(self, simout: SimulationOutput) -> Tuple[float]:
         pass
 
-class FitnessMinDistance(FitnessBase):
+class FitnessMinDistance(Fitness):
     @property
     def min_or_max(self):
         return ("min",)
@@ -48,7 +48,7 @@ class FitnessMinDistance(FitnessBase):
             result = np.min(geometric.distPair(traceEgo, tracePed))
         return result
 
-class FitnessMinDistanceVelocity(FitnessBase):
+class FitnessMinDistanceVelocity(Fitness):
     @property
     def min_or_max(self):
         return "min", "max"
@@ -76,7 +76,7 @@ class FitnessMinDistanceVelocity(FitnessBase):
 
         return (distance, speed)
 
-class FitnessMinDistanceVelocityFrontOnly(FitnessBase):
+class FitnessMinDistanceVelocityFrontOnly(Fitness):
     @property
     def min_or_max(self):
         return "min", "max"
@@ -112,7 +112,7 @@ class FitnessMinDistanceVelocityFrontOnly(FitnessBase):
         return (distance, speed)
 
 
-class FitnessMinTTC(FitnessBase):
+class FitnessMinTTC(Fitness):
     @property
     def min_or_max(self):
         return "min"
@@ -162,7 +162,7 @@ class FitnessMinTTC(FitnessBase):
         return min_ttc
 
 
-class FitnessMinTTCVelocity(FitnessBase):
+class FitnessMinTTCVelocity(Fitness):
     @property
     def min_or_max(self):
         return "min", "max"
@@ -217,7 +217,7 @@ class FitnessMinTTCVelocity(FitnessBase):
         result = (min_ttc, velocity_min_ttc)
         return result
 
-class FitnessAdaptedDistSpeedRelVelocity(FitnessBase):
+class FitnessAdaptedDistSpeedRelVelocity(Fitness):
     @property
     def min_or_max(self):
         return "max", "max", "max"
@@ -350,7 +350,7 @@ class FitnessAdaptedDistSpeedRelVelocity(FitnessBase):
         return vector_fitness
 
 
-class FitnessAdaptedDistanceSpeed(FitnessBase):
+class FitnessAdaptedDistanceSpeed(Fitness):
     @property
     def min_or_max(self):
         return "max", "max"
@@ -367,7 +367,7 @@ class FitnessAdaptedDistanceSpeed(FitnessBase):
         return adapted_distance, speed
 
 
-class FitnessAdaptedDistanceSpeedTTC(FitnessBase):
+class FitnessAdaptedDistanceSpeedTTC(Fitness):
     @property
     def min_or_max(self):
         return "min", "max", "min"

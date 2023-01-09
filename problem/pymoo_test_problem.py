@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 from pymoo.core.problem import ElementwiseProblem, Problem
 from pymoo.problems import get_problem
-from evaluation.critical import CriticalBase
+from evaluation.critical import Critical
 from simulation.simulator import SimulationOutput
 import numpy as np
 
 @dataclass
 class PymooTestProblem(Problem):
     
-    def __init__(self, problem_name: str, critical_function: CriticalBase, approx_eval_time: float =0.01):
+    def __init__(self, problem_name: str, critical_function: Critical, approx_eval_time: float =0.01):
         self.critical_function = critical_function
         self.problem_name = problem_name
         self.test_problem = get_problem(problem_name)

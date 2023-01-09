@@ -5,7 +5,7 @@ import math
 from abc import ABC, abstractmethod
 from typing import List
 
-class CriticalBase(ABC):
+class Critical(ABC):
     @property
     def name(self):
         return self.__class__.__name__
@@ -15,7 +15,7 @@ class CriticalBase(ABC):
         pass
 
 
-class CriticalAdasExplicitRearCollision(CriticalBase):
+class CriticalAdasExplicitRearCollision(Critical):
 
     ''' ADAS problems ''' 
     def eval(self, vector_fitness: List[float], simout: SimulationOutput = None):
@@ -43,7 +43,7 @@ class CriticalAdasExplicitRearCollision(CriticalBase):
         else:
             return False
 
-class CriticalAdasFrontCollisions(CriticalBase):    
+class CriticalAdasFrontCollisions(Critical):    
     def eval(self, vector_fitness, simout: SimulationOutput = None):
         if simout is not None:
             isCollision = simout.otherParams['isCollision']
@@ -55,7 +55,7 @@ class CriticalAdasFrontCollisions(CriticalBase):
         else:
             return False
 
-class CriticalAdasTTCVelocity(CriticalBase):            
+class CriticalAdasTTCVelocity(Critical):            
     def eval(self, vector_fitness, simout: SimulationOutput = None):
         if simout is not None:
             isCollision = simout.otherParams['isCollision']
@@ -78,7 +78,7 @@ class CriticalAdasTTCVelocity(CriticalBase):
         # b) minimal distance between ego and other vehicle < 0.3m
         # c) velcoty at time of minimal distance is > 1 m/s
     '''
-class CriticalAdasDistanceVelocity(CriticalBase):            
+class CriticalAdasDistanceVelocity(Critical):            
     def eval(self, vector_fitness, simout: SimulationOutput = None):
         if simout is not None:
             isCollision = simout.otherParams['isCollision']
@@ -90,11 +90,11 @@ class CriticalAdasDistanceVelocity(CriticalBase):
         else:
             return False
 
-class CriticalAdasBox(CriticalBase):
+class CriticalAdasBox(Critical):
     def eval(self, vector_fitness, simout):
         return (vector_fitness[0] < -0.6) and (vector_fitness[1] < -1.5)
 
-class CriticalAdasBoxCollision(CriticalBase):
+class CriticalAdasBoxCollision(Critical):
     def eval(self, vector_fitness, simout: SimulationOutput = None):
         if simout is not None:
             isCollision = simout.otherParams['isCollision']
@@ -106,7 +106,7 @@ class CriticalAdasBoxCollision(CriticalBase):
         # "or" or "and"?
         
 ''' Test problems '''
-class CriticalBnhDivided(CriticalBase):
+class CriticalBnhDivided(Critical):
     def eval(self, vector_fitness: np.ndarray, simout=None):
         return  (vector_fitness[0] < 10 ) and \
                 (vector_fitness[1] < 50) and  (vector_fitness[1] > 20) or \
@@ -115,6 +115,6 @@ class CriticalBnhDivided(CriticalBase):
                 (vector_fitness[0] < 40 ) and (vector_fitness[0] > 20 )  and \
                 (vector_fitness[1] < 20) and  (vector_fitness[1] > 15)
 
-class CriticalBnh(CriticalBase):
+class CriticalBnh(Critical):
     def eval(self, vector_fitness):
         return (vector_fitness[0] < 60) and (vector_fitness[1] < 20)

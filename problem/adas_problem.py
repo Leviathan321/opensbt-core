@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Dict
 from pymoo.core.problem import Problem
 import numpy as np
-from evaluation.critical import CriticalBase
+from evaluation.critical import Critical
 from evaluation.fitness import *
 
 @dataclass
@@ -11,9 +11,9 @@ class ADASProblem(Problem):
                  xl: List[float],
                  xu: List[float],
                  scenario_path: str,
-                 fitness_function: FitnessBase,
+                 fitness_function: Fitness,
                  simulate_function,
-                 critical_function: CriticalBase,
+                 critical_function: Critical,
                  simulation_time: float,
                  sampling_time: float,
                  simulation_variables: List[float],
