@@ -7,6 +7,10 @@ from utils.sorting import *
 import dill
 import os
 from pathlib import Path
+from visualization import output
+
+RESULTS_FOLDER = os.sep + "results" + os.sep
+WRITE_ALL_INDIVIDUALS = True
 
 class ResultExtended(Result):
 
@@ -60,3 +64,40 @@ class ResultExtended(Result):
     def load(save_folder, name="result"):
         with open(save_folder + os.sep + name, "rb") as f:
             return dill.load(f)
+            
+    def write_results(self, results_folder = RESULTS_FOLDER):
+        algorithm = self.algorithm
+        algorithm_name = algorithm.__class__.__name__        
+
+        # if self is None:
+        #     print("Result object is None. Execute algorithm first, before writing results.")
+        #     return
+        print(f"=====[{algorithm_name}] Writing results...")
+
+        # config = self.config
+        # algorithm_parameters = {
+        #     "Population size" : str(config.population_size),
+        #     "Number of generations" : str(config.n_generations),
+        #     "Number of offsprings": str(config.num_offsprings),
+        #     "Crossover probability" : str(config.prob_crossover),
+        #     "Crossover eta" : str(config.eta_crossover),
+        #     "Mutation probability" : str(config.prob_mutation),
+        #     "Mutation eta" : str(config.eta_mutation)
+        # }
+
+        save_folder = output.create_save_folder(self.problem, results_folder, algorithm_name)
+
+        output.convergence_analysis(self, save_folder)
+        output.hypervolume_analysis(self, save_folder)
+        output.spread_analysis(self, save_folder)
+        
+        output.write_calculation_properties(self,save_folder,algorithm_name)
+        output.design_space(self, save_folder)
+        output.objective_space(self, save_folder)
+        output.optimal_individuals(self, save_folder)
+        output.write_summary_results(self, save_folder)
+        output.write_simulation_output(self,save_folder)
+        output.simulations(self, save_folder)
+
+        if WRITE_ALL_INDIVIDUALS:
+            output.all_individuals(self, save_folder)

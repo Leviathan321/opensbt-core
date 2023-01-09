@@ -15,12 +15,9 @@ pymoo.core.problem.Problem = ProblemExtended
 import argparse
 import logging
 import os
-import re
 import sys
-
-from algorithm.nsga2_dt_sim import *
-from algorithm.nsga2_sim import *
-from simulation.simulator import SimulationType
+from algorithm.nsga2_optimizer import *
+from algorithm.nsga2dt_optimizer import *
 from experiment.default_experiments import *
 
 os.chmod(os.getcwd(), 0o777)
@@ -170,25 +167,22 @@ if not args.do_visualize is None:
 
 if __name__ == "__main__":
     execTime = None
-    algo = None
+    opt = None
     if algorithm == AlgorithmType.NSGAII:
         print("pymoo NSGA-II algorithm is used.")
-        algo = NSGAII_SIM(
+        optimizer = NsgaIIOptimizer(
                               problem=problem,
                               config=config)
 
-        experiment.algorithm = algo       
-        experiment.run()
-        experiment.write_results(results_folder=results_folder)
-        
-    # refactored only for default algorithms
+        res = optimizer.run()
+        res.write_results(results_folder=results_folder)
     elif algorithm == AlgorithmType.NSGAIIDT:
         print("pymoo NSGA-II-DT algorithm is used.")
-        algo = NSGAII_DT_SIM(
+        optimizer = NsgaIIDTOptimizer(
                               problem=problem,
                               config=config)
-        res = algo.run()
-        algo.write_results(results_folder=results_folder)
+        res = optimizer.run()
+        res.write_results(results_folder=results_folder)
     else:
         raise ValueError("Error: No algorithm with the given code: " + str(algorithm))
 

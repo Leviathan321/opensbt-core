@@ -13,15 +13,15 @@ from pymoo.operators.mutation.pm import PM
 from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
-from algorithm.SimAlgo import SimAlgo
 from algorithm.classification.classifier import ClassificationType
 from algorithm.classification.decision_tree.decision_tree import *
+from algorithm.optimizer import Optimizer
 from experiment.search_configuration import SearchConfiguration
 from visualization import output
 import quality_indicators.metrics.spread as qi
 from model_ga.result import *
 
-class NSGAII_SIM(SimAlgo):
+class NsgaIIOptimizer(Optimizer):
 
     algorithm_name = "NSGA-II"
 

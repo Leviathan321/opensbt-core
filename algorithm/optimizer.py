@@ -4,7 +4,7 @@ from experiment.search_configuration import SearchConfiguration
 from model_ga.problem import ProblemExtended
 
 
-class SimAlgo(ABC):
+class Optimizer(ABC):
     
     algorithm_name: str
     

@@ -13,8 +13,8 @@ pymoo.core.result.Result = ResultExtended
 from model_ga.problem import ProblemExtended
 pymoo.core.problem.Problem = ProblemExtended
 
-from algorithm.nsga2_dt_sim import NSGAII_DT_SIM
-from algorithm.nsga2_sim import NSGAII_SIM
+from algorithm.nsga2dte_optimizer import NSGAII_DT_SIM
+from algorithm.nsga2dt_optimizer import NSGAII_SIM
 from experiment.default_experiments import getExp6
 from visualization.combined import *
 import os
