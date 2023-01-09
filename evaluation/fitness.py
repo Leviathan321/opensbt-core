@@ -90,20 +90,21 @@ class FitnessMinDistanceVelocityFrontOnly(FitnessBase):
             name_adversary = "adversary"
         else:
             name_adversary = "other"
-
+        
+        car_length = float(4.0)
         traceEgo = simout.location["ego"]
         tracePed = simout.location[name_adversary]
 
         ind_min_dist = np.argmin(geometric.distPair(traceEgo, tracePed))
 
-        # distance between ego and other object
-        distance = np.min(geometric.distPair(traceEgo, tracePed))
+        # approx distance between ego's front and other object
+        distance = np.min(geometric.distPair(traceEgo, tracePed))  - car_length/2
 
         # speed of ego at time of the minimal distance
         speed = simout.speed["ego"][ind_min_dist]
         
         # value scenarios worse if pedestrian is not in front of the car
-        car_length = float(4.3)
+       
         if (traceEgo[ind_min_dist][0] -  tracePed[ind_min_dist][0] < car_length/2):
             distance = 1000
             speed = -1000
