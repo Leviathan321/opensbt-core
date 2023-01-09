@@ -1,10 +1,8 @@
 import os
 from evaluation.fitness import *
-from evaluation import critical
 from problem.adas_problem import ADASProblem
 from problem.pymoo_test_problem import PymooTestProblem
 from experiment.experiment import *
-from simulation.simulator import SimulationType
 from algorithm.algorithm import *
 from evaluation.critical import *
 
@@ -29,7 +27,7 @@ class DefaultExperiments(object):
         return self.store
 
 
-experiments = DefaultExperiments()
+experiments_store = DefaultExperiments()
 
 '''
 EXAMPLE CARLA SIMULATOR
@@ -63,7 +61,7 @@ def getExp1() -> Experiment:
                             search_configuration=config)
     return experiment
 
-experiments.register(getExp1())
+experiments_store.register(getExp1())
 
 '''
     BNH Problem
@@ -86,9 +84,4 @@ def getExp2() -> Experiment:
 
     return experiment
 
-experiments.register(getExp2())
-
-# experiment_switcher = {
-#     1: getExp1,
-#     2: getExp2,
-# }
+experiments_store.register(getExp2())

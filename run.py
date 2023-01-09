@@ -75,7 +75,7 @@ args = parser.parse_args()
 
 if args.show_info:
     print("Experiments with the following names are defined:")
-    store = experiments.get_store()
+    store = experiments_store.get_store()
     for name in store.keys():
         print(name)
     
@@ -94,11 +94,8 @@ elif not (args.exp_number or args.scenario_path):
 ###### set experiment
 ####### have indiviualized imports
 if args.exp_number:
-    # exp_number provided
-    # selExpNumber = re.findall("[1-9]+", args.exp_number)[0]
-    # print(f"Selected experiment number: {selExpNumber}")
-    #experiment = experiment_switcher.get(int(selExpNumber))()
-    experiment = experiments.load(experiment_name=args.exp_number)
+    # print(f"Selected experiment: {args.exp_number}")
+    experiment = experiments_store.load(experiment_name=args.exp_number)
     config = experiment.search_configuration
     problem = experiment.problem
     algorithm = experiment.algorithm
