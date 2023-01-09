@@ -38,9 +38,10 @@ Follow the steps desribed  [here](https://git.fortiss.org/fortissimo/ff1_testing
 
 2. Defining a fitness function
 
-3. Defining a testing scenario
+3. Integrating a search method
 
-(3. Integrating a search method)
+4. Defining a testing experiment
+
 
 #### Running the search
 
