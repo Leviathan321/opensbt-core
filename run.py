@@ -63,10 +63,26 @@ parser.add_argument('-o', dest='results_folder', type=str, action='store', defau
                     help='The name of the folder where the results of the search are stored (default: \\results\\single\\)')
 parser.add_argument('-v', dest='do_visualize', action='store_true',
                     help='Whether to use the simuator\'s visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.')
+parser.add_argument('-info', dest='show_info', action='store_true',
+                    help='List name of all defined experiments')
 
 args = parser.parse_args()
 
 #######
+
+# list all experiments
+
+
+if args.show_info:
+    print("Experiments with the following names are defined:")
+    store = experiments.get_store()
+    for name in store.keys():
+        print(name)
+    
+    sys.exit(0)
+
+parser.add_argument('-list', dest='show_info', action='store_false',
+                    help='List name of all defined experiments')
 
 if args.exp_number and args.scenario_path:
     print("Flags set not correctly: Experiment file and example experiment cannot be set at the same time")
@@ -79,10 +95,10 @@ elif not (args.exp_number or args.scenario_path):
 ####### have indiviualized imports
 if args.exp_number:
     # exp_number provided
-    selExpNumber = re.findall("[1-9]+", args.exp_number)[0]
-    print(f"Selected experiment number: {selExpNumber}")
-    experiment = experiment_switcher.get(int(selExpNumber))()
-
+    # selExpNumber = re.findall("[1-9]+", args.exp_number)[0]
+    # print(f"Selected experiment number: {selExpNumber}")
+    #experiment = experiment_switcher.get(int(selExpNumber))()
+    experiment = experiments.load(experiment_name=args.exp_number)
     config = experiment.search_configuration
     problem = experiment.problem
     algorithm = experiment.algorithm
