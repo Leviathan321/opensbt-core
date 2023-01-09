@@ -25,7 +25,7 @@ class PymooTestProblem(Problem):
         # HACK: Copy over attribute values pointer to two functions
         super().__init__(**problem.__dict__)
         if hasattr(problem, 'pareto_front'):
-            print("pareto front set")
+            #print("pareto front set")
             setattr(self,"pareto_front",problem.pareto_front)
                 
         if hasattr(problem, '_calc_pareto_front'):
