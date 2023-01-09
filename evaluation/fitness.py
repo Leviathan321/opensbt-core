@@ -17,6 +17,10 @@ class FitnessBase(ABC):
         pass
 
     @property
+    def n_obj(self):
+        return len(self.min_or_max)
+
+    @property
     @abstractmethod
     def name(self):
         pass
@@ -28,7 +32,7 @@ class FitnessBase(ABC):
 class FitnessMinDistance(FitnessBase):
     @property
     def min_or_max(self):
-        return "min"
+        return ("min",)
 
     @property
     def name(self):
@@ -71,6 +75,42 @@ class FitnessMinDistanceVelocity(FitnessBase):
         speed = simout.speed["ego"][ind_min_dist]
 
         return (distance, speed)
+
+class FitnessMinDistanceVelocityFrontOnly(FitnessBase):
+    @property
+    def min_or_max(self):
+        return "min", "max"
+
+    @property
+    def name(self):
+        return "Min distance", "Velocity at min distance"
+
+    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+        if "adversary" in simout.location:
+            name_adversary = "adversary"
+        else:
+            name_adversary = "other"
+        
+        car_length = float(4.0)
+        traceEgo = simout.location["ego"]
+        tracePed = simout.location[name_adversary]
+
+        ind_min_dist = np.argmin(geometric.distPair(traceEgo, tracePed))
+
+        # approx distance between ego's front and other object
+        distance = np.min(geometric.distPair(traceEgo, tracePed))  - car_length/2
+
+        # speed of ego at time of the minimal distance
+        speed = simout.speed["ego"][ind_min_dist]
+        
+        # value scenarios worse if pedestrian is not in front of the car
+       
+        if (traceEgo[ind_min_dist][0] -  tracePed[ind_min_dist][0] < car_length/2):
+            distance = 1000
+            speed = -1000
+
+        return (distance, speed)
+
 
 class FitnessMinTTC(FitnessBase):
     @property

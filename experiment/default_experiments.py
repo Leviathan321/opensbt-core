@@ -47,7 +47,7 @@ def getExp1() -> Experiment:
                               "PedestrianEgoDistanceStartWalk"],
                           fitness_function=FitnessMinDistanceVelocity(),
                           simulate_function=CarlaSimulator.simulate,
-                          critical_function=CriticalAdasFrontCollisions(),
+                          critical_function=CriticalAdasDistanceVelocity(),
                           simulation_time=10,
                           sampling_time=100,
                           problem_name="PedestrianCrossingStartWalk",

@@ -42,7 +42,7 @@ def create_save_folder(problem: Problem, results_folder: str, algorithm_name: st
     return save_folder
 
 
-def write_calculation_properties(res: Result, save_folder: str, algorithm_name: str, algorithm_parameters: Dict, **kwargs):
+def write_calculation_properties(res: Result, save_folder: str, algorithm_name: str, algorithm_parameters: Dict = None, **kwargs):
     problem = res.problem
     # algorithm_name = type(res.algorithm).__name__
     is_simulation = problem.is_simulation()
@@ -63,8 +63,9 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
         # write_to.writerow(['Number of maximal tree generations', str(max_tree_iterations)])
         write_to.writerow(['Search time', str("%.2f" % res.exec_time + " sec")])
 
-        for item,value in algorithm_parameters.items():
-            write_to.writerow([item, value])
+        if algorithm_parameters is not None:
+            for item,value in algorithm_parameters.items():
+                write_to.writerow([item, value])
 
         _additional_descritption(res, save_folder, algorithm_name, **kwargs)
 

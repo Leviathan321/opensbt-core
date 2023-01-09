@@ -2,7 +2,6 @@ import copy
 import sys
 import time
 
-from pymoo.core.result import Result
 from pymoo.termination import get_termination
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.population import Population
@@ -15,10 +14,10 @@ from pymoo.optimize import minimize
 from pymoo.termination import get_termination
 
 from pymoo.core.problem import Problem
+from algorithm.optimizer import Optimizer
 from exception.configuration import RestrictiveConfigException
 from visualization import output
 from problem.adas_problem import ADASProblem
-from problem.pymoo_test_problem import PymooTestProblem
 from utils.time_utils import convert_pymoo_time_to_seconds
 from pymoo.core.population import Population
 from visualization.configuration import *
@@ -42,15 +41,14 @@ SEARCH_WITH_BOUNDARIES = False
 #                        "WITH-BOUNDS" if SEARCH_WITH_BOUNDARIES else 'FULL'])
 
 '''General flags'''
-ALGORITHM_NAME = "NSGA-II-DT"  # + str(variation_label) if variation_label is not [] else ""
 RESULTS_FOLDER = os.sep + "results" + os.sep
 DO_EVAL_APPROXIMATION = True
 WRITE_ALL_INDIVIDUALS = False
 
 
-class NSGAII_DT_SIM(object):
+class NsgaIIDTOptimizer(Optimizer):
 
-    algorithm_name = ALGORITHM_NAME
+    algorithm_name = "NSGA-II-DT"  # + str(variation_label) if variation_label is not [] else ""
 
     def __init__(self,
                  problem: Problem,
