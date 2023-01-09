@@ -13,21 +13,17 @@ from pymoo.operators.mutation.pm import PM
 from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
+from algorithm.SimAlgo import SimAlgo
 from algorithm.classification.classifier import ClassificationType
 from algorithm.classification.decision_tree.decision_tree import *
 from experiment.search_configuration import SearchConfiguration
 from visualization import output
 import quality_indicators.metrics.spread as qi
-
 from model_ga.result import *
 
-ALGORITHM_NAME = "NSGA-II"
-RESULTS_FOLDER = os.sep + "results" + os.sep
-WRITE_ALL_INDIVIDUALS = True
+class NSGAII_SIM(SimAlgo):
 
-class NSGAII_SIM(object):
-
-    algorithm_name = ALGORITHM_NAME
+    algorithm_name = "NSGA-II"
 
     def __init__(self,
                 problem: Problem,
@@ -64,37 +60,3 @@ class NSGAII_SIM(object):
                     verbose=True)
 
         return self.res
-
-    def write_results(self, results_folder = RESULTS_FOLDER):
-        algorithm_name = self.algorithm_name
-        if self.res is None:
-            print("Result object is None. Execute algorithm first, before writing results.")
-            return
-        print(f"=====[{ALGORITHM_NAME}] Writing results...")
-        config = self.config
-        res = self.res
-        algorithm_parameters = {
-            "Population size" : str(config.population_size),
-            "Number of generations" : str(config.n_generations),
-            "Number of offsprings": str(config.num_offsprings),
-            "Crossover probability" : str(config.prob_crossover),
-            "Crossover eta" : str(config.eta_crossover),
-            "Mutation probability" : str(config.prob_mutation),
-            "Mutation eta" : str(config.eta_mutation)
-        }
-
-        save_folder = output.create_save_folder(res.problem, results_folder, algorithm_name)
-
-        output.convergence_analysis(res, save_folder)
-        output.hypervolume_analysis(res, save_folder)
-        output.spread_analysis(res, save_folder)
-        output.write_calculation_properties(res,save_folder,algorithm_name,algorithm_parameters)
-        output.design_space(res, save_folder)
-        output.objective_space(res, save_folder)
-        output.optimal_individuals(res, save_folder)
-        output.write_summary_results(res, save_folder)
-        output.write_simulation_output(res,save_folder)
-        output.simulations(res, save_folder)
-
-        if WRITE_ALL_INDIVIDUALS:
-            output.all_individuals(res, save_folder)

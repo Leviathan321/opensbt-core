@@ -15,6 +15,7 @@ from pymoo.optimize import minimize
 from pymoo.termination import get_termination
 
 from pymoo.core.problem import Problem
+from algorithm.SimAlgo import SimAlgo
 from exception.configuration import RestrictiveConfigException
 from visualization import output
 from problem.adas_problem import ADASProblem
@@ -42,15 +43,14 @@ SEARCH_WITH_BOUNDARIES = False
 #                        "WITH-BOUNDS" if SEARCH_WITH_BOUNDARIES else 'FULL'])
 
 '''General flags'''
-ALGORITHM_NAME = "NSGA-II-DT"  # + str(variation_label) if variation_label is not [] else ""
 RESULTS_FOLDER = os.sep + "results" + os.sep
 DO_EVAL_APPROXIMATION = True
 WRITE_ALL_INDIVIDUALS = False
 
 
-class NSGAII_DT_SIM(object):
+class NSGAII_DT_SIM(SimAlgo):
 
-    algorithm_name = ALGORITHM_NAME
+    algorithm_name = "NSGA-II-DT"  # + str(variation_label) if variation_label is not [] else ""
 
     def __init__(self,
                  problem: Problem,

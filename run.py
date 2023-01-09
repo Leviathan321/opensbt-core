@@ -163,15 +163,24 @@ if __name__ == "__main__":
         algo = NSGAII_SIM(
                               problem=problem,
                               config=config)
+
+        experiment.algorithm = algo       
+        experiment.run()
+        experiment.write_results(results_folder=results_folder)
+        
+    # refactored only for default algorithms
     elif algorithm == AlgorithmType.NSGAIIDT:
         print("pymoo NSGA-II-DT algorithm is used.")
         algo = NSGAII_DT_SIM(
                               problem=problem,
                               config=config)
+        res = algo.run()
+        algo.write_results(results_folder=results_folder)
     else:
         raise ValueError("Error: No algorithm with the given code: " + str(algorithm))
 
-    res = algo.run()
-    algo.write_results(results_folder=results_folder)
-
+ 
     print("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")
+
+
+
