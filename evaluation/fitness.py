@@ -18,7 +18,6 @@ class FitnessBase(ABC):
 
     @property
     def n_obj(self):
-        print("test")
         return len(self.min_or_max)
 
     @property
@@ -48,7 +47,7 @@ class FitnessMinDistance(FitnessBase):
             tracePed = simout.location["adversary"]
             result = np.min(geometric.distPair(traceEgo, tracePed))
         return result
-        
+
 class FitnessMinDistanceVelocity(FitnessBase):
     @property
     def min_or_max(self):
