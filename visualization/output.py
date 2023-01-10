@@ -224,16 +224,16 @@ def create_markers():
     patch_critical_region = mpatches.Patch(color=color_critical, label='Critical regions', alpha=0.05)
 
     circle_critical = mpatches.Circle((0.5, 0.5), radius=2, facecolor='none',
-                                      edgecolor=color_critical, linewidth=1, label='Critical individuals')
+                                      edgecolor=color_critical, linewidth=1, label='Critical testcases')
 
     circle_not_critical = mpatches.Circle((0.5, 0.5), radius=2, facecolor='none',
-                                          edgecolor=color_not_critical, linewidth=1, label='Not critical individuals')
+                                          edgecolor=color_not_critical, linewidth=1, label='Not critical testcases')
 
     circle_optimal = mpatches.Circle((0.5, 0.5), radius=2, facecolor=color_optimal,
-                                     edgecolor='none', linewidth=1, label='Optimal individuals')
+                                     edgecolor='none', linewidth=1, label='Optimal testcases')
 
     circle_not_optimal = mpatches.Circle((0.5, 0.5), radius=2, facecolor=color_not_optimal,
-                                         edgecolor='none', linewidth=1, label='Not optimal individuals')
+                                         edgecolor='none', linewidth=1, label='Not optimal testcases')
 
     line_pareto = Line2D([0], [0], label='Pareto front', color='blue')
 
@@ -311,7 +311,7 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
                                                   facecolor=region_color, alpha=0.05))
 
             ax = plt.subplot(111)
-            plt.title("Design Space" + " (" + str(len(all_population)) + " individuals, " + str(len(critical_all)) + " of which are critical)")
+            plt.title("Design Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
 
             if classification_type == ClassificationType.DT:
                 for algo in hist:
@@ -383,7 +383,7 @@ def objective_space(res, save_folder, iteration=None):
     for axis_x in range(n_obj - 1):
         for axis_y in range(axis_x + 1, n_obj):
             ax = plt.subplot(111)
-            plt.title("Objective Space" + " (" + str(len(all_population)) + " individuals, " + str(len(critical_all)) + " of which are critical)")
+            plt.title("Objective Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
 
             if True: #classification_type == ClassificationType.DT:
                 for algo in hist:
@@ -434,7 +434,7 @@ def optimal_individuals(res, save_folder):
     design_names = problem.design_names
     objective_names = problem.objective_names
 
-    with open(save_folder + 'optimal_individuals.csv', 'w', encoding='UTF8', newline='') as f:
+    with open(save_folder + 'optimal_testcases.csv', 'w', encoding='UTF8', newline='') as f:
         write_to = csv.writer(f)
 
         header = ['Index']
@@ -460,7 +460,7 @@ def all_individuals(res, save_folder):
     design_names = problem.design_names
     objective_names = problem.objective_names
 
-    with open(save_folder + 'all_individuals.csv', 'w', encoding='UTF8', newline='') as f:
+    with open(save_folder + 'all_testcases.csv', 'w', encoding='UTF8', newline='') as f:
         write_to = csv.writer(f)
 
         header = ['Index']
