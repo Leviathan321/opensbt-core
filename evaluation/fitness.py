@@ -1,18 +1,13 @@
-from inspect import trace
 import sys
 from typing import List, Tuple
-from unicodedata import name
 from simulation.simulator import SimulationOutput
 import numpy as np
 import math
 from scipy.spatial.distance import cdist
 from utils import geometric
-import random
-from abc import ABC, ABCMeta, abstractmethod
 
-class Fitness(ABC):
+class Fitness():
     @property
-    @abstractmethod
     def min_or_max(self):
         pass
 
@@ -21,11 +16,9 @@ class Fitness(ABC):
         return len(self.min_or_max)
 
     @property
-    @abstractmethod
     def name(self):
         pass
 
-    @abstractmethod
     def eval(self, simout: SimulationOutput) -> Tuple[float]:
         pass
 
@@ -47,6 +40,8 @@ class FitnessMinDistance(Fitness):
             tracePed = simout.location["adversary"]
             result = np.min(geometric.distPair(traceEgo, tracePed))
         return result
+
+f = FitnessMinDistance()
 
 class FitnessMinDistanceVelocity(Fitness):
     @property

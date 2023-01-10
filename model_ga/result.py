@@ -12,7 +12,7 @@ from visualization import output
 RESULTS_FOLDER = os.sep + "results" + os.sep
 WRITE_ALL_INDIVIDUALS = True
 
-class ResultExtended(Result):
+class SimulationResult(Result):
 
     def __init__(self) -> None:
         super().__init__()

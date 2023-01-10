@@ -52,11 +52,11 @@ class NsgaIIOptimizer(Optimizer):
 
         self.save_history = True
 
-    def run(self) -> ResultExtended:
-        self.res = minimize(self.problem,
-                    self.algorithm,
-                    self.termination,
-                    save_history=self.save_history,
-                    verbose=True)
+    # def run(self) -> ResultExtended:
+    #     self.res = minimize(self.problem,
+    #                 self.algorithm,
+    #                 self.termination,
+    #                 save_history=self.save_history,
+    #                 verbose=True)
 
-        return self.res
+    #     return self.res

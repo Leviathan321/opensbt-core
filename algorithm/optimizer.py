@@ -1,17 +1,22 @@
 from abc import ABC, abstractclassmethod, abstractmethod
 
 from experiment.search_configuration import SearchConfiguration
-from model_ga.problem import ProblemExtended
-
+from model_ga.problem import SimulationProblem
+from model_ga.result import SimulationResult
+from pymoo.optimize import minimize
 
 class Optimizer(ABC):
     
     algorithm_name: str
     
     @abstractmethod
-    def __init__(self, problem: ProblemExtended, config: SearchConfiguration):
+    def __init__(self, problem: SimulationProblem, config: SearchConfiguration):
+        ''' Create here the algorithm instance to be used in run '''
         pass
 
-    @abstractmethod
-    def run(self):
-        pass
+    def run(self) -> SimulationResult:
+        return minimize(self.problem,
+                self.algorithm,
+                self.termination,
+                save_history=self.save_history,
+                verbose=True)

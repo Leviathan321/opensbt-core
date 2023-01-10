@@ -6,11 +6,11 @@ pymoo.core.individual.Individual = IndividualSimulated
 from model_ga.population import PopulationExtended
 pymoo.core.population.Population = PopulationExtended
 
-from model_ga.result  import ResultExtended
-pymoo.core.result.Result = ResultExtended
+from model_ga.result  import SimulationResult
+pymoo.core.result.Result = SimulationResult
 
-from model_ga.problem import ProblemExtended
-pymoo.core.problem.Problem = ProblemExtended
+from model_ga.problem import SimulationProblem
+pymoo.core.problem.Problem = SimulationProblem
 
 import argparse
 import logging

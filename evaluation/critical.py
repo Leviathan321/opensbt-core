@@ -2,15 +2,13 @@ from simulation.simulator import SimulationOutput
 from typing import Tuple
 import numpy as np
 import math
-from abc import ABC, abstractmethod
 from typing import List
 
-class Critical(ABC):
+class Critical():
     @property
     def name(self):
         return self.__class__.__name__
 
-    @abstractmethod
     def eval(self, vector_fitness: np.ndarray, simout: SimulationOutput) -> bool:
         pass
 

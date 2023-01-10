@@ -59,7 +59,7 @@ class NsgaIIDTOptimizer(Optimizer):
         self.done_tree_iterations = 0
         self.res = None
 
-    def run(self) -> ResultExtended:
+    def run(self) -> SimulationResult:
         problem = self.problem
         config = self.config
 
@@ -236,7 +236,7 @@ class NsgaIIDTOptimizer(Optimizer):
             algo.problem = problem
             algo.result()
 
-        res_holder = ResultExtended()
+        res_holder = SimulationResult()
         res_holder.algorithm = inner_algorithm
         res_holder.algorithm.evaluator.n_eval = I
         res_holder.problem = problem

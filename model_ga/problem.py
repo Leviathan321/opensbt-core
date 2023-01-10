@@ -11,7 +11,7 @@ from pymoo.core.problem import Problem
 from pymoo.core.problem import ElementwiseEvaluationFunction
 from pymoo.core.problem import LoopedElementwiseEvaluation
 
-class ProblemExtended(Problem):
+class SimulationProblem(Problem):
     def __init__(self,
                  n_var,
                  n_obj=1,
