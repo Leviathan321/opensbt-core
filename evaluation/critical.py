@@ -15,7 +15,7 @@ class Critical():
 
 class CriticalAdasExplicitRearCollision(Critical):
 
-    ''' ADAS problems ''' 
+    ''' ADAS problems '''
     def eval(self, vector_fitness: List[float], simout: SimulationOutput = None):
         safety_distance = 0.50 # all dimensions, radial, in m
 
@@ -24,7 +24,7 @@ class CriticalAdasExplicitRearCollision(Critical):
         else:
             isCollision = None
         # a) collision occurred (not from the rear) and velocity of ego > 0
-        # b) safety distance to pedestrian violated 
+        # b) safety distance to pedestrian violated
         if isCollision:
             loc_ego = simout.location["ego"]
             loc_ped = simout.location["other"]
@@ -41,25 +41,25 @@ class CriticalAdasExplicitRearCollision(Critical):
         else:
             return False
 
-class CriticalAdasFrontCollisions(Critical):    
+class CriticalAdasFrontCollisions(Critical):
     def eval(self, vector_fitness, simout: SimulationOutput = None):
         if simout is not None:
             isCollision = simout.otherParams['isCollision']
         else:
             isCollision = None
 
-        if (isCollision == True) or (vector_fitness[0] < -0.6) and (vector_fitness[1] < 0): 
+        if (isCollision == True) or (vector_fitness[0] < 0.5) and (vector_fitness[1] < 0):
             return True
         else:
             return False
 
-class CriticalAdasTTCVelocity(Critical):            
+class CriticalAdasTTCVelocity(Critical):
     def eval(self, vector_fitness, simout: SimulationOutput = None):
         if simout is not None:
             isCollision = simout.otherParams['isCollision']
         else:
             isCollision = None
-        
+
         if(isCollision == True) or (vector_fitness[0] < 5) and (vector_fitness[1] < -1):
             return True
         else:
@@ -70,19 +70,19 @@ class CriticalAdasTTCVelocity(Critical):
         f[0] - min distance ego <-> pedestrian
         f[1] - velocity at time of minimal distance
 
-        # Scenario critical <-> 
+        # Scenario critical <->
 
         # a) collision ocurred
         # b) minimal distance between ego and other vehicle < 0.3m
         # c) velcoty at time of minimal distance is > 1 m/s
     '''
-class CriticalAdasDistanceVelocity(Critical):            
+class CriticalAdasDistanceVelocity(Critical):
     def eval(self, vector_fitness, simout: SimulationOutput = None):
         if simout is not None:
             isCollision = simout.otherParams['isCollision']
         else:
             isCollision = None
-        
+
         if(isCollision == True) or (vector_fitness[0] < 0.3) and (vector_fitness[1] < -1):
             return True
         else:
@@ -102,7 +102,7 @@ class CriticalAdasBoxCollision(Critical):
         # works as a standard critical box function if isCollision not available
         return CriticalAdasBox().eval(vector_fitness) or isCollision
         # "or" or "and"?
-        
+
 ''' Test problems '''
 class CriticalBnhDivided(Critical):
     def eval(self, vector_fitness: np.ndarray, simout=None):
