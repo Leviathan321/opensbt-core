@@ -1,4 +1,5 @@
 import pymoo
+from algorithm.algorithm import AlgorithmType
 
 from model_ga.individual import IndividualSimulated
 pymoo.core.individual.Individual = IndividualSimulated
@@ -18,7 +19,8 @@ import os
 import sys
 from algorithm.nsga2_optimizer import *
 from algorithm.nsga2dt_optimizer import *
-from experiment.default_experiments import *
+from experiment.experiment_store import experiments_store
+from default_experiments import *
 
 os.chmod(os.getcwd(), 0o777)
 logging.basicConfig(filename="log.txt", filemode='w', level=logging.ERROR)
@@ -91,7 +93,7 @@ elif not (args.exp_number or args.scenario_path):
 ###### set experiment
 ####### have indiviualized imports
 if args.exp_number:
-    # print(f"Selected experiment: {args.exp_number}")
+    print(f"Selected experiment: {args.exp_number}")
     experiment = experiments_store.load(experiment_name=args.exp_number)
     config = experiment.search_configuration
     problem = experiment.problem

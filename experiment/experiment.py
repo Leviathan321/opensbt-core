@@ -12,3 +12,4 @@ class Experiment(object):
         self.problem = problem
         self.algorithm = algorithm
         self.search_configuration = search_configuration
+
