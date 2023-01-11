@@ -8,11 +8,10 @@ import csv
 
 MIN_SAMPLES_SPLIT = 2
 MIN_SAMPLES_LEAF = 1
-CRITICALITY_THRESHOLD_MIN = 0.2
-CRITICALITY_THRESHOLD_MAX = 0.99
+CRITICALITY_THRESHOLD_MIN = 0.5
+CRITICALITY_THRESHOLD_MAX = 1
 DELTA = 0.0  # delta can be set negative to make regions overlap
 MAX_TREE_DEPTH = 4
-
 
 class Region:
     def __init__(self, xl, xu, population):
