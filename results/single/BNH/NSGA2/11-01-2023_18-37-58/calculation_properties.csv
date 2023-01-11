@@ -1,0 +1,6 @@
+Attribute,Value
+Problem,PedestrianCrossingStartWalk
+Algorithm,NSGA2
+Fitness function,"('Min distance', 'Velocity at min distance')"
+Critical function,CriticalAdasFrontCollisions
+Search time,3610.98 sec
