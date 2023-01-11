@@ -408,6 +408,33 @@ def objective_space(res, save_folder, iteration=None):
                     ax.scatter(critical.get("F")[:, axis_x], critical.get("F")[:, axis_y], s=40,
                                facecolors=color_optimal, edgecolors=color_critical, marker='o')
 
+            # limit axes bounds, since we do not want to show fitness values as 1000 or int.max, 
+            # that assign bad quality to worse scenarios
+             
+            MAX_VALUE = 100
+            MIN_VALUE = -100
+
+            max_x_f_ind = max(all_population.get("F")[axis_x])
+            min_x_f_ind = min(all_population.get("F")[axis_x])
+
+            max_y_f_ind = max(all_population.get("F")[axis_y])
+            min_y_f_ind = min(all_population.get("F")[axis_y])
+
+            print(all_population.get("F")[axis_x])
+            print(all_population.get("F")[axis_y])
+            
+            print(max_x_f_ind)
+            print(min_x_f_ind)
+
+            print(max_y_f_ind)
+            print(min_y_f_ind)
+            
+            eta_x = (max_x_f_ind - min_x_f_ind) / 10
+            eta_y = (max_y_f_ind- min_y_f_ind) / 10
+            
+            plt.xlim(max(MIN_VALUE,min_x_f_ind) - eta_x, min(MAX_VALUE,max_x_f_ind) + eta_x)
+            plt.ylim(max(MIN_VALUE,min_y_f_ind) - eta_y, min(MAX_VALUE,max_y_f_ind) + eta_y)
+            
             plt.xlabel(objective_names[axis_x])
             plt.ylabel(objective_names[axis_y])
 
