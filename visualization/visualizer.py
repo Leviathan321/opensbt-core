@@ -10,7 +10,7 @@ import matplotlib.patches as mpatches
 from matplotlib.patches import Rectangle
 from matplotlib.lines import Line2D
 from matplotlib.legend_handler import HandlerPatch
-from visualization import plotter
+from visualization import scenario_plotter
 from pymoo.indicators.igd import IGD
 from pymoo.indicators.hv import Hypervolume
 from pymoo.core.population import Population
@@ -55,7 +55,7 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
         write_to.writerow(['Algorithm', algorithm_name])
 
         if is_simulation:
-            write_to.writerow(['Fitness function', str(problem.fitness_function.name)])
+            write_to.writerow(['Fitness function', str(problem.fitness_function.__name__)])
         else:
             write_to.writerow(['Fitness function', "<No name available>"])
 
@@ -65,9 +65,9 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
 
         if algorithm_parameters is not None:
             for item,value in algorithm_parameters.items():
-                write_to.writerow([item, value])
+                    write_to.writerow([item, value])
 
-        _additional_descritption(res, save_folder, algorithm_name, **kwargs)
+        _additional_description(res, save_folder, algorithm_name, **kwargs)
 
         f.close()
 
@@ -77,10 +77,10 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
 def _calc_properties(res, save_folder, algorithm_name, **kwargs):
     pass
 
-def _additional_descritption(res, save_folder, algorithm_name, **kwargs):
+def _additional_description(res, save_folder, algorithm_name, **kwargs):
     pass
 
-'''Output of the simulation data for all solutions (for the moment only partial data)'''
+'''output of the simulation data for all solutions (for the moment only partial data)'''
 def write_simulation_output(res: Result, save_folder: str):
     
     problem = res.problem
@@ -249,7 +249,7 @@ def write_summary_results(res, save_folder):
     critical_best, non_critical_best = best_population.divide_critical_non_critical()
     critical_all, non_critical_all = all_population.divide_critical_non_critical()
 
-    '''Output of summery of the performance'''
+    '''output of summery of the performance'''
     with open(save_folder + 'summary_results.csv', 'w', encoding='UTF8', newline='') as f:
         write_to = csv.writer(f)
 
@@ -457,7 +457,7 @@ def objective_space(res, save_folder, iteration=None):
     plt.close(f)
 
 def optimal_individuals(res, save_folder):
-    """Output of optimal individuals"""
+    """output of optimal individuals"""
     problem = res.problem
     design_names = problem.design_names
     objective_names = problem.objective_names
@@ -482,7 +482,7 @@ def optimal_individuals(res, save_folder):
 
 
 def all_individuals(res, save_folder):
-    """Output of all evaluated individuals"""
+    """output of all evaluated individuals"""
     problem = res.problem
     hist = res.history
     design_names = problem.design_names
@@ -520,6 +520,6 @@ def simulations(res, save_folder):
         for index, simout in enumerate(res.opt.get("SO")):
             file_name = str(index) + str("_trajectory")
             param_values = res.opt.get("X")[index]
-            plotter.plot_gif(param_values, simout, save_folder_gif, file_name)
+            scenario_plotter.plot_scenario_gif(param_values, simout, save_folder_gif, file_name)
     else:
         print("No simulation visualization available. The experiment is not a simulation.")

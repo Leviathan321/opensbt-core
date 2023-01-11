@@ -17,7 +17,6 @@ from algorithm.classification.classifier import ClassificationType
 from algorithm.classification.decision_tree.decision_tree import *
 from algorithm.optimizer import Optimizer
 from experiment.search_configuration import SearchConfiguration
-from visualization import output
 import quality_indicators.metrics.spread as qi
 from model_ga.result import *
 
@@ -35,6 +34,16 @@ class NsgaIIOptimizer(Optimizer):
 
         if self.config.prob_mutation is None:
             self.config.prob_mutation = 1 / problem.n_var
+
+        self.parameters = {
+            "Population size" : str(config.population_size),
+            "Number of generations" : str(config.n_generations),
+            "Number of offsprings": str(config.num_offsprings),
+            "Crossover probability" : str(config.prob_crossover),
+            "Crossover eta" : str(config.eta_crossover),
+            "Mutation probability" : str(config.prob_mutation),
+            "Mutation eta" : str(config.eta_mutation)
+        }
 
         self.algorithm = NSGA2(
             pop_size=config.population_size,

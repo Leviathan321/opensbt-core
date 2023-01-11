@@ -103,10 +103,8 @@ elif (args.scenario_path):
     scenario_path = args.scenario_path
     var_min = []
     var_max = []
-
-    #TODO create an experiment from user input
     #TODO create an ADASProblem from user input
-
+    #TODO create an experiment from user input
     print("-- Experiment provided by file")
 
     if args.var_min is None:
@@ -119,21 +117,6 @@ elif (args.scenario_path):
 
     print("Creating an experiment from user input not yet supported. Use default_experiments.py to create experiment")
     sys.exit()
-
-    # # set design names
-    # if  args.design_names is None:
-    #     design_names = ["feature_" + str(i) for i in range(len(var_min))]
-
-    # if scenario_path.endswith('.pb'):
-    #     fitnessFcn = fitness.fitness_min_distance_two_actors_prescan
-    #     simulateFcn = PrescanSimulator.simulateBatch_compiled_csv
-    # elif scenario_path.endswith('.scenario_path'):
-    #     fitnessFcn = fitness.fitness_min_distance_two_actors_carla
-    #     simulateFcn = CarlaSimulator.simulateBatch
-    # else:
-    #     print("-- File is not supported.")
-    #     sys.exit()
-    # experiment = Experiment()
 else:
     print("-- No file provided and no experiment selected")
     sys.exit()
@@ -177,14 +160,14 @@ if __name__ == "__main__":
                               config=config)
 
         res = optimizer.run()
-        res.write_results(results_folder=results_folder)
+        res.write_results(results_folder=results_folder, params = optimizer.parameters)
     elif algorithm == AlgorithmType.NSGAIIDT:
         print("pymoo NSGA-II-DT algorithm is used.")
         optimizer = NsgaIIDTOptimizer(
                               problem=problem,
                               config=config)
         res = optimizer.run()
-        res.write_results(results_folder=results_folder)
+        res.write_results(results_folder=results_folder, params = optimizer.parameters)
     else:
         raise ValueError("Error: No algorithm with the given code: " + str(algorithm))
 

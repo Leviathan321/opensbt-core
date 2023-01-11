@@ -16,7 +16,7 @@ from pymoo.termination import get_termination
 from pymoo.core.problem import Problem
 from algorithm.optimizer import Optimizer
 from exception.configuration import RestrictiveConfigException
-from visualization import output
+from visualization import visualizer
 from problem.adas_problem import ADASProblem
 from utils.time_utils import convert_pymoo_time_to_seconds
 from pymoo.core.population import Population
@@ -286,7 +286,7 @@ class NsgaIIDTOptimizer(Optimizer):
 
         print(f"=====[{algorithm_name}] Writing results...")
 
-        save_folder = output.create_save_folder(
+        save_folder = visualizer.create_save_folder(
             problem, results_folder, algorithm_name)
 
         # output of plots for every tree iteration
@@ -301,23 +301,23 @@ class NsgaIIDTOptimizer(Optimizer):
             opt_all_tmp_nds = get_nondominated_population(opt_all_tmp)
             res_holder_tmp.opt = opt_all_tmp_nds
 
-            output.design_space(res_holder_tmp, save_folder +
+            visualizer.design_space(res_holder_tmp, save_folder +
                                 "tree_iterations" + os.sep + "TI" + str(i) + os.sep)
-            output.objective_space(
+            visualizer.objective_space(
                 res_holder_tmp, save_folder + "tree_iterations" + os.sep + "TI" + str(i) + os.sep)
 
-        output.write_summary_results(res_holder, save_folder)
-        output.convergence_analysis(res_holder, save_folder)
-        output.hypervolume_analysis(res_holder, save_folder)
-        output.spread_analysis(res_holder, save_folder)
-        output.write_calculation_properties(
+        visualizer.write_summary_results(res_holder, save_folder)
+        visualizer.convergence_analysis(res_holder, save_folder)
+        visualizer.hypervolume_analysis(res_holder, save_folder)
+        visualizer.spread_analysis(res_holder, save_folder)
+        visualizer.write_calculation_properties(
             res_holder, save_folder, algorithm_name, algorithm_parameters)
-        output.design_space(res_holder, save_folder)
-        output.objective_space(res_holder, save_folder)
-        output.optimal_individuals(res_holder, save_folder)
+        visualizer.design_space(res_holder, save_folder)
+        visualizer.objective_space(res_holder, save_folder)
+        visualizer.optimal_individuals(res_holder, save_folder)
 
         if WRITE_ALL_INDIVIDUALS:
-            output.all_individuals(res_holder, save_folder)
+            visualizer.all_individuals(res_holder, save_folder)
     
     ''' Approximate whether time has left for the next tree iteration by using simulation time '''
     def is_time_left_for_next_iteration(self, start_time, _maximal_execution_time, simulation_time, critical_regions,

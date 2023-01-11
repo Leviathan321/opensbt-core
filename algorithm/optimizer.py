@@ -9,6 +9,8 @@ class Optimizer(ABC):
     
     algorithm_name: str
     
+    parameters: str
+
     @abstractmethod
     def __init__(self, problem: SimulationProblem, config: SearchConfiguration):
         ''' Create here the algorithm instance to be used in run '''

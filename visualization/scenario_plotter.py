@@ -10,7 +10,7 @@ import os
 import numpy as np
 from visualization.configuration import *
 
-def plot_gif(parameter_values, simout: SimulationOutput, savePath=None, fileName=None):
+def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None, fileName=None):
     if "car_length" in simout.otherParams:
         car_length = float(simout.otherParams["car_length"])
     else:
