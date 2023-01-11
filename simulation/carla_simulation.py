@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 from typing import List, Dict
 from carla_simulation import balancer
 from simulation.simulator import Simulator, SimulationOutput
@@ -44,33 +45,32 @@ class CarlaSimulator(Simulator):
                 os.remove(os.path.join(SCENARIO_DIR, f))
         return results
 
+    ''' Replace parameter values in parameter declaration section by provided parameters '''
     @staticmethod
     def create_scenario_instance_xosc(filename: str, values_dict: Dict, outfolder=None):
-        Path(outfolder).mkdir(parents=True, exist_ok=True)
-        parameterFlag = "$"
-
-        print(values_dict)
-        # Read in the file
-        with open(filename, 'r') as file :
-            filedata = file.read()
-
-        suffix = ""
-        # Replace the target string
-        for k,v in values_dict.items():
-            filedata = filedata.replace(parameterFlag + k, str(v))
-            suffix = suffix + "_" + str(v)
-
+    
+        import xml.etree.ElementTree as ET
+        xml_tree = ET.parse(filename)
+    
+        parameters = xml_tree.find('ParameterDeclarations')
+        for name, value in values_dict.items():
+            for parameter in parameters:
+                if parameter.attrib.get("name") == name:
+                    parameter.attrib["value"] = str(value)
+            
+        # # Write the file out again
         if outfolder is not None:
-            if not os.path.exists(outfolder):
-                os.mkdir(outfolder)
+            Path(outfolder).mkdir(parents=True, exist_ok=True)
             filename = outfolder + os.sep + os.path.split(filename)[1]
-
         splitFilename =  os.path.splitext(filename)
         newPathPrefix = splitFilename[0]
+        ending = splitFilename[1]
 
-        # Write the file out again
-        newFileName  = newPathPrefix + suffix + splitFilename[1]
-        with open(newFileName, 'w') as file:
-            file.write(filedata)
+        suffix = ""
+        for k,v in values_dict.items():
+            suffix = suffix + "_" + str(v)
+        
+        newFileName  = newPathPrefix + suffix + ending
+        xml_tree.write(newFileName)
 
         return newFileName
