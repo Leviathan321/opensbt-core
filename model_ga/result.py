@@ -89,7 +89,7 @@ class SimulationResult(Result):
 
         output.convergence_analysis(self, save_folder)
         output.hypervolume_analysis(self, save_folder)
-        output.spread_analysis(self, save_folder)
+        #output.spread_analysis(self, save_folder)
         
         output.write_calculation_properties(self,save_folder,algorithm_name)
         output.design_space(self, save_folder)
