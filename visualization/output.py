@@ -420,14 +420,14 @@ def objective_space(res, save_folder, iteration=None):
             max_y_f_ind = max(all_population.get("F")[axis_y])
             min_y_f_ind = min(all_population.get("F")[axis_y])
 
-            print(all_population.get("F")[axis_x])
-            print(all_population.get("F")[axis_y])
+            # print(all_population.get("F")[axis_x])
+            # print(all_population.get("F")[axis_y])
             
-            print(max_x_f_ind)
-            print(min_x_f_ind)
+            # print(max_x_f_ind)
+            # print(min_x_f_ind)
 
-            print(max_y_f_ind)
-            print(min_y_f_ind)
+            # print(max_y_f_ind)
+            # print(min_y_f_ind)
             
             eta_x = (max_x_f_ind - min_x_f_ind) / 10
             eta_y = (max_y_f_ind- min_y_f_ind) / 10
