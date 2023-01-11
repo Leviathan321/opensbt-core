@@ -55,7 +55,7 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
         write_to.writerow(['Algorithm', algorithm_name])
 
         if is_simulation:
-            write_to.writerow(['Fitness function', str(problem.fitness_function.__name__)])
+            write_to.writerow(['Fitness function', str(problem.fitness_function.__class__.__name__)])
         else:
             write_to.writerow(['Fitness function', "<No name available>"])
 
@@ -407,34 +407,31 @@ def objective_space(res, save_folder, iteration=None):
                 if len(critical) != 0:
                     ax.scatter(critical.get("F")[:, axis_x], critical.get("F")[:, axis_y], s=40,
                                facecolors=color_optimal, edgecolors=color_critical, marker='o')
-
+            
             # limit axes bounds, since we do not want to show fitness values as 1000 or int.max, 
             # that assign bad quality to worse scenarios
-            CONSIDER_HIGH_VAL = False
+            CONSIDER_HIGH_VAL = True
             if CONSIDER_HIGH_VAL:
-                MAX_VALUE = 100
-                MIN_VALUE = -100
-
-                max_x_f_ind = max(all_population.get("F")[axis_x])
-                min_x_f_ind = min(all_population.get("F")[axis_x])
-
-                max_y_f_ind = max(all_population.get("F")[axis_y])
-                min_y_f_ind = min(all_population.get("F")[axis_y])
-
-                # print(all_population.get("F")[axis_x])
-                # print(all_population.get("F")[axis_y])
+                MAX_VALUE = 1000
+                MIN_VALUE = -1000
                 
-                # print(max_x_f_ind)
-                # print(min_x_f_ind)
+                pop_f_x = all_population.get("F")[:,axis_x]
+                clean_pop_x = np.delete(pop_f_x, np.where(pop_f_x == MAX_VALUE))
+                max_x_f_ind = max(clean_pop_x)
+                clean_pop_x = np.delete(pop_f_x, np.where(pop_f_x == MIN_VALUE))
+                min_x_f_ind = min(clean_pop_x)
 
-                # print(max_y_f_ind)
-                # print(min_y_f_ind)
-                
+                pop_f_y = all_population.get("F")[:,axis_y]
+                clean_pop_y = np.delete(pop_f_y, np.where(pop_f_y == MAX_VALUE))
+                max_y_f_ind = max(clean_pop_y)
+                clean_pop_y = np.delete(pop_f_y, np.where(pop_f_y == MIN_VALUE))
+                min_y_f_ind = min(clean_pop_y)
+
                 eta_x = (max_x_f_ind - min_x_f_ind) / 10
                 eta_y = (max_y_f_ind- min_y_f_ind) / 10
                 
-                plt.xlim(max(MIN_VALUE,min_x_f_ind) - eta_x, min(MAX_VALUE,max_x_f_ind) + eta_x)
-                plt.ylim(max(MIN_VALUE,min_y_f_ind) - eta_y, min(MAX_VALUE,max_y_f_ind) + eta_y)
+                plt.xlim(min_x_f_ind - eta_x, max_x_f_ind  + eta_x)
+                plt.ylim(min_y_f_ind - eta_y, max_y_f_ind  + eta_y)
                 
             plt.xlabel(objective_names[axis_x])
             plt.ylabel(objective_names[axis_y])

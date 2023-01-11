@@ -94,9 +94,10 @@ class FitnessMinDistanceVelocityFrontOnly(Fitness):
         # speed of ego at time of the minimal distance
         speed = simout.speed["ego"][ind_min_dist]
         # value scenarios worse if pedestrian is not in front of the car
+        FITNESS_WORSE = 1000
         if (traceEgo[ind_min_dist][0] -  tracePed[ind_min_dist][0] < car_length/2):
-            distance = 1000
-            speed = -1000
+            distance = FITNESS_WORSE
+            speed = -FITNESS_WORSE
         return (distance, speed)
 
 
