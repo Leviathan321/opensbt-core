@@ -15,6 +15,7 @@ def getExp1() -> Experiment:
     from simulation.carla_simulation import CarlaSimulator
 
     problem = ADASProblem(
+                          problem_name="PedestrianCrossingStartWalk",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
                           xl=[0.5, 1, 0],
                           xu=[3, 80, 60],
@@ -22,12 +23,11 @@ def getExp1() -> Experiment:
                               "PedestrianSpeed",
                               "FinalHostSpeed",
                               "PedestrianEgoDistanceStartWalk"],
-                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),
-                          simulate_function=CarlaSimulator.simulate,
+                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),  
                           critical_function=CriticalAdasFrontCollisions(),
+                          simulate_function=CarlaSimulator.simulate,
                           simulation_time=10,
                           sampling_time=100,
-                          problem_name="PedestrianCrossingStartWalk",
                           approx_eval_time=10,
                           do_visualize = False
                           )
