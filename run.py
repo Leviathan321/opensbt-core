@@ -37,33 +37,31 @@ experiment = None
 
 ########
 
-parser = argparse.ArgumentParser(description="Pass parameters for search.")
+parser = argparse.ArgumentParser(description="Pass parameters for search. Pass -h for a list of all options.")
 parser.add_argument('-e', dest='exp_number', type=str, action='store',
-                    help='Hardcoded example scenario to use [2 to 6].')
+                    help='Name of default experiment to be used. (show all experiments via -info)].')
 parser.add_argument('-i', dest='n_generations', type=int, default=None, action='store',
                     help='Number generations to perform.')
 parser.add_argument('-n', dest='size_population', type=int, default=None, action='store',
                     help='The size of the initial population of scenario candidates.')
 parser.add_argument('-a', dest='algorithm', type=int, default=None, action='store',
-                    help='The algorithm to use for search, 1 for NSGA2, 2 for NSGA2-DT.')
+                    help='The algorithm to use for search. (Currently only 1: NSGAII supported.)')
 parser.add_argument('-t', dest='maximal_execution_time', type=str, default=None, action='store',
-                    help='The time to use for search with nsga2-DT (actual search time can be above the threshold, since algorithm might perform nsga2 iterations, when time limit is already reached.')
+                    help='The time to use for search.')
 parser.add_argument('-f', dest='scenario_path', type=str, action='store',
-                    help='The path to the scenario description file/experiment.')
+                    help='The path to the scenario description file.')
 parser.add_argument('-min', dest='var_min', nargs="+", type=float, action='store',
-                    help='The lower bound of each parameter.')
+                    help='The lower bound of each search parameter.')
 parser.add_argument('-max', dest='var_max', nargs="+", type=float, action='store',
-                    help='The upper bound of each parameter.')
+                    help='The upper bound of each search parameter.')
 parser.add_argument('-m', dest='design_names', nargs="+", type=str, action='store',
                     help='The names of the variables to modify.')
-parser.add_argument('-dt', dest='max_tree_iterations', type=int, action='store',
-                    help='The maximum number of total decision tree generations (when using NSGA2-DT algoritm).')
 parser.add_argument('-o', dest='results_folder', type=str, action='store', default=os.sep + "results" + os.sep,
                     help='The name of the folder where the results of the search are stored (default: \\results\\single\\)')
 parser.add_argument('-v', dest='do_visualize', action='store_true',
                     help='Whether to use the simuator\'s visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.')
 parser.add_argument('-info', dest='show_info', action='store_true',
-                    help='List name of all defined experiments')
+                    help='List name of all defined experiments.')
 
 args = parser.parse_args()
 

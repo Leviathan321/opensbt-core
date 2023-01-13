@@ -68,7 +68,7 @@ class SimulationResult(Result):
     def write_results(self, results_folder = RESULTS_FOLDER, params=None):
         algorithm = self.algorithm
         algorithm_name = algorithm.__class__.__name__        
-
+        
         print(f"=====[{algorithm_name}] Writing results...")
 
         save_folder = visualizer.create_save_folder(self.problem, results_folder, algorithm_name)

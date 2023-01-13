@@ -3,19 +3,16 @@
 
 ## Intro
 
-The framework provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
+[VIDEO]()
+
+OpenSBT provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
+OpenSBT has been already applied to the safety assessment of an industrial AEB using the Prescan Simulator.
 
 The tool provides the following features:
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-
-Future work features
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
+- [ ] Integration...
+- [ ] ...
+- [ ] HV Analysis of search algorithms
 
 ## Preliminaries
 
@@ -26,26 +23,59 @@ To install all dependencies run:
 python -m pip install -r requirements.txt
 ```
 
-### Preliminaries using CARLA Simulator
+## Usage
 
-Follow the steps desribed  [here](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla) to integrate CARLA.
+We describe the usage of the framework by testing the BehaviourAgent (SUT) in the CARLA Simulator.
 
-### Example Usage: Testing a SUT in Carla Simulator
+### 1. Integrating the Simulator/SUT
 
-#### Creating the experiment
+To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instances need to be passed to the simulator to execute the SUT with the scenarios. 
+The implementation of this method is Simulator specific. For CARLA we have implemented an interface that needs to called by the simulate method.
 
-1. Integrating the Simulator/SUT
+Follow the steps desribed  [here](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla) to integrate the CARLA Simulation for scenario simulation.
 
-2. Defining a fitness function
+### 2. Implementing a fitness function
 
-3. Integrating a search method
+A fitness finction is implemented by implementing the Fitness class and returning scalar or vector-valued output:
+```
+class FitnessMinDistanceVelocity(Fitness):
+    @property
+    def min_or_max(self):
+        return "min", "max"
 
-4. Defining a testing experiment
+    @property
+    def name(self):
+        return "Min distance", "Velocity at min distance"
+
+    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+        if "adversary" in simout.location:
+            name_adversary = "adversary"
+        else:
+            name_adversary = "other"
+
+        traceEgo = simout.location["ego"]
+        tracePed = simout.location[name_adversary]
+
+        ind_min_dist = np.argmin(geometric.distPair(traceEgo, tracePed))
+
+        # distance between ego and other object
+        distance = np.min(geometric.distPair(traceEgo, tracePed))
+
+        # speed of ego at time of the minimal distance
+        speed = simout.speed["ego"][ind_min_dist]
+
+        return (distance, speed)
+
+```
+### 3. Integrating the search algorithm
+
+### 4. Defining the scenario/search space
+ 
+
+We demonstrate the search with a scenario where a pedestrian crosses the lane of the ego car.
 
 
-#### Running the search
-
-We demonstrate the search with a scenario in carla where a pedestrian crosses the lane of the ego car.
+### 5. Starting search
 
 To run search with the predefined search configuration use:
 
@@ -53,36 +83,58 @@ To run search with the predefined search configuration use:
 python run.py -e 1
 ```
 
-The results are written in the *results* folder.
+Console
 
 To change the search space, the search method and termination creteria run the following.
 ```
 python run.py -e 1 -a 1 -min 0 0 -max 10 2 -m "SpeedEgo" "SpeedPed" -t "01:00:00"
 ```
 
-#### Analyzing the results
-
-TODO
-
-### Optional Parameters TODO update
+### Optional Parameters
 
 All flags that can be set are (get options by -h flag):
 
 ```
-  -e EXP_NUMBER         Implemented experiments to use (1: Carla AEB Experiment, 2: TBD).
-  -i N_ITERATIONS       Number iterations to perform.
+ -h, --help            show this help message and exit
+  -e EXP_NUMBER         Name of default experiment to be used. (show all experiments via -info)].
+  -i N_GENERATIONS      Number generations to perform.
   -n SIZE_POPULATION    The size of the initial population of scenario candidates.
-  -a ALGORITHM          The algorithm to use for search, 1 for NSGA2, 2 for NSGA2-DT.
+  -a ALGORITHM          The algorithm to use for search. (Currently only 1: NSGAII supported.)
   -t MAXIMAL_EXECUTION_TIME
-                        The maximal time to be used for search.
-  -f XOSC               The path to the scenario description file/experiment.
+                        The time to use for search.
+  -f SCENARIO_PATH      The path to the scenario description file.
   -min VAR_MIN [VAR_MIN ...]
                         The lower bound of each search parameter.
   -max VAR_MAX [VAR_MAX ...]
                         The upper bound of each search parameter.
   -m DESIGN_NAMES [DESIGN_NAMES ...]
                         The names of the variables to modify.
+  -o RESULTS_FOLDER     The name of the folder where the results of the search are stored (default: \results\single\)
+  -v                    Whether to use the simuator's visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.
+  -info                 List name of all defined experiments.
 ```
+
+
+### Results
+
+Results are written in the *results* folder.
+
+OpenSBT creates the following plots:
+
+- Design Space Plot
+
+- Scenario 2D visualization
+
+- Objective Space Plot
+
+- HV Plot
+
+Following csv. files are generated:
+
+- 
+-
+-
+
 
 ## Visual Studio Code Integration
 
