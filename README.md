@@ -3,9 +3,12 @@
 
 ## Intro
 
-<a href="https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4">
-    <img src="doc\video_logo.png" alt="Demo" width="600"/>
-</a>
+
+<div align="center">
+
+[<img src="doc\video_logo.png" width="500"/>](https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4)
+
+</div>
 
 OpenSBT provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
 
@@ -67,15 +70,32 @@ class FitnessMinDistanceVelocity(Fitness):
 
 ```
 
-Further we implement a [criticality function](evaluation/critical.py) to indicate when a scenario is considered fault-revealing/critical.
+Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) end declares based on this whether a scenario is critical: (here: when min distance < 0.5 m , ego velocity > 0 (inverted sign)). 
 
+
+```python
+class CriticalAdasFrontCollisions(Critical):
+    def eval(self, vector_fitness, simout: SimulationOutput = None):
+        if simout is not None:
+            isCollision = simout.otherParams['isCollision']
+        else:
+            isCollision = None
+
+        if (isCollision == True) or (vector_fitness[0] < 0.5) and (vector_fitness[1] < 0):
+            return True
+        else:
+            return False
+
+```
 ### 3. Integrating the search algorithm
 
 The search technique is represented by the (abstract) *Optimizer* class.
-We instantiate in the init function the SearchAlgorithm which has to be an instance of **Algorithm** pymoo. We instantiate NSGAII from pymoo as done [here](). 
+We instantiate in the init function the SearchAlgorithm which has to be an instance of **Algorithm** pymoo. We instantiate NSGAII from pymoo as done [here](algorithm/nsga2_optimizer.py).
 
 ### 4. Defining the experiment
  
+Consider: Step 2 and 3 is only required when using the console for experiment execution.
+
 To define an experiment we do the following:
 
 1. We instantiate *ADASProblem* to define the search space for the optimization and assign the simulator, fitness/criticality function.
@@ -100,7 +120,7 @@ problem = ADASProblem(
                         )
                         
 ```
-2. We create an experiment instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used.
+2. We create an experiment instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used. 
 
 ```python
 experiment = Experiment(name="1",
@@ -114,6 +134,19 @@ experiment = Experiment(name="1",
 experiments_store.register(getExp1())
 ```
 ### 5. Starting search
+
+- To start search without console
+
+```python
+optimizer = NsgaIIOptimizer(
+                            problem=problem,
+                            config=DefaultSearchConfiguration()
+                            )
+res = optimizer.run()
+res.write_results(results_folder=results_folder, params = optimizer.parameters)
+```
+
+- To start search via console
 
 To run the experiment with the name "1" we execute:
 
