@@ -1,34 +1,37 @@
-# OpenSBT - An open-source framework for the application of search-based testing approaches for Automated and Autonomous Driving Systems
+# OpenSBT - An open-source framework for the application of search-based testing for Automated and Autonomous Driving Systems
 
 
 ## Intro
 
-<a href="https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4">
-    <img src="doc\video_logo.png" alt="Demo" width="600"/>
-</a>
+
+<div align="center">
+
+[<img src="doc/video_logo.png" width="500"/>](https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4)
+
+</div>
 
 OpenSBT provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
 
 ## Preliminaries
 
-The tool requires python to be installed.
-To install all dependencies run:
+The tool requires python to be installed. Compatibility has been test with python 3.7/3.8. To create a virtual environment and install all dependencies run:
 
-```
-python -m pip install -r requirements.txt
+```bash
+bash install.sh
 ```
 
 ## Usage
 
-We describe the usage of the framework by testing the BehaviourAgent (SUT) in the CARLA Simulator.
+We describe the usage of the framework by testing the BehaviourAgent (AEB) in the CARLA Simulator for collisions and close to collision situations.
 
-As testing scenario we consider a pedestrian that is crossing the lane of ego. We want to vary the speed of ego, the speed of pedestrian, and the distance to the ego when the pedestrian starts walking to identify whether the SUT behaves faulty.
+As testing scenario we consider a pedestrian that is crossing the lane of the ego vehicle. The scenario is provided as an OpenSCENARIO 1.2 [file](scenarios/PedestrianCrossing.xosc). We vary the speed of ego, the speed of pedestrian, and the distance to the ego vehicle when the pedestrian starts walking.
+
 
 ### 1. Integrating the Simulator/SUT
 
-To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instances need to be passed to the simulator to execute the SUT with the test cases. 
+To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
 
-The implementation of this method is Simulator specific. For CARLA we have implemented an [interface](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called by the simulate method. For the usage, consider that the interface is installed.
+The implementation of *simulate* is simulator specific. For CARLA we have implemented an [module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called from the simulate method. 
 
 ### 2. Implementing a fitness function
 
@@ -67,15 +70,32 @@ class FitnessMinDistanceVelocity(Fitness):
 
 ```
 
-Further we implement a [criticality function](evaluation/critical.py) to indicate when a scenario is considered fault-revealing/critical.
+Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) end declares based on this whether a scenario is critical: (here: when min distance < 0.5 m , ego velocity > 0 (inverted sign)). 
 
+
+```python
+class CriticalAdasFrontCollisions(Critical):
+    def eval(self, vector_fitness, simout: SimulationOutput = None):
+        if simout is not None:
+            isCollision = simout.otherParams['isCollision']
+        else:
+            isCollision = None
+
+        if (isCollision == True) or (vector_fitness[0] < 0.5) and (vector_fitness[1] < 0):
+            return True
+        else:
+            return False
+
+```
 ### 3. Integrating the search algorithm
 
 The search technique is represented by the (abstract) *Optimizer* class.
-We instantiate in the init function the SearchAlgorithm which has to be an instance of **Algorithm** pymoo. We instantiate NSGAII from pymoo as done [here](). 
+We instantiate in the init function the SearchAlgorithm which has to be an instance of **Algorithm** pymoo. We instantiate NSGAII from pymoo as done [here](algorithm/nsga2_optimizer.py).
 
 ### 4. Defining the experiment
  
+Consider: Step 2 and 3 is only required when using the console for experiment execution.
+
 To define an experiment we do the following:
 
 1. We instantiate *ADASProblem* to define the search space for the optimization and assign the simulator, fitness/criticality function.
@@ -100,7 +120,7 @@ problem = ADASProblem(
                         )
                         
 ```
-2. We create an experiment instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used.
+2. We create an experiment instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used. 
 
 ```python
 experiment = Experiment(name="1",
@@ -114,6 +134,19 @@ experiment = Experiment(name="1",
 experiments_store.register(getExp1())
 ```
 ### 5. Starting search
+
+- To start search without console
+
+```python
+optimizer = NsgaIIOptimizer(
+                            problem=problem,
+                            config=DefaultSearchConfiguration()
+                            )
+res = optimizer.run()
+res.write_results(results_folder=results_folder, params = optimizer.parameters)
+```
+
+- To start search via console
 
 To run the experiment with the name "1" we execute:
 
@@ -166,7 +199,7 @@ OpenSBT creates the following plots:
 
 - Objective Space Plot
 
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\objective_space\Min_distance_Velocity_at_min_distance.png" alt="Objective Space Plot" width="600"/>
+<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\objective_space\Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
 
 - HV Plot
 
@@ -273,8 +306,6 @@ To reproduce the example setup included with the OpenSBT framework in [Microsoft
 
 - [ ] GUI
 - [ ] Improve the architecture to define algorithms
-
-
 
 
 ## License
