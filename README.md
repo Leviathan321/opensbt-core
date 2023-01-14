@@ -179,7 +179,7 @@ All flags that can be set are (get options by -h flag):
                         The upper bound of each search parameter.
   -m DESIGN_NAMES [DESIGN_NAMES ...]
                         The names of the variables to modify.
-  -o RESULTS_FOLDER     The name of the folder where the results of the search are stored (default: \results\single\)
+  -o RESULTS_FOLDER     The name of the folder where the results of the search are stored (default: /results/single/)
   -v                    Whether to use the simuator's visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.
   -info                 Names of all defined experiments.
 ```
@@ -191,19 +191,21 @@ When the search has terminated, results are written into the *results* folder in
 
 OpenSBT creates the following plots:
 
-- Design Space Plot
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\design_space\FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>
+**Design Space Plot**
 
-- Scenario 2D visualization
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\gif\0_trajectory.gif" alt="Scenario Visualization" width="600"/>
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>
 
-- Objective Space Plot
+**Scenario 2D visualization**
 
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\objective_space\Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/gif/0_trajectory.gif" alt="Scenario Visualization" width="600"/>
 
-- HV Plot
+**Objective Space Plot**
 
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\hypervolume.png" alt="Hypervolume Plot" width="600"/>
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
+
+**HV Plot**
+
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/hypervolume.png" alt="Hypervolume Plot" width="600"/>
 
 Following csv. files are generated:
 
