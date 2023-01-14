@@ -6,7 +6,7 @@
 
 <div align="center">
 
-[<img src="doc\video_logo.png" width="500"/>](https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4)
+[<img src="doc/video_logo.png" width="500"/>](https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4)
 
 </div>
 
