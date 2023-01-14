@@ -3,7 +3,9 @@
 
 ## Intro
 
-[VIDEO]()
+<a href="https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4">
+    <img src="doc\video_logo.png" alt="Demo" width="600"/>
+</a>
 
 OpenSBT provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
 
