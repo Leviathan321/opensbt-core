@@ -31,11 +31,10 @@ def getExp1() -> Experiment:
                           approx_eval_time=10,
                           do_visualize = False
                           )
-    config = DefaultSearchConfiguration()
     experiment = Experiment(name="1",
                             problem=problem,
                             algorithm=AlgorithmType.NSGAII,
-                            search_configuration=config)
+                            search_configuration=DefaultSearchConfiguration())
     return experiment
 
 experiments_store.register(getExp1())

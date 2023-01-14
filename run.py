@@ -61,7 +61,7 @@ parser.add_argument('-o', dest='results_folder', type=str, action='store', defau
 parser.add_argument('-v', dest='do_visualize', action='store_true',
                     help='Whether to use the simuator\'s visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.')
 parser.add_argument('-info', dest='show_info', action='store_true',
-                    help='List name of all defined experiments.')
+                    help='Names of all defined experiments.')
 
 args = parser.parse_args()
 

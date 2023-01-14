@@ -6,13 +6,6 @@
 [VIDEO]()
 
 OpenSBT provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
-OpenSBT has been already applied to the safety assessment of an industrial AEB using the Prescan Simulator.
-
-The tool provides the following features:
-
-- [ ] Integration...
-- [ ] ...
-- [ ] HV Analysis of search algorithms
 
 ## Preliminaries
 
@@ -27,16 +20,20 @@ python -m pip install -r requirements.txt
 
 We describe the usage of the framework by testing the BehaviourAgent (SUT) in the CARLA Simulator.
 
+As testing scenario we consider a pedestrian that is crossing the lane of ego. We want to vary the speed of ego, the speed of pedestrian, and the distance to the ego when the pedestrian starts walking to identify whether the SUT behaves faulty.
+
 ### 1. Integrating the Simulator/SUT
 
-To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instances need to be passed to the simulator to execute the SUT with the scenarios. 
-The implementation of this method is Simulator specific. For CARLA we have implemented an interface that needs to called by the simulate method.
+To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instances need to be passed to the simulator to execute the SUT with the test cases. 
 
-Follow the steps desribed  [here](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla) to integrate the CARLA Simulation for scenario simulation.
+The implementation of this method is Simulator specific. For CARLA we have implemented an [interface](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called by the simulate method. For the usage, consider that the interface is installed.
 
 ### 2. Implementing a fitness function
 
-A fitness finction is implemented by implementing the Fitness class and returning scalar or vector-valued output:
+To implement a new fitness function we need to implement the Fitness class (interface). We implement the eval function in the class, which receives as input one simulation output and returns a scalar or vector-valued output.
+In our example as the first objective we want to minimze the distance to the pedestrian, and maximize the velocity of ego:
+
+
 ```
 class FitnessMinDistanceVelocity(Fitness):
     @property
@@ -67,26 +64,64 @@ class FitnessMinDistanceVelocity(Fitness):
         return (distance, speed)
 
 ```
+
+Further we implement a [criticality function](evaluation/critical.py) to indicate when a scenario is considered fault-revealing/critical.
+
 ### 3. Integrating the search algorithm
 
-### 4. Defining the scenario/search space
+The search technique is represented by the (abstract) *Optimizer* class.
+We instantiate in the init function the SearchAlgorithm which has to be an instance of **Algorithm** pymoo. We instantiate NSGAII from pymoo as done [here](). 
+
+### 4. Defining the experiment
  
+To define an experiment we do the following:
 
-We demonstrate the search with a scenario where a pedestrian crosses the lane of the ego car.
+1. We instantiate *ADASProblem* to define the search space for the optimization and assign the simulator, fitness/criticality function.
 
+```python
+problem = ADASProblem(
+                        problem_name="PedestrianCrossingStartWalk",
+                        scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
+                        xl=[0.5, 1, 0],
+                        xu=[3, 80, 60],
+                        simulation_variables=[
+                            "PedestrianSpeed",
+                            "FinalHostSpeed",
+                            "PedestrianEgoDistanceStartWalk"],
+                        fitness_function=FitnessMinDistanceVelocityFrontOnly(),  
+                        critical_function=CriticalAdasFrontCollisions(),
+                        simulate_function=CarlaSimulator.simulate,
+                        simulation_time=10,
+                        sampling_time=100,
+                        approx_eval_time=10,
+                        do_visualize = False
+                        )
+                        
+```
+2. We create an experiment instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used.
 
+```python
+experiment = Experiment(name="1",
+                        problem=problem,
+                        algorithm=AlgorithmType.NSGAII,
+                        search_configuration=DefaultSearchConfiguration())
+```
+
+3. We register the experiment to use it via the console.
+```python
+experiments_store.register(getExp1())
+```
 ### 5. Starting search
 
-To run search with the predefined search configuration use:
+To run the experiment with the name "1" we execute:
 
-```
+```bash
 python run.py -e 1
 ```
 
-Console
+We can change search parameter as parameter boundaries, search time using flags:
 
-To change the search space, the search method and termination creteria run the following.
-```
+```bash
 python run.py -e 1 -a 1 -min 0 0 -max 10 2 -m "SpeedEgo" "SpeedPed" -t "01:00:00"
 ```
 
@@ -96,7 +131,7 @@ All flags that can be set are (get options by -h flag):
 
 ```
  -h, --help            show this help message and exit
-  -e EXP_NUMBER         Name of default experiment to be used. (show all experiments via -info)].
+  -e EXP_NUMBER         Name of existing experiment to be used. (show all experiments via -info)].
   -i N_GENERATIONS      Number generations to perform.
   -n SIZE_POPULATION    The size of the initial population of scenario candidates.
   -a ALGORITHM          The algorithm to use for search. (Currently only 1: NSGAII supported.)
@@ -111,30 +146,36 @@ All flags that can be set are (get options by -h flag):
                         The names of the variables to modify.
   -o RESULTS_FOLDER     The name of the folder where the results of the search are stored (default: \results\single\)
   -v                    Whether to use the simuator's visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.
-  -info                 List name of all defined experiments.
+  -info                 Names of all defined experiments.
 ```
 
 
 ### Results
 
-Results are written in the *results* folder.
+When the search has terminated, results are written into the *results* folder in a folder named as the problem name.
 
 OpenSBT creates the following plots:
 
 - Design Space Plot
+<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\design_space\FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>
 
 - Scenario 2D visualization
+<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\gif\0_trajectory.gif" alt="Scenario Visualization" width="600"/>
 
 - Objective Space Plot
 
+<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\objective_space\Min_distance_Velocity_at_min_distance.png" alt="Objective Space Plot" width="600"/>
+
 - HV Plot
+
+<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\hypervolume.png" alt="Hypervolume Plot" width="600"/>
 
 Following csv. files are generated:
 
-- 
--
--
-
+- all_testcases: Contains a list of all evaluated testcases
+- calculation_properties: Algorihm parameters used for search (e.g. population size)
+- optimal_testcases: List of the "worst/optimal" testcases
+- summary_results: Details of the experiment setup
 
 ## Visual Studio Code Integration
 
@@ -226,6 +267,12 @@ To reproduce the example setup included with the OpenSBT framework in [Microsoft
 }
 
 ```
+## Features to be implemented
+
+- [ ] GUI
+- [ ] Improve the architecture to define algorithms
+
+
 
 
 ## License
