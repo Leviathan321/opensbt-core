@@ -1,4 +1,4 @@
-# OpenSBT - An open-source framework for the application of search-based testing approaches for Automated and Autonomous Driving Systems
+# OpenSBT - An open-source framework for the application of search-based testing for Automated and Autonomous Driving Systems
 
 
 ## Intro
@@ -14,24 +14,24 @@ OpenSBT provides a modular and extandable code base for the application of searc
 
 ## Preliminaries
 
-The tool requires python to be installed.
-To install all dependencies run:
+The tool requires python to be installed. Compatibility has been test with python 3.7/3.8. To create a virtual environment and install all dependencies run:
 
-```
-python -m pip install -r requirements.txt
+```bash
+bash install.sh
 ```
 
 ## Usage
 
-We describe the usage of the framework by testing the BehaviourAgent (SUT) in the CARLA Simulator.
+We describe the usage of the framework by testing the BehaviourAgent (AEB) in the CARLA Simulator for collisions and close to collision situations.
 
-As testing scenario we consider a pedestrian that is crossing the lane of the ego vehicle. We vary the speed of ego, the speed of pedestrian, and the distance to the ego vehicle when the pedestrian starts walking to identify whether the SUT behaves faulty.
+As testing scenario we consider a pedestrian that is crossing the lane of the ego vehicle. The scenario is provided as an OpenSCENARIO 1.2 [file](scenarios/PedestrianCrossing.xosc). We vary the speed of ego, the speed of pedestrian, and the distance to the ego vehicle when the pedestrian starts walking.
+
 
 ### 1. Integrating the Simulator/SUT
 
 To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
 
-The implementation of this method is simulator specific. For CARLA we have implemented an [interface module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called by the simulate method. This module needs to be installed first.
+The implementation of *simulate* is simulator specific. For CARLA we have implemented an [module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called from the simulate method. 
 
 ### 2. Implementing a fitness function
 
