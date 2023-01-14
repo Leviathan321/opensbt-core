@@ -131,11 +131,6 @@ if not args.algorithm is None:
     algorithm = AlgorithmType(args.algorithm)
 if not args.maximal_execution_time is None:
     config.maximal_execution_time = args.maximal_execution_time
-if not args.max_tree_iterations is None:
-    config.max_tree_iterations = args.max_tree_iterations
-if not args.max_tree_iterations is None:
-    results_folder = args.results_folder
-
 if not args.var_max is None:
     problem.var_max = args.var_max
 if not args.var_min is None:

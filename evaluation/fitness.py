@@ -12,10 +12,6 @@ class Fitness():
         pass
 
     @property
-    def n_obj(self):
-        return len(self.min_or_max)
-
-    @property
     def name(self):
         pass
 
