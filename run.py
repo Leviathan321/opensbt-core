@@ -18,7 +18,6 @@ import logging
 import os
 import sys
 from algorithm.nsga2_optimizer import *
-from algorithm.nsga2dt_optimizer import *
 from experiment.experiment_store import experiments_store
 from default_experiments import *
 
@@ -159,18 +158,8 @@ if __name__ == "__main__":
 
         res = optimizer.run()
         res.write_results(results_folder=results_folder, params = optimizer.parameters)
-    elif algorithm == AlgorithmType.NSGAIIDT:
-        print("pymoo NSGA-II-DT algorithm is used.")
-        optimizer = NsgaIIDTOptimizer(
-                              problem=problem,
-                              config=config)
-        res = optimizer.run()
-        res.write_results(results_folder=results_folder, params = optimizer.parameters)
     else:
         raise ValueError("Error: No algorithm with the given code: " + str(algorithm))
 
  
     print("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")
-
-
-
