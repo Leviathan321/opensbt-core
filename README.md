@@ -22,13 +22,13 @@ python -m pip install -r requirements.txt
 
 We describe the usage of the framework by testing the BehaviourAgent (SUT) in the CARLA Simulator.
 
-As testing scenario we consider a pedestrian that is crossing the lane of ego. We want to vary the speed of ego, the speed of pedestrian, and the distance to the ego when the pedestrian starts walking to identify whether the SUT behaves faulty.
+As testing scenario we consider a pedestrian that is crossing the lane of the ego vehicle. We vary the speed of ego, the speed of pedestrian, and the distance to the ego vehicle when the pedestrian starts walking to identify whether the SUT behaves faulty.
 
 ### 1. Integrating the Simulator/SUT
 
-To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instances need to be passed to the simulator to execute the SUT with the test cases. 
+To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
 
-The implementation of this method is Simulator specific. For CARLA we have implemented an [interface](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called by the simulate method. For the usage, consider that the interface is installed.
+The implementation of this method is simulator specific. For CARLA we have implemented an [interface module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called by the simulate method. This module needs to be installed first.
 
 ### 2. Implementing a fitness function
 
@@ -166,7 +166,7 @@ OpenSBT creates the following plots:
 
 - Objective Space Plot
 
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\objective_space\Min_distance_Velocity_at_min_distance.png" alt="Objective Space Plot" width="600"/>
+<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\objective_space\Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
 
 - HV Plot
 
