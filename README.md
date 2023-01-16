@@ -14,7 +14,7 @@ OpenSBT provides a modular and extandable code base for the application of searc
 
 ## Preliminaries
 
-The tool requires python to be installed. Compatibility has been test with python 3.7/3.8. To create a virtual environment and install all dependencies run:
+The tool requires python to be installed. Compatibility has been tested with python 3.7/3.8. To create a virtual environment and install all dependencies run:
 
 ```bash
 bash install.sh
@@ -70,7 +70,7 @@ class FitnessMinDistanceVelocity(Fitness):
 
 ```
 
-Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) end declares based on this whether a scenario is critical: (here: when min distance < 0.5 m , ego velocity > 0 (inverted sign)). 
+Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) and the simulation output to declare based on this whether a scenario is critical: (here: when min distance < 0.5 m , ego velocity > 0 (inverted sign)). 
 
 
 ```python
