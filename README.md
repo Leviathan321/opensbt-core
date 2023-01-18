@@ -31,7 +31,7 @@ As testing scenario we consider a pedestrian that is crossing the lane of the eg
 
 To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
 
-The implementation of *simulate* is simulator specific. For CARLA we have implemented an [module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called from the simulate method. 
+The implementation of *simulate* is simulator specific. For CARLA we have implemented a [module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called from the simulate method. 
 
 ### 2. Implementing a fitness function
 
@@ -70,7 +70,7 @@ class FitnessMinDistanceVelocity(Fitness):
 
 ```
 
-Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) and the simulation output to declare based on this whether a scenario is critical: (here: when min distance < 0.5 m , ego velocity > 0 (inverted sign)). 
+Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) and the simulation output to declare based on this whether a scenario is critical: (here: when 1) a collision ocurred, 2) min distance < 0.5m or 3) ego velocity > 0 (inverted sign)). 
 
 
 ```python
