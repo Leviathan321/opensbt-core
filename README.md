@@ -35,8 +35,8 @@ The implementation of *simulate* is simulator specific. For CARLA we have implem
 
 ### 2. Implementing a fitness function
 
-To implement a new fitness function we need to implement the Fitness class (interface). We implement the eval function in the class, which receives as input a [simulation output](https://git.fortiss.org/opensbt/opensbt-core/-/blob/main/simulation/simulator.py#L40-62) and returns a scalar or vector-valued output.
-In our example as the first objective we want to minimize the distance to the pedestrian, and as the second objective maximize the velocity of ego:
+To implement a new fitness function we need to implement the `Fitness` class (interface). We implement the eval function in the class, which receives as input a [`SimulationOutput`](https://git.fortiss.org/opensbt/opensbt-core/-/blob/main/simulation/simulator.py#L40-62) and returns a scalar or vector-valued output.
+In our example as the first objective we want to minimize the distance to the pedestrian, and as the second objective maximize the velocity of ego. Additionally, we assign a name to each objective and declare whether the value is maximized or minimized.
 
 
 ```python
@@ -70,7 +70,7 @@ class FitnessMinDistanceVelocity(Fitness):
 
 ```
 
-Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) and the simulation output to declare based on this whether a scenario is critical: (here: when 1) a collision ocurred, 2) min distance < 0.5m or 3) ego velocity > 0 (inverted sign)). 
+Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class `Critical` to indicate when a scenario is considered fault-revealing/critical. The corresponding *eval* function receives as input the fitness value(s) and the simulation output to declare based on this whether a scenario is critical: (here: when 1) a collision ocurred, 2) min distance < 0.5m or 3) ego velocity > 0 (inverted sign)). 
 
 
 ```python
@@ -89,8 +89,8 @@ class CriticalAdasFrontCollisions(Critical):
 ```
 ### 3. Integrating the search algorithm
 
-The search technique is represented by the (abstract) *Optimizer* class.
-We instantiate in the init function the SearchAlgorithm which has to be an instance of **Algorithm** pymoo. We instantiate NSGAII from pymoo:
+The search technique is represented by the (abstract) `Optimizer` class.
+We instantiate in the init function the SearchAlgorithm which has to be an instance of `Algorithm` pymoo. We instantiate NSGAII from pymoo:
 
 ```python
 class NsgaIIOptimizer(Optimizer):
@@ -137,7 +137,7 @@ class NsgaIIOptimizer(Optimizer):
 
 ### 4. Defining the experiment
  
-Consider: Step 2 and 3 is only required when using the console for experiment execution.
+**Consider: Step 2 and 3 is only required when using the console for experiment execution/modification.**
 
 To define an experiment we do the following:
 
@@ -238,9 +238,13 @@ OpenSBT creates the following plots:
 
 <img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>
 
+Critical regions of the search space are highlighted using classification based on the decision tree algorithm. Other classification techniques, e.g., SVM, KNN can be integrated. The interval borders of the regions are written into a `bounds_regions.csv` as in this [example](example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/classification/bounds_regions.csv). 
+
 **Scenario 2D visualization**
 
 <img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/gif/0_trajectory.gif" alt="Scenario Visualization" width="600"/>
+
+Traces of the ego vehicle (yellow box) and the adversary (blue circle) are visualized in a 2D .gif animation. The [`SimulationOutput`](simulation/simulator)` can be extended by further state parameters, e.g., environmental information to be plotted in the .gif.
 
 **Objective Space Plot**
 
@@ -250,12 +254,14 @@ OpenSBT creates the following plots:
 
 <img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/hypervolume.png" alt="Hypervolume Plot" width="600"/>
 
+Hypervolume (HV) is a well-applied quality indicator to assess/compare the performance of mulitobjective optimization (MOO) algorithms. The higher the value the better the performances is considered. The plotted graph can be used to understand wether the search configuration is well chosen (e.g., when HV values does not rise drastically any more).
+
 Following csv. files are generated:
 
-- all_testcases: Contains a list of all evaluated testcases
-- calculation_properties: Algorihm parameters used for search (e.g. population size)
-- optimal_testcases: List of the "worst/optimal" testcases
-- summary_results: Details of the experiment setup
+- all_testcases: Contains a list of all evaluated testcases.
+- calculation_properties: Experiment setup, as algorithm parameters used for search (e.g. population size, number iterations).
+- optimal_testcases: List of the "worst/optimal" testcases.
+- summary_results: Information on the performance of the algorithm, e.g., number critical test cases found, ratio |critical test cases|/|all test cases|.
 
 ## Visual Studio Code Integration
 
