@@ -135,7 +135,7 @@ class NsgaIIOptimizer(Optimizer):
         self.save_history = True
 ```
 
-### 4. Defining the experiment
+### 4. Defining the problem
  
 **Consider: Step 2 and 3 is only required when using the console for experiment execution/modification.**
 
