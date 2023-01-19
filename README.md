@@ -90,7 +90,7 @@ class CriticalAdasFrontCollisions(Critical):
 ### 3. Integrating the search algorithm
 
 The search technique is represented by the (abstract) `Optimizer` class.
-We instantiate in the init function the search algorithm which has to be an instance of `Algorithm` pymoo. We instantiate NSGAII from pymoo:
+We instantiate in the init function the search algorithm which has to be an instance of [`Algorithm`](https://github.com/anyoptimization/pymoo/blob/main/pymoo/core/algorithm.py) pymoo. We instantiate `[NSGAII](https://github.com/anyoptimization/pymoo/blob/main/pymoo/algorithms/moo/nsga2.py#L84) from pymoo:
 
 ```python
 class NsgaIIOptimizer(Optimizer):
