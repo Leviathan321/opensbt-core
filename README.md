@@ -141,7 +141,7 @@ class NsgaIIOptimizer(Optimizer):
 
 To define an experiment we do the following:
 
-1. We instantiate `ADASProblem` to define the search space for the optimization and assign the simulator, fitness/criticality function.
+1. We instantiate `ADASProblem` to define the search space for the optimization and assign the simulator, fitness/criticality function, variables in the scenario to vary. In our example the variables have to be defined in the OpenSCENARIO file as parameters in the [`ParameterDeclaration`](https://git.fortiss.org/opensbt/opensbt-core/-/blob/main/scenarios/PedestrianCrossing.xosc#L5-11) section.
 
 ```python
 problem = ADASProblem(
