@@ -254,7 +254,7 @@ Traces of the ego vehicle (yellow box) and the adversary (blue circle) are visua
 
 <img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/hypervolume.png" alt="Hypervolume Plot" width="600"/>
 
-Hypervolume (HV) is a well-applied quality indicator to assess/compare the performance of mulitobjective optimization (MOO) algorithms. The higher the value the better the performances is considered. The plotted graph can be used to understand wether the search configuration is well chosen (e.g., when HV values does not rise drastically any more).
+Hypervolume (HV) is a well-applied quality indicator to assess/compare the performance of mulitobjective optimization (MOO) algorithms. The higher the value the better the performances of the algorithm is considered. The plotted graph over the number of evaluations can be used to understand whether the search configuration (i.e. the search time) is well chosen. For instance, when the HV values does not rise drastically anymore, it means that a longer search will most likely not reveal more "optimal/critical" solutions.
 
 Following csv. files are generated:
 
