@@ -29,7 +29,7 @@ As testing scenario we consider a pedestrian that is crossing the lane of the eg
 
 ### 1. Integrating the Simulator/SUT
 
-To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
+To integrate a simulator we need to implement the [simulate]() method of the [`Simulator`]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
 
 The implementation of *simulate* is simulator specific. For CARLA we have implemented a [module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called from the simulate method. 
 
@@ -90,7 +90,7 @@ class CriticalAdasFrontCollisions(Critical):
 ### 3. Integrating the search algorithm
 
 The search technique is represented by the (abstract) `Optimizer` class.
-We instantiate in the init function the SearchAlgorithm which has to be an instance of `Algorithm` pymoo. We instantiate NSGAII from pymoo:
+We instantiate in the init function the search algorithm which has to be an instance of `Algorithm` pymoo. We instantiate NSGAII from pymoo:
 
 ```python
 class NsgaIIOptimizer(Optimizer):
@@ -141,7 +141,7 @@ class NsgaIIOptimizer(Optimizer):
 
 To define an experiment we do the following:
 
-1. We instantiate *ADASProblem* to define the search space for the optimization and assign the simulator, fitness/criticality function.
+1. We instantiate `ADASProblem` to define the search space for the optimization and assign the simulator, fitness/criticality function.
 
 ```python
 problem = ADASProblem(
@@ -163,7 +163,7 @@ problem = ADASProblem(
                         )
                         
 ```
-2. We create an experiment instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used. 
+2. We create an `Experiment` instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used. 
 
 ```python
 experiment = Experiment(name="1",
