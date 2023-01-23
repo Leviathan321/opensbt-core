@@ -238,7 +238,7 @@ OpenSBT creates the following plots:
 
 <img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>
 
-Critical regions of the search space are highlighted using classification based on the decision tree algorithm. Other classification techniques, e.g., SVM, KNN can be integrated. The interval borders of the regions are written into a `bounds_regions.csv` as in this [example](example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/classification/bounds_regions.csv). 
+Critical regions of the search space are highlighted using classification based on the decision tree algorithm. Other classification techniques, e.g., SVM, KNN can be integrated. The interval borders of the regions are written into a `bounds_regions.csv` as in this [example](example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/classification/bounds_regions.csv). The corresponding decision tree can be investigated in the file named [tree](example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/classification/tree.pdf).
 
 **Scenario 2D visualization**
 
