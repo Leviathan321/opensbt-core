@@ -357,7 +357,7 @@ To reproduce the example setup included with the OpenSBT framework in [Microsoft
 
 - [ ] GUI
 - [ ] Improve the architecture to define algorithms
-
+- [ ] Decouple SUT from Simulator using FMI and ROS
 
 ## License
 
