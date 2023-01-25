@@ -7,7 +7,7 @@ import pydotplus
 import csv
 
 MIN_SAMPLES_SPLIT = 0.1
-MIN_SAMPLES_LEAF = 0.05
+MIN_SAMPLES_LEAF = 5
 CRITICALITY_THRESHOLD_MIN = 0.2
 CRITICALITY_THRESHOLD_MAX = 0.95
 DELTA = 0.0  # delta can be set negative to make regions overlap
