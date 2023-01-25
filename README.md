@@ -36,7 +36,7 @@ The implementation of *simulate* is simulator specific. For CARLA we have implem
 ### 2. Implementing a fitness function
 
 To implement a new fitness function we need to implement the `Fitness` class (interface). We implement the eval function in the class, which receives as input a [`SimulationOutput`](https://git.fortiss.org/opensbt/opensbt-core/-/blob/main/simulation/simulator.py#L40-62) and returns a scalar or vector-valued output.
-In our example as the first objective we want to minimize the distance to the pedestrian, and as the second objective maximize the velocity of ego. Additionally, we assign a name to each objective and declare whether the value is maximized or minimized.
+In our example we have a vector valued output, since as the first objective we want to minimize the distance to the pedestrian, and as the second objective we want to maximize the velocity of the ego vehicle. Additionally, we assign inside the class a name to each objective and declare whether the value is maximized or minimized.
 
 
 ```python
