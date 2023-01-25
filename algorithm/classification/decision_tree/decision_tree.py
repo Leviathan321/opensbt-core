@@ -6,12 +6,13 @@ import pymoo.core.population
 import pydotplus
 import csv
 
-MIN_SAMPLES_SPLIT = 2
-MIN_SAMPLES_LEAF = 1
-CRITICALITY_THRESHOLD_MIN = 0.5
-CRITICALITY_THRESHOLD_MAX = 1
+MIN_SAMPLES_SPLIT = 0.1
+MIN_SAMPLES_LEAF = 5
+CRITICALITY_THRESHOLD_MIN = 0.2
+CRITICALITY_THRESHOLD_MAX = 0.95
 DELTA = 0.0  # delta can be set negative to make regions overlap
-MAX_TREE_DEPTH = 4
+MAX_TREE_DEPTH = 100
+MIN_IMPURITY_DECREASE = 0.1
 
 class Region:
     def __init__(self, xl, xu, population):
@@ -27,18 +28,18 @@ class Region:
         return
 
 
-def generate_critical_regions(population, problem, min_samples_split=MIN_SAMPLES_SPLIT,
-                              min_samples_leaf=MIN_SAMPLES_LEAF, max_depth=MAX_TREE_DEPTH, save_folder=None):
-    # problem = res.problem
+def generate_critical_regions(population, 
+                             problem,
+                             min_samples_split=MIN_SAMPLES_SPLIT,
+                             min_samples_leaf=MIN_SAMPLES_LEAF, 
+                             max_depth=MAX_TREE_DEPTH, 
+                             min_impurity_decrease=MIN_IMPURITY_DECREASE,
+                             save_folder=None):
+
     feature_names = problem.design_names
 
-    # hist = res.history
     xl = problem.xl
     xu = problem.xu
-    
-    # population = pymoo.core.population.Population.empty()
-    # for algo in hist:
-    #     population = pymoo.core.population.merge(population, algo.pop)
     
     X, F, CB, SO = population.get("X", "F", "CB", "SO")
 
@@ -46,9 +47,11 @@ def generate_critical_regions(population, problem, min_samples_split=MIN_SAMPLES
     regions = []
     critical_regions = []
 
-    clf = tree.DecisionTreeClassifier(min_samples_split=min_samples_split, min_samples_leaf=min_samples_leaf,
+    clf = tree.DecisionTreeClassifier(min_samples_split=min_samples_split, 
+                                     min_samples_leaf=min_samples_leaf,
                                       criterion="entropy",
-                                      max_depth=max_depth)
+                                      max_depth=max_depth,
+                                      min_impurity_decrease=min_impurity_decrease)
     clf = clf.fit(X, CB)
 
     n_nodes = clf.tree_.node_count
