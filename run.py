@@ -28,7 +28,7 @@ from pymoo.config import Config
 
 Config.warnings['not_compiled'] = False
 
-results_folder = '/results/single/'
+results_folder = '/results/'
 
 algorithm = None
 problem = None
