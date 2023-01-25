@@ -14,7 +14,7 @@ OpenSBT provides a modular and extandable code base for the application of searc
 
 ## Preliminaries
 
-The tool requires python to be installed. Compatibility has been test with python 3.7/3.8. To create a virtual environment and install all dependencies run:
+The tool requires python to be installed. Compatibility has been tested with python 3.7/3.8. To create a virtual environment and install all dependencies run:
 
 ```bash
 bash install.sh
@@ -29,17 +29,17 @@ As testing scenario we consider a pedestrian that is crossing the lane of the eg
 
 ### 1. Integrating the Simulator/SUT
 
-To integrate a simulator we need to implement the [simulate]() method of the [Simulator]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
+To integrate a simulator we need to implement the [simulate]() method of the [`Simulator`]() class. In this method a scenario instance is passed to the simulator to execute the SUT in the scenario.
 
-The implementation of *simulate* is simulator specific. For CARLA we have implemented an [module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called from the simulate method. 
+The implementation of *simulate* is simulator specific. For CARLA we have implemented a [module](https://git.fortiss.org/fortissimo/ff1_testing/ff1_carla), that needs to be called from the simulate method. 
 
 ### 2. Implementing a fitness function
 
-To implement a new fitness function we need to implement the Fitness class (interface). We implement the eval function in the class, which receives as input one simulation output and returns a scalar or vector-valued output.
-In our example as the first objective we want to minimze the distance to the pedestrian, and maximize the velocity of ego:
+To implement a new fitness function we need to implement the `Fitness` class (interface). We implement the eval function in the class, which receives as input a [`SimulationOutput`](https://git.fortiss.org/opensbt/opensbt-core/-/blob/main/simulation/simulator.py#L40-62) and returns a scalar or vector-valued output.
+In our example as the first objective we want to minimize the distance to the pedestrian, and as the second objective maximize the velocity of ego. Additionally, we assign a name to each objective and declare whether the value is maximized or minimized.
 
 
-```
+```python
 class FitnessMinDistanceVelocity(Fitness):
     @property
     def min_or_max(self):
@@ -70,7 +70,7 @@ class FitnessMinDistanceVelocity(Fitness):
 
 ```
 
-Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class *Critical* to indicate when a scenario is considered fault-revealing/critical. The corresponding eval function receives as input the fitness value(s) end declares based on this whether a scenario is critical: (here: when min distance < 0.5 m , ego velocity > 0 (inverted sign)). 
+Further we implement a [criticality function](evaluation/critical.py) by implementing the interface class `Critical` to indicate when a scenario is considered fault-revealing/critical. The corresponding *eval* function receives as input the fitness value(s) and the simulation output to declare based on this whether a scenario is critical: (here: when 1) a collision ocurred, 2) min distance < 0.5m or 3) ego velocity > 0 (inverted sign)). 
 
 
 ```python
@@ -89,16 +89,59 @@ class CriticalAdasFrontCollisions(Critical):
 ```
 ### 3. Integrating the search algorithm
 
-The search technique is represented by the (abstract) *Optimizer* class.
-We instantiate in the init function the SearchAlgorithm which has to be an instance of **Algorithm** pymoo. We instantiate NSGAII from pymoo as done [here](algorithm/nsga2_optimizer.py).
+The search technique is represented by the (abstract) `Optimizer` class.
+We instantiate in the init function the search algorithm which has to be an instance of [`Algorithm`](https://github.com/anyoptimization/pymoo/blob/main/pymoo/core/algorithm.py) pymoo. We instantiate [`NSGAII`](https://github.com/anyoptimization/pymoo/blob/main/pymoo/algorithms/moo/nsga2.py#L84) from pymoo:
 
-### 4. Defining the experiment
+```python
+class NsgaIIOptimizer(Optimizer):
+
+    algorithm_name = "NSGA-II"
+
+    def __init__(self,
+                problem: Problem,
+                config: SearchConfiguration):
+
+        self.config = config
+        self.problem = problem
+        self.res = None
+
+        if self.config.prob_mutation is None:
+            self.config.prob_mutation = 1 / problem.n_var
+
+        self.parameters = {
+            "Population size" : str(config.population_size),
+            "Number of generations" : str(config.n_generations),
+            "Number of offsprings": str(config.num_offsprings),
+            "Crossover probability" : str(config.prob_crossover),
+            "Crossover eta" : str(config.eta_crossover),
+            "Mutation probability" : str(config.prob_mutation),
+            "Mutation eta" : str(config.eta_mutation)
+        }
+
+        self.algorithm = NSGA2(
+            pop_size=config.population_size,
+            n_offsprings=config.num_offsprings,
+            sampling=FloatRandomSampling(),
+            crossover=SBX(prob=config.prob_crossover, eta=config.eta_crossover),
+            mutation=PM(prob=config.prob_mutation, eta=config.eta_mutation),
+            eliminate_duplicates=True)
+
+        ''' Prioritize max search time over set maximal number of generations'''
+        if config.maximal_execution_time is not None:
+            self.termination = get_termination("time", config.maximal_execution_time)
+        else:
+            self.termination = get_termination("n_gen", config.n_generations)
+
+        self.save_history = True
+```
+
+### 4. Defining the problem
  
-Consider: Step 2 and 3 is only required when using the console for experiment execution.
+**Consider: Step 2 and 3 is only required when using the console for experiment execution/modification.**
 
 To define an experiment we do the following:
 
-1. We instantiate *ADASProblem* to define the search space for the optimization and assign the simulator, fitness/criticality function.
+1. We instantiate `ADASProblem` to define the search space for the optimization and assign the simulator, fitness/criticality function, variables in the scenario to vary. In our example the variables have to be defined in the OpenSCENARIO file as parameters in the [`ParameterDeclaration`](https://git.fortiss.org/opensbt/opensbt-core/-/blob/main/scenarios/PedestrianCrossing.xosc#L5-11) section.
 
 ```python
 problem = ADASProblem(
@@ -120,7 +163,7 @@ problem = ADASProblem(
                         )
                         
 ```
-2. We create an experiment instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used. 
+2. We create an `Experiment` instance, assigning the name, the problem, the algorithm and the search configuration for the algorithm to be used. 
 
 ```python
 experiment = Experiment(name="1",
@@ -131,7 +174,7 @@ experiment = Experiment(name="1",
 
 3. We register the experiment to use it via the console.
 ```python
-experiments_store.register(getExp1())
+experiments_store.register(experiment)
 ```
 ### 5. Starting search
 
@@ -179,7 +222,7 @@ All flags that can be set are (get options by -h flag):
                         The upper bound of each search parameter.
   -m DESIGN_NAMES [DESIGN_NAMES ...]
                         The names of the variables to modify.
-  -o RESULTS_FOLDER     The name of the folder where the results of the search are stored (default: \results\single\)
+  -o RESULTS_FOLDER     The name of the folder where the results of the search are stored (default: /results/single/)
   -v                    Whether to use the simuator's visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.
   -info                 Names of all defined experiments.
 ```
@@ -191,26 +234,34 @@ When the search has terminated, results are written into the *results* folder in
 
 OpenSBT creates the following plots:
 
-- Design Space Plot
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\design_space\FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>
+**Design Space Plot**
 
-- Scenario 2D visualization
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\gif\0_trajectory.gif" alt="Scenario Visualization" width="600"/>
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>
 
-- Objective Space Plot
+Critical regions of the search space are highlighted using classification based on the decision tree algorithm. Other classification techniques, e.g., SVM, KNN can be integrated. The interval borders of the regions are written into a `bounds_regions.csv` as in this [example](example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/classification/bounds_regions.csv). The corresponding decision tree can be investigated in the file named [tree](example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/classification/tree.pdf).
 
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\objective_space\Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
+**Scenario 2D visualization**
 
-- HV Plot
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/gif/0_trajectory.gif" alt="Scenario Visualization" width="600"/>
 
-<img src="example\results\single\PedestrianCrossingStartWalk\NSGA2\11-01-2023_18-37-58\hypervolume.png" alt="Hypervolume Plot" width="600"/>
+Traces of the ego vehicle (yellow box) and the adversary (blue circle) are visualized in a 2D .gif animation. The [`SimulationOutput`](simulation/simulator)` can be extended by further state parameters, e.g., environmental information to be plotted in the .gif.
+
+**Objective Space Plot**
+
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
+
+**HV Plot**
+
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/hypervolume.png" alt="Hypervolume Plot" width="600"/>
+
+Hypervolume (HV) is a well-applied quality indicator to assess/compare the performance of mulitobjective optimization (MOO) algorithms. The higher the value the better the performances of the algorithm is considered. The plotted graph over the number of evaluations can be used to understand whether the search configuration (i.e. the search time) is well chosen. For instance, when the HV values does not rise drastically anymore, it means that a longer search will most likely not reveal more "optimal/critical" solutions.
 
 Following csv. files are generated:
 
-- all_testcases: Contains a list of all evaluated testcases
-- calculation_properties: Algorihm parameters used for search (e.g. population size)
-- optimal_testcases: List of the "worst/optimal" testcases
-- summary_results: Details of the experiment setup
+- all_testcases: Contains a list of all evaluated testcases.
+- calculation_properties: Experiment setup, as algorithm parameters used for search (e.g. population size, number iterations).
+- optimal_testcases: List of the "worst/optimal" testcases.
+- summary_results: Information on the performance of the algorithm, e.g., number critical test cases found, ratio |critical test cases|/|all test cases|.
 
 ## Visual Studio Code Integration
 
@@ -306,7 +357,7 @@ To reproduce the example setup included with the OpenSBT framework in [Microsoft
 
 - [ ] GUI
 - [ ] Improve the architecture to define algorithms
-
+- [ ] Decouple SUT from Simulator using FMI and ROS
 
 ## License
 
