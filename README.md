@@ -202,7 +202,7 @@ python run.py -e 1
 We can change search parameter as parameter boundaries, search time using flags:
 
 ```bash
-python run.py -e 1 -a 1 -min 0 0 -max 10 2 -m "SpeedEgo" "SpeedPed" -t "01:00:00"
+python run.py -e 1 -a 1 -min 0 0 -max 10 2 -m "PedestrianSpeed", "FinalHostSpeed" -t "01:00:00"
 ```
 
 ### Optional Parameters
