@@ -199,10 +199,10 @@ To run the experiment with the name "1" we execute:
 python run.py -e 1
 ```
 
-We can change search parameter as parameter boundaries, search time using flags:
+We can change experiment parameter as e.g., lower and upper bounds of the search parameters and the search time a using flags:
 
 ```bash
-python run.py -e 1 -a 1 -min 0 0 -max 10 2 -m  "FinalHostSpeed" "PedestrianSpeed" -t "01:00:00"
+python run.py -e 1 -min 0 0 -max 10 2 -m  "FinalHostSpeed" "PedestrianSpeed" -t "01:00:00"
 ```
 
 ### Optional Parameters
