@@ -234,7 +234,7 @@ All flags that can be set are (get options by -h flag):
 
 When the search has terminated, results are written into the *results* folder in a folder named as the problem name.
 
-OpenSBT creates the following plots:
+OpenSBT creates the following types of plots:
 
 **Design Space Plot**
 
