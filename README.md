@@ -10,7 +10,7 @@
 
 </div>
 
-OpenSBT provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
+OpenSBT provides a modular and extandable code base for the application of search-based testing approaches for the safety assessment of AD/ADAS systems.
 
 ## Preliminaries
 
