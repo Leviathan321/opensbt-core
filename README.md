@@ -10,7 +10,7 @@
 
 </div>
 
-OpenSBT provides a modular and extandable code base for the application of search-based testing approaches on AD/ADAS systems.
+OpenSBT provides a modular and extandable code base for the application of search-based testing approaches for the safety assessment of AD/ADAS systems.
 
 ## Preliminaries
 
@@ -199,10 +199,10 @@ To run the experiment with the name "1" we execute:
 python run.py -e 1
 ```
 
-We can change search parameter as parameter boundaries, search time using flags:
+We can change experiment parameter as e.g., lower and upper bounds of the search parameters and the search time a using flags:
 
 ```bash
-python run.py -e 1 -a 1 -min 0 0 -max 10 2 -m "PedestrianSpeed", "FinalHostSpeed" -t "01:00:00"
+python run.py -e 1 -min 0 0 -max 10 2 -m  "FinalHostSpeed" "PedestrianSpeed" -t "01:00:00"
 ```
 
 ### Optional Parameters
@@ -234,7 +234,7 @@ All flags that can be set are (get options by -h flag):
 
 When the search has terminated, results are written into the *results* folder in a folder named as the problem name.
 
-OpenSBT creates the following plots:
+OpenSBT creates the following types of plots:
 
 **Design Space Plot**
 
@@ -250,7 +250,7 @@ Traces of the ego vehicle (yellow box) and the adversary (blue circle) are visua
 
 **Objective Space Plot**
 
-<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
+<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/26-01-2023_14-15-14/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
 
 **HV Plot**
 
