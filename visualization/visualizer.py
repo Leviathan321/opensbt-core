@@ -427,8 +427,8 @@ def objective_space(res, save_folder, iteration=None):
                 clean_pop_y = np.delete(pop_f_y, np.where(pop_f_y == MIN_VALUE))
                 min_y_f_ind = min(clean_pop_y)
 
-                eta_x = (max_x_f_ind - min_x_f_ind) / 10
-                eta_y = (max_y_f_ind- min_y_f_ind) / 10
+                eta_x = abs(max_x_f_ind - min_x_f_ind) / 10
+                eta_y = abs(max_y_f_ind- min_y_f_ind) / 10
                 
                 plt.xlim(min_x_f_ind - eta_x, max_x_f_ind  + eta_x)
                 plt.ylim(min_y_f_ind - eta_y, max_y_f_ind  + eta_y)
