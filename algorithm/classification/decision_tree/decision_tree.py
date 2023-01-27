@@ -12,7 +12,7 @@ CRITICALITY_THRESHOLD_MIN = 0.2
 CRITICALITY_THRESHOLD_MAX = 0.95
 DELTA = 0.0  # delta can be set negative to make regions overlap
 MAX_TREE_DEPTH = 100
-MIN_IMPURITY_DECREASE = 0.1
+MIN_IMPURITY_DECREASE = 0.05
 
 class Region:
     def __init__(self, xl, xu, population):
