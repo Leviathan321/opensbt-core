@@ -69,13 +69,14 @@ class SimulationResult(Result):
         algorithm = self.algorithm
         algorithm_name = algorithm.__class__.__name__        
         
-        print(f"=====[{algorithm_name}] Writing results...")
+        print(f"=====[{algorithm_name}] Writing results to: ")
 
         save_folder = visualizer.create_save_folder(self.problem, results_folder, algorithm_name)
+        print(save_folder)
 
-        visualizer.convergence_analysis(self, save_folder)
+        # visualizer.convergence_analysis(self, save_folder)
         visualizer.hypervolume_analysis(self, save_folder)
-        #visualizer.spread_analysis(self, save_folder)
+        # visualizer.spread_analysis(self, save_folder)
         
         visualizer.write_calculation_properties(self,save_folder,algorithm_name, algorithm_parameters=params)
         visualizer.design_space(self, save_folder)
@@ -87,3 +88,4 @@ class SimulationResult(Result):
 
         if WRITE_ALL_INDIVIDUALS:
             visualizer.all_individuals(self, save_folder)
+        
