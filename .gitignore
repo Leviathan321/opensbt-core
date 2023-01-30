@@ -22,3 +22,5 @@ venv/
 
 # Temporary files
 carla_simulation/temp
+
+results

@@ -125,7 +125,7 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
     circle_adversary = Circle((0, 0), radius=pedestrian_size, color=colors["adversary"])
     circles_pedestrians = [Circle((0, 0), radius=pedestrian_size, color=colors["pedestrians"]) for _ in range(len(pedestrians_names))]
 
-    skip = 4
+    skip = 2
 
     "Plot traces of all objects"
     plt.plot(x_ego, y_ego, color=colors["traces"])
