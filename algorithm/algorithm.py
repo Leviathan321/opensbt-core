@@ -4,3 +4,4 @@ from enum import Enum
 
 class AlgorithmType(Enum):
     NSGAII = 1
+    PSO = 2 

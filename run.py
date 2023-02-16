@@ -18,6 +18,7 @@ import logging
 import os
 import sys
 from algorithm.nsga2_optimizer import *
+from algorithm.pso_optimizer import *
 from experiment.experiment_store import experiments_store
 from default_experiments import *
 
@@ -148,6 +149,14 @@ if __name__ == "__main__":
     if algorithm == AlgorithmType.NSGAII:
         print("pymoo NSGA-II algorithm is used.")
         optimizer = NsgaIIOptimizer(
+                              problem=problem,
+                              config=config)
+
+        res = optimizer.run()
+        res.write_results(results_folder=results_folder, params = optimizer.parameters)
+    elif algorithm == AlgorithmType.PSO:
+        print("pymoo PSO algorithm is used.")
+        optimizer = PSOOptimizer(
                               problem=problem,
                               config=config)
 

@@ -6,7 +6,7 @@ from pymoo.optimize import minimize
 from pymoo.visualization.scatter import Scatter
 from pymoo.core.problem import Problem
 from pymoo.termination import get_termination
-from pymoo.algorithms.moo.nsga2 import NSGA2
+from pymoo.algorithms.soo.nonconvex.pso import PSO
 from pymoo.core.population import Population
 from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
@@ -20,9 +20,9 @@ from experiment.search_configuration import SearchConfiguration
 import quality_indicators.metrics.spread as qi
 from model_ga.result import *
 
-class NsgaIIOptimizer(Optimizer):
+class PSOOptimizer(Optimizer):
 
-    algorithm_name = "NSGA-II"
+    algorithm_name = "PSO"
 
     def __init__(self,
                 problem: Problem,

@@ -87,3 +87,20 @@ def getExp3() -> Experiment:
     return experiment
     
 experiments_store.register(getExp3())
+
+Rastrigin SOO problem (n_var = 2, n_obj = 1)
+def getExp4() -> Experiment:
+    problem = PymooTestProblem(
+        'rastrigin',
+        critical_function=CriticalRastrigin())
+
+    config = DefaultSearchConfiguration()
+    config.maximal_execution_time = "00:00:02"
+    experiment = Experiment(name="4",
+                            problem=problem,
+                            algorithm=AlgorithmType.PSO,
+                            search_configuration=config)
+
+    return experiment
+    
+experiments_store.register(getExp4())

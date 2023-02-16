@@ -116,3 +116,7 @@ class CriticalBnhDivided(Critical):
 class CriticalBnh(Critical):
     def eval(self, vector_fitness):
         return (vector_fitness[0] < 60) and (vector_fitness[1] < 20)
+
+class CriticalRastrigin(Critical):
+    def eval(self, fitness):
+        return fitness < 2 and fitness > -2
