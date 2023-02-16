@@ -88,7 +88,9 @@ def getExp3() -> Experiment:
     
 experiments_store.register(getExp3())
 
-Rastrigin SOO problem (n_var = 2, n_obj = 1)
+'''
+Rastrigin SOO problem (n_var = 2, n_obj = 1), test for PSO
+'''
 def getExp4() -> Experiment:
     problem = PymooTestProblem(
         'rastrigin',
