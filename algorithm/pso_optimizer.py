@@ -19,6 +19,7 @@ from algorithm.optimizer import Optimizer
 from experiment.search_configuration import SearchConfiguration
 import quality_indicators.metrics.spread as qi
 from model_ga.result import *
+import logging as log
 
 class PSOOptimizer(Optimizer):
 
@@ -28,30 +29,22 @@ class PSOOptimizer(Optimizer):
                 problem: Problem,
                 config: SearchConfiguration):
 
+        log.info("Initialized PSO Optimizer")
+        
         self.config = config
         self.problem = problem
         self.res = None
 
-        if self.config.prob_mutation is None:
-            self.config.prob_mutation = 1 / problem.n_var
-
+        # TODO set other PSO parameters by user
         self.parameters = {
             "Population size" : str(config.population_size),
-            "Number of generations" : str(config.n_generations),
-            "Number of offsprings": str(config.num_offsprings),
-            "Crossover probability" : str(config.prob_crossover),
-            "Crossover eta" : str(config.eta_crossover),
-            "Mutation probability" : str(config.prob_mutation),
-            "Mutation eta" : str(config.eta_mutation)
+            "Max number of generations" : str(config.n_generations),
         }
 
-        self.algorithm = NSGA2(
+        # initialize algorithm
+        self.algorithm = PSO(
             pop_size=config.population_size,
-            n_offsprings=config.num_offsprings,
-            sampling=FloatRandomSampling(),
-            crossover=SBX(prob=config.prob_crossover, eta=config.eta_crossover),
-            mutation=PM(prob=config.prob_mutation, eta=config.eta_mutation),
-            eliminate_duplicates=True)
+        )
 
         ''' Prioritize max search time over set maximal number of generations'''
         if config.maximal_execution_time is not None:

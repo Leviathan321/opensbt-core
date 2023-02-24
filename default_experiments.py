@@ -97,7 +97,7 @@ def getExp4() -> Experiment:
         critical_function=CriticalRastrigin())
 
     config = DefaultSearchConfiguration()
-    config.maximal_execution_time = "00:00:02"
+    config.maximal_execution_time = "00:00:01"
     experiment = Experiment(name="4",
                             problem=problem,
                             algorithm=AlgorithmType.PSO,
