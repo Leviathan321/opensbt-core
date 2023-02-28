@@ -22,7 +22,7 @@ bash install.sh
 
 ## Usage
 
-We describe the usage of the framework by testing the BehaviourAgent (AEB) in the CARLA Simulator for collisions and close to collision situations.
+We describe the usage of the framework by testing the BehaviourAgent (AEB) in the CARLA Simulator for collisions and close to collision situations. The example has been implemented on Ubuntu.
 
 As testing scenario we consider a pedestrian that is crossing the lane of the ego vehicle. The scenario is provided as an OpenSCENARIO 1.2 [file](scenarios/PedestrianCrossing.xosc). We vary the speed of ego, the speed of pedestrian, and the distance to the ego vehicle when the pedestrian starts walking.
 
