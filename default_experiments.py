@@ -9,24 +9,24 @@ from evaluation.critical import *
 '''
 Rastrigin SOO problem (n_var = 2, n_obj = 1), test for PSO
 '''
-def getExp4() -> Experiment:
+def getExp5() -> Experiment:
     problem = PymooTestProblem(
         'rastrigin',
         critical_function=CriticalRastrigin())
 
     config = DefaultSearchConfiguration()
     config.maximal_execution_time = "00:00:01"
-    experiment = Experiment(name="4",
+    experiment = Experiment(name="5",
                             problem=problem,
                             algorithm=AlgorithmType.PSO,
                             search_configuration=config)
 
     return experiment
     
-experiments_store.register(getExp4())
+experiments_store.register(getExp5())
 
 ''' FOCETA Prescan experiment for search with NSGAII'''
-def getExp5() -> Experiment:
+def getExp6() -> Experiment:
     from simulation.prescan_simulation import PrescanSimulator
 
     problem = ADASProblem(
@@ -50,11 +50,11 @@ def getExp5() -> Experiment:
     config.maximal_execution_time = "00:01:00"
     config.n_generations = 5
     config.population_size = 2
-    experiment = Experiment(name="5",
+    experiment = Experiment(name="6",
                             problem=problem,
                             algorithm=AlgorithmType.NSGAII,
                             search_configuration=config)
 
     return experiment
 
-experiments_store.register(getExp5())
+experiments_store.register(getExp6())
