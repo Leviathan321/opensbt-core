@@ -35,26 +35,6 @@
         </Properties>
       </Vehicle>
     </ScenarioObject>
-
-    <!--ScenarioObject name="adversary">
-      <Vehicle name="vehicle.tesla.model3" vehicleCategory="car">
-        <ParameterDeclarations/>
-        <Performance maxSpeed="69.444" maxAcceleration="200" maxDeceleration="10.0"/>
-        <BoundingBox>
-          <Center x="1.5" y="0.0" z="0.9"/>
-          <Dimensions width="2.1" length="4.5" height="1.8"/>
-        </BoundingBox>
-        <Axles>
-          <FrontAxle maxSteering="0.5" wheelDiameter="0.6" trackWidth="1.8" positionX="3.1" positionZ="0.3"/>
-          <RearAxle maxSteering="0.0" wheelDiameter="0.6" trackWidth="1.8" positionX="0.0" positionZ="0.3"/>
-        </Axles>
-        <Properties>
-          <Property name="type" value="simulation"/>
-          <Property name="color" value="255,0,0"/>
-        </Properties>
-      </Vehicle>
-    </ScenarioObject-->
-
     <ScenarioObject name="adversary">
       <Pedestrian model="walker.pedestrian.0001" mass="90.0" name="walker.pedestrian.0001" pedestrianCategory="pedestrian">
         <ParameterDeclarations/>
@@ -67,7 +47,6 @@
         </Properties>
       </Pedestrian>
     </ScenarioObject>
-
   </Entities>
   <Storyboard>
     <Init>
@@ -89,7 +68,6 @@
           <PrivateAction>
             <TeleportAction>
               <Position>
-                <!--RoadPosition roadId="4" s="48.58" t="2.75"/-->
                 <WorldPosition x="150" y="55" z="0" h="3.14159265359"/>
               </Position>
             </TeleportAction>
@@ -128,7 +106,6 @@
           <PrivateAction>
             <TeleportAction>
               <Position>
-                <!--RelativeRoadPosition entityRef="hero" ds="$PedestrianDistanceEgoX" dt="$PedestrianDistanceEgoY"/-->
                 <WorldPosition x="110" y="52" z="0.3" h="1.57079632679"/>
               </Position>
             </TeleportAction>
@@ -166,122 +143,15 @@
                     <EntityCondition>
                     <ReachPositionCondition tolerance="$PedestrianEgoDistanceStartWalk">
                       <Position>
-                        <!--RelativeRoadPosition entityRef="hero" ds="$PedestrianDistanceEgoX" dt="$PedestrianDistanceEgoY"/-->
                         <WorldPosition x="110" y="52" z="0.3" h="1.57079632679"/>
                       </Position>
                     </ReachPositionCondition>
                   </EntityCondition>
-                    <!--EntityCondition>
-                      <TraveledDistanceCondition value="$DrivenDistance"/>
-                    </EntityCondition-->
                   </ByEntityCondition>
                 </Condition>
-                  <!--Condition name="StartCondition" delay="0" conditionEdge="rising">
-                    <ByEntityCondition>
-                      <TriggeringEntities triggeringEntitiesRule="any">
-                        <EntityRef entityRef="hero"/>
-                      </TriggeringEntities>
-                      <EntityCondition>
-                        <ReachPositionCondition tolerance="200.0">
-                          <Position>
-                              <RoadPosition roadId="4" s="50.58" t="2.75"/>
-                          </Position>
-                        </ReachPositionCondition>
-                      </EntityCondition>
-                    </ByEntityCondition>
-                  </Condition-->
                 </ConditionGroup>
               </StartTrigger>
             </Event>
-            <!--Event name="PedestrianStopsAndWaits" priority="overwrite">
-              <Action name="PedestrianStopsAndWaits">
-                <PrivateAction>
-                  <LongitudinalAction>
-                    <SpeedAction>
-                      <SpeedActionDynamics dynamicsShape="step" value="10" dynamicsDimension="time"/>
-                      <SpeedActionTarget>
-                        <AbsoluteTargetSpeed value="0.0"/>
-                      </SpeedActionTarget>
-                    </SpeedAction>
-                  </LongitudinalAction>
-                </PrivateAction>
-              </Action>
-              <StartTrigger>
-                <ConditionGroup>
-                  <Condition name="AfterPedestrianWalks" delay="0" conditionEdge="rising">
-                    <ByValueCondition>
-                      <StoryboardElementStateCondition storyboardElementType="action" storyboardElementRef="PedestrianStartsWalking" state="completeState"/>
-                    </ByValueCondition>
-                  </Condition>
-                </ConditionGroup>
-              </StartTrigger>
-            </Event-->
-            <!--Event name="PedestrianWalksAway" priority="overwrite">
-              <Action name="PedestrianStartsWalkingAway">
-                <PrivateAction>
-                  <LongitudinalAction>
-                    <SpeedAction>
-                      <SpeedActionDynamics dynamicsShape="step" value="9" dynamicsDimension="distance"/>
-                      <SpeedActionTarget>
-                        <AbsoluteTargetSpeed value="2.0"/>
-                      </SpeedActionTarget>
-                    </SpeedAction>
-                  </LongitudinalAction>
-                </PrivateAction>
-              </Action>
-              <StartTrigger>
-                <ConditionGroup>
-                  <Condition name="StartCondition" delay="0" conditionEdge="rising">
-                    <ByEntityCondition>
-                      <TriggeringEntities triggeringEntitiesRule="any">
-                        <EntityRef entityRef="hero"/>
-                      </TriggeringEntities>
-                      <EntityCondition>
-                        <StandStillCondition duration="0.1"/>
-                      </EntityCondition>
-                    </ByEntityCondition>
-                  </Condition>
-                  <Condition name="AfterPedestrianStopsAndWaits" delay="0" conditionEdge="rising">
-                    <ByValueCondition>
-                      <StoryboardElementStateCondition storyboardElementType="action" storyboardElementRef="PedestrianStopsAndWaits" state="completeState"/>
-                    </ByValueCondition>
-                  </Condition>
-                </ConditionGroup>
-              </StartTrigger>
-            </Event-->
-            <!--Event name="PedestrianWaits" priority="overwrite">
-              <Action name="PedestrianWaits">
-                <PrivateAction>
-                  <LongitudinalAction>
-                    <SpeedAction>
-                      <SpeedActionDynamics dynamicsShape="step" value="1" dynamicsDimension="time"/>
-                      <SpeedActionTarget>
-                        <AbsoluteTargetSpeed value="0.0"/>
-                      </SpeedActionTarget>
-                    </SpeedAction>
-                  </LongitudinalAction>
-                </PrivateAction>
-              </Action>
-              <StartTrigger>
-                <ConditionGroup>
-                  <Condition name="StartCondition" delay="0" conditionEdge="rising">
-                    <ByEntityCondition>
-                      <TriggeringEntities triggeringEntitiesRule="any">
-                        <EntityRef entityRef="adversary"/>
-                      </TriggeringEntities>
-                      <EntityCondition>
-                        <StandStillCondition duration="0.1"/>
-                      </EntityCondition>
-                    </ByEntityCondition>
-                  </Condition>
-                  <Condition name="AfterPedestrianStartsWalking" delay="0" conditionEdge="rising">
-                    <ByValueCondition>
-                      <StoryboardElementStateCondition storyboardElementType="action" storyboardElementRef="PedestrianStartsWalkingAway" state="completeState"/>
-                    </ByValueCondition>
-                  </Condition>
-                </ConditionGroup>
-              </StartTrigger>
-            </Event-->
           </Maneuver>
         </ManeuverGroup>
         <StartTrigger>
@@ -307,20 +177,6 @@
 						</Condition>
 					</ConditionGroup>
 				</StopTrigger>
-        <!--StopTrigger>
-          <ConditionGroup>
-            <Condition name="EndCondition" delay="0" conditionEdge="rising">
-              <ByEntityCondition>
-                <TriggeringEntities triggeringEntitiesRule="any">
-                  <EntityRef entityRef="hero"/>
-                </TriggeringEntities>
-                <EntityCondition>
-                  <TraveledDistanceCondition value="200.0"/>
-                </EntityCondition>
-              </ByEntityCondition>
-            </Condition>
-          </ConditionGroup>
-        </StopTrigger-->
       </Act>
     </Story>
     <StopTrigger>
