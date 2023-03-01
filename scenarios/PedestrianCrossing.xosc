@@ -2,8 +2,8 @@
 <OpenSCENARIO>
   <FileHeader revMajor="1" revMinor="0" date="2020-03-24T12:00:00" description="CARLA:PedestrianCrossing" author=""/>
   <ParameterDeclarations>
-      <ParameterDeclaration name="SimulationTime" parameterType="double" value="5"/> 
-      <ParameterDeclaration name="FinalHostSpeed" parameterType="double" value="10"/> 
+      <ParameterDeclaration name="SimulationTime" parameterType="double" value="5"/>
+      <ParameterDeclaration name="FinalHostSpeed" parameterType="double" value="10"/>
       <ParameterDeclaration name="PedestrianSpeed" parameterType="double" value="10"/>
       <ParameterDeclaration name="PedestrianDistanceEgoX" parameterType="double" value="50"/>
       <ParameterDeclaration name="PedestrianDistanceEgoY" parameterType="double" value="3"/>
@@ -17,7 +17,7 @@
   </RoadNetwork>
   <Entities>
     <ScenarioObject name="hero">
-      <Vehicle name="vehicle.volkswagen.t2" vehicleCategory="car">
+      <Vehicle name="vehicle.audi.etron" vehicleCategory="car">
         <ParameterDeclarations/>
         <Performance maxSpeed="75" maxAcceleration="80" maxDeceleration="10.0"/>
         <BoundingBox>
