@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import List, Dict
-from balancer import Balancer
+from carla_simulation.balancer import Balancer
 from simulation.simulator import Simulator, SimulationOutput
 import logging
 import json
