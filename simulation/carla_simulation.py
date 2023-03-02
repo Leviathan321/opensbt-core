@@ -35,7 +35,7 @@ class CarlaSimulator(Simulator):
             if CarlaSimulator._balancer is None:
                 CarlaSimulator._balancer = Balancer(
                     directory = SCENARIO_DIR,
-                    jobs = 2,
+                    jobs = 1,
                     visualization = do_visualize
                 )
                 CarlaSimulator._balancer.start()
