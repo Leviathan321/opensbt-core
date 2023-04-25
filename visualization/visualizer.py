@@ -287,7 +287,11 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
     if classification_type == ClassificationType.DT:
         save_folder_classification = save_folder + "classification" + os.sep
         Path(save_folder_classification).mkdir(parents=True, exist_ok=True)
-        regions = decision_tree.generate_critical_regions(all_population, problem, save_folder=save_folder_classification)
+        regions = decision_tree.generate_critical_regions(all_population, 
+                                                          problem, 
+                                                          criticality_threshold_min=0.7,
+                                                          criticality_threshold_max=1,
+                                                          save_folder=save_folder_classification)
     
     f = plt.figure(figsize=(12, 10))
     for axis_x in range(n_var - 1):
@@ -352,7 +356,9 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
             markers = marker_list[:-1]
 
             plt.legend(handles=markers,
-                       loc='center left', bbox_to_anchor=(1, 0.5), handler_map={mpatches.Circle: HandlerCircle()})
+                       #loc='center left', 
+                       #bbox_to_anchor=(1, 0.5), 
+                       handler_map={mpatches.Circle: HandlerCircle()})
 
             plt.savefig(save_folder_plot + design_names[axis_x] + '_' + design_names[axis_y] + '.png')
             plt.clf()
@@ -446,7 +452,9 @@ def objective_space(res, save_folder, iteration=None):
                 markers = marker_list[2:-1]
 
             plt.legend(handles=markers,
-                       loc='center left', bbox_to_anchor=(1, 0.5), handler_map={mpatches.Circle: HandlerCircle()})
+                       #loc='center left', 
+                       #bbox_to_anchor=(1, 0.5), 
+                       handler_map={mpatches.Circle: HandlerCircle()})
 
             plt.savefig(save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png')
             plt.clf()
