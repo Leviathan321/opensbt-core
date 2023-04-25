@@ -21,6 +21,8 @@ from quality_indicators.quality import Quality
 from model_ga.problem import *
 from model_ga.result import *
 from typing import Dict
+from utils.duplicates import duplicate_free
+
 
 WRITE_ALL_INDIVIDUALS = True
 BACKUP_FOLDER =  "backup" + os.sep
@@ -249,18 +251,35 @@ def write_summary_results(res, save_folder):
     critical_best, non_critical_best = best_population.divide_critical_non_critical()
     critical_all, non_critical_all = all_population.divide_critical_non_critical()
 
-    '''output of summery of the performance'''
+    n_crit_all_dup_free = len(duplicate_free(critical_all))
+    n_all_dup_free = len(duplicate_free(all_population))
+    n_crit_best_dup_free = len(duplicate_free(critical_best))
+    n_best_dup_free = len(duplicate_free(best_population))
+
+    '''Output of summery of the performance'''
     with open(save_folder + 'summary_results.csv', 'w', encoding='UTF8', newline='') as f:
         write_to = csv.writer(f)
 
         header = ['Attribute', 'Value']
         write_to.writerow(header)
         write_to.writerow(['Number Critical Scenarios', len(critical_all)])
+        write_to.writerow(['Number Critical Scenarios (duplicate free)', n_crit_all_dup_free])
+
         write_to.writerow(['Number All Scenarios', len(all_population)])
+        write_to.writerow(['Number All Scenarios (duplicate free)', n_all_dup_free])
+
         write_to.writerow(['Number Best Critical Scenarios', len(critical_best)])
+        write_to.writerow(['Number Best Critical Scenarios (duplicate free)', n_crit_best_dup_free])
+
         write_to.writerow(['Number Best Scenarios', len(best_population)])
+        write_to.writerow(['Number Best Scenarios (duplicate free)',n_best_dup_free])
+
         write_to.writerow(['Ratio Critical/All scenarios', '{0:.2f}'.format(len(critical_all) / len(all_population))])
+        write_to.writerow(['Ratio Critical/All scenarios (duplicate free)', '{0:.2f}'.format(n_crit_all_dup_free/n_all_dup_free)])
+
         write_to.writerow(['Ratio Best Critical/Best Scenarios', '{0:.2f}'.format(len(critical_best) / len(best_population))])
+        write_to.writerow(['Ratio Best Critical/Best Scenarios (duplicate free)', '{0:.2f}'.format(n_crit_best_dup_free/n_best_dup_free)])
+
         f.close()
 
 
@@ -356,8 +375,8 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
             markers = marker_list[:-1]
 
             plt.legend(handles=markers,
-                       #loc='center left', 
-                       #bbox_to_anchor=(1, 0.5), 
+                       loc='center left', 
+                       bbox_to_anchor=(1, 0.5), 
                        handler_map={mpatches.Circle: HandlerCircle()})
 
             plt.savefig(save_folder_plot + design_names[axis_x] + '_' + design_names[axis_y] + '.png')
@@ -452,8 +471,8 @@ def objective_space(res, save_folder, iteration=None):
                 markers = marker_list[2:-1]
 
             plt.legend(handles=markers,
-                       #loc='center left', 
-                       #bbox_to_anchor=(1, 0.5), 
+                       loc='center left', 
+                       bbox_to_anchor=(1, 0.5), 
                        handler_map={mpatches.Circle: HandlerCircle()})
 
             plt.savefig(save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png')
@@ -485,9 +504,8 @@ def optimal_individuals(res, save_folder):
             write_to.writerow(row)
         f.close()
 
-
 def all_individuals(res, save_folder):
-    """output of all evaluated individuals"""
+    """Output of all evaluated individuals"""
     problem = res.problem
     hist = res.history
     design_names = problem.design_names
@@ -501,12 +519,43 @@ def all_individuals(res, save_folder):
             header.append(design_names[i])
         for i in range(problem.n_obj):
             header.append(objective_names[i])
+        # column to indicate wheter individual is critical or not 
+        header.append(f"Critical")
 
         write_to.writerow(header)
 
         index = 0
         for algo in hist:
             for i in range(len(algo.pop)):
+                row = [index]
+                row.extend(["%.6f" % X_i for X_i in algo.pop.get("X")[i]])
+                row.extend(["%.6f" % F_i for F_i in algo.pop.get("F")[i]])
+                row.extend(["%i" % res.opt.get("CB")[i]])
+                write_to.writerow(row)
+                index += 1
+        f.close()
+
+def all_critical_individuals(res, save_folder):
+    """Output of all critical individuals"""
+    problem = res.problem
+    hist = res.history
+    design_names = problem.design_names
+    objective_names = problem.objective_names
+
+    with open(save_folder + 'all_critical_testcases.csv', 'w', encoding='UTF8', newline='') as f:
+        write_to = csv.writer(f)
+
+        header = ['Index']
+        for i in range(problem.n_var):
+            header.append(design_names[i])
+        for i in range(problem.n_obj):
+            header.append(objective_names[i])
+
+        write_to.writerow(header)
+
+        index = 0
+        for algo in hist:
+            for i in range(len(algo.pop.divide_critical_non_critical()[0])):
                 row = [index]
                 row.extend(["%.6f" % X_i for X_i in algo.pop.get("X")[i]])
                 row.extend(["%.6f" % F_i for F_i in algo.pop.get("F")[i]])
