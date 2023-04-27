@@ -11,6 +11,7 @@ class SearchConfiguration(object):
     # NSGAII-DT specific
     max_tree_iterations = None
     inner_num_gen = None
+    n_func_evals_lim = None
 
 #TODO create a search configuration file specific for each algorithm
 class DefaultSearchConfiguration(SearchConfiguration):
@@ -26,3 +27,4 @@ class DefaultSearchConfiguration(SearchConfiguration):
     # NSGAII-DT specific
     inner_num_gen = 4
     max_tree_iterations = 4
+    n_func_evals_lim = 1000

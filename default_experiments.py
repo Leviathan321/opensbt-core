@@ -5,7 +5,7 @@ from problem.pymoo_test_problem import PymooTestProblem
 from experiment.experiment_store import *
 from algorithm.algorithm import *
 from evaluation.critical import *
-from simulation.carla_simulation import CarlaSimulator
+#from simulation.carla_simulation import CarlaSimulator
 
 '''
 EXAMPLE CARLA SIMULATOR
@@ -36,7 +36,7 @@ def getExp1() -> Experiment:
                             search_configuration=DefaultSearchConfiguration())
     return experiment
 
-experiments_store.register(getExp1())
+# experiments_store.register(getExp1())
 
 '''
     BNH Problem
@@ -86,7 +86,7 @@ def getExp3() -> Experiment:
 
     return experiment
     
-experiments_store.register(getExp3())
+# experiments_store.register(getExp3())
 
 '''
 Rastrigin SOO problem (n_var = 2, n_obj = 1), test for PSO
@@ -106,3 +106,25 @@ def getExp4() -> Experiment:
     return experiment
     
 experiments_store.register(getExp4())
+
+'''
+    BNH Problem with NSGAII-DT
+
+    Pareto solutions:
+    x∗1=x∗2∈[0,3]  and x∗1∈[3,5], x∗2=3
+'''
+
+def getExp5() -> Experiment:
+    problem = PymooTestProblem(
+        'BNH',
+        critical_function=CriticalBnhDivided())
+
+    config = DefaultSearchConfiguration()
+    config.maximal_execution_time = "00:00:01"
+    experiment = Experiment(name="5",
+                            problem=problem,
+                            algorithm=AlgorithmType.NSGAIIDT,
+                            search_configuration=config)
+
+    return experiment
+experiments_store.register(getExp5())
