@@ -17,7 +17,7 @@ def getExp1() -> Experiment:
                           problem_name="PedestrianCrossingStartWalk",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
                           xl=[0.5, 1, 0],
-                          xu=[3, 80, 60],
+                          xu=[3, 22, 60],
                           simulation_variables=[
                               "PedSpeed",
                               "EgoSpeed",
@@ -76,7 +76,8 @@ def getExp3() -> Experiment:
                           simulate_function=CarlaSimulator.simulate,
                           simulation_time=10,
                           sampling_time=100,
-                          approx_eval_time=10
+                          approx_eval_time=10,
+                          do_visualize=True
                           )
     config = DefaultSearchConfiguration()
     experiment = Experiment(name="3",

@@ -37,8 +37,6 @@ class FitnessMinDistance(Fitness):
             result = np.min(geometric.distPair(traceEgo, tracePed))
         return result
 
-f = FitnessMinDistance()
-
 class FitnessMinDistanceVelocity(Fitness):
     @property
     def min_or_max(self):

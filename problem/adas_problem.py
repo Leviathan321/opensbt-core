@@ -7,6 +7,7 @@ from evaluation.fitness import *
 
 @dataclass
 class ADASProblem(Problem):
+
     def __init__(self,
                  xl: List[float],
                  xu: List[float],
@@ -47,7 +48,7 @@ class ADASProblem(Problem):
         self.sampling_time = sampling_time
         self.simulation_variables = simulation_variables
         self.do_visualize = do_visualize
-
+  
         if design_names is not None:
             self.design_names = design_names
         else:

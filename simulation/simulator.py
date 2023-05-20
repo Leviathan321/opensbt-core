@@ -63,14 +63,18 @@ class SimulationOutput(object):
 
 
 class Simulator(ABC):
-    do_visualize = False
     sim_time = 10
     time_step = 0.01
     
-    #TODO check whether to define sim time , time step as attribute here (instead in problem), show_visualization as well
     @abstractstaticmethod
-    def simulate(list_individuals: List[Individual], variable_names: List[str], scenario_path: str, sim_time: float, time_step: float) -> List[SimulationOutput]:
-        raise NotImplementedError("Implement the simulation of a batch of scenario instances.")
+    def simulate(list_individuals: List[Individual], 
+                variable_names: List[str], 
+                scenario_path: str, 
+                sim_time: float = 10, 
+                time_step: float = 0.01, 
+                do_visualize: bool = True) -> List[SimulationOutput]:
+        pass
+        #raise NotImplementedError("Implement the simulation of a batch of scenario instances.")
       
 class SimulationType(Enum):
     DUMMY = 0
