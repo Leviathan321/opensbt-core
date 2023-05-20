@@ -75,7 +75,7 @@ class SimulationResult(Result):
         print(save_folder)
 
         # visualizer.convergence_analysis(self, save_folder)
-        visualizer.hypervolume_analysis(self, save_folder)
+        # visualizer.hypervolume_analysis(self, save_folder)
         # visualizer.spread_analysis(self, save_folder)
         
         visualizer.write_calculation_properties(self,save_folder,algorithm_name, algorithm_parameters=params)

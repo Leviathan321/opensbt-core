@@ -19,16 +19,16 @@ def getExp1() -> Experiment:
                           xl=[0.5, 1, 0],
                           xu=[3, 80, 60],
                           simulation_variables=[
-                              "PedestrianSpeed",
-                              "FinalHostSpeed",
-                              "PedestrianEgoDistanceStartWalk"],
+                              "PedSpeed",
+                              "EgoSpeed",
+                              "PedDist"],
                           fitness_function=FitnessMinDistanceVelocityFrontOnly(),  
                           critical_function=CriticalAdasFrontCollisions(),
                           simulate_function=CarlaSimulator.simulate,
                           simulation_time=10,
                           sampling_time=100,
                           approx_eval_time=10,
-                          do_visualize = False
+                          do_visualize = True
                           )
     experiment = Experiment(name="1",
                             problem=problem,
