@@ -144,8 +144,15 @@ def generate_critical_regions(population,
 
     if save_folder is not None:
         tree.plot_tree(clf)
-        dot_data = tree.export_graphviz(clf, out_file=None, filled=True, rounded=True,  # leaves_parallel=True,
-                                        special_characters=True, feature_names=feature_names)
+        dot_data = tree.export_graphviz(clf, 
+                                        out_file=None, 
+                                        filled=True, 
+                                        rounded=True,  
+                                        # leaves_parallel=True,
+                                        special_characters=True, 
+                                        class_names=["non-critical", "critical"],
+                                        feature_names=feature_names)
+                                        
         graph = pydotplus.graph_from_dot_data(dot_data)
         graph.write_pdf(save_folder + "tree.pdf")
         
