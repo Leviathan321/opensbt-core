@@ -352,9 +352,14 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
             markers = marker_list[:-1]
 
             plt.legend(handles=markers,
-                       loc='center left', bbox_to_anchor=(1, 0.5), handler_map={mpatches.Circle: HandlerCircle()})
+                       #loc="lower right",
+                       #loc='center left', 
+                       #bbox_to_anchor=(1, 0.5), 
+                       handler_map={mpatches.Circle: HandlerCircle()})
 
             plt.savefig(save_folder_plot + design_names[axis_x] + '_' + design_names[axis_y] + '.png')
+            plt.savefig(save_folder_plot + design_names[axis_x] + '_' + design_names[axis_y] + '.pdf', format="pdf")
+
             plt.clf()
 
     plt.close(f)
