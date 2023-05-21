@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 SMALL_SIZE = 10
 MEDIUM_SIZE = 18
 BIGGER_SIZE = 20
+LEGEND_SIZE = 16
 
 font = {'family': 'sans serif',
         'weight': 'normal',
@@ -14,7 +15,7 @@ plt.rc('axes', titlesize=MEDIUM_SIZE)  # fontsize of the axes title
 plt.rc('axes', labelsize=MEDIUM_SIZE)  # fontsize of the x and y labels
 plt.rc('xtick', labelsize=MEDIUM_SIZE)  # fontsize of the tick labels
 plt.rc('ytick', labelsize=MEDIUM_SIZE)  # fontsize of the tick labels
-plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
+plt.rc('legend', fontsize=LEGEND_SIZE)  # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)
 
 '''Colour mapping in plots'''
