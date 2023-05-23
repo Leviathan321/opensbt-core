@@ -30,18 +30,18 @@ def getExp6() -> Experiment:
     from simulation.prescan_simulation import PrescanSimulator
 
     problem = ADASProblem(
-                          scenario_path=os.getcwd() + "/../FOCETA/experiments/Leuven_PedestrianCrossing/Leuven_AVP_ori/Demo_AVP.pb",
+                          scenario_path=os.getcwd() + "/../FOCETA/experiments/ASE_Leuven_PedestrianCrossing/Leuven_AVP_ori/Demo_AVP.pb",
                           simulation_variables=[
                               "Ego_HostVelGain",  # in m/s
                               "Other_Velocity_mps",  # , # in m/s
                               "Other_Time_s",  # in s,
                           ],
                           xl=[0, 0.5, 0],
-                          xu=[1, 2, 5],
+                          xu=[5, 2, 5],
                           fitness_function=FitnessMinDistanceVelocity(),
                           critical_function=CriticalAdasDistanceVelocity(),
                           simulate_function=PrescanSimulator.simulate,
-                          problem_name="Demo_AVP_Pedestrian")
+                          problem_name="PedestrianCrossingPrescan")
 
     config = DefaultSearchConfiguration()
     config.n_generations = 5
