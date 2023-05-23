@@ -21,7 +21,7 @@ class ADASProblem(Problem):
                  objective_names: List[str] = None,
                  problem_name: str = None,
                  other_parameters: Dict = None,
-                 approx_eval_time: float = None,
+                 approx_eval_time: float = 100, #needs to have a default values
                  do_visualize: bool = False):
 
         super().__init__(n_var=len(xl),
