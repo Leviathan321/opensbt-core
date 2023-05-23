@@ -12,9 +12,6 @@ class Critical():
     def eval(self, vector_fitness: np.ndarray, simout: SimulationOutput) -> bool:
         pass
 
-class CriticalFunctionADASFront(Critical):
-    pass
-
 class CriticalAdasExplicitRearCollision(Critical):
 
     ''' ADAS problems '''

@@ -16,7 +16,7 @@ def getExp5() -> Experiment:
 
     config = DefaultSearchConfiguration()
     config.maximal_execution_time = "00:00:01"
-    experiment = Experiment(name="5",
+    experiment = Experiment(name="1",
                             problem=problem,
                             algorithm=AlgorithmType.PSO,
                             search_configuration=config)
@@ -39,18 +39,14 @@ def getExp6() -> Experiment:
                           xl=[0, 0.5, 0],
                           xu=[1, 2, 5],
                           fitness_function=FitnessMinDistanceVelocity(),
-                          critical_function=CriticalFunctionADASFront(),
+                          critical_function=CriticalAdasDistanceVelocity(),
                           simulate_function=PrescanSimulator.simulate,
-                          simulation_time=10,
-                          sampling_time=100,
-                          problem_name="Demo_AVP_Pedestrian",
-                          approx_eval_time=30)
+                          problem_name="Demo_AVP_Pedestrian")
 
     config = DefaultSearchConfiguration()
-    config.maximal_execution_time = "00:01:00"
     config.n_generations = 5
     config.population_size = 2
-    experiment = Experiment(name="6",
+    experiment = Experiment(name="2",
                             problem=problem,
                             algorithm=AlgorithmType.NSGAII,
                             search_configuration=config)

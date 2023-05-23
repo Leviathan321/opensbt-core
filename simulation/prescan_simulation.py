@@ -47,7 +47,7 @@ class PrescanSimulator(Simulator):
                                              exp_file = scenario_path,
                                              name_executable = EXP_EXECUTABLE,
                                              sim_time=sim_time,
-                                             do_visualize=do_visualize,
+                                             do_visualize=True,
                                              output_filename= OUTPUT_FILENAME,
                                              traces_filename= TRACES_FILENAME)
                 simout = SimulationOutput.from_json(json.dumps(ouput_runner))
