@@ -17,8 +17,11 @@ import argparse
 import logging
 import os
 import sys
+
 from algorithm.nsga2_optimizer import *
+from algorithm.nsga2dt_optimizer import *
 from algorithm.pso_optimizer import *
+
 from experiment.experiment_store import experiments_store
 from default_experiments import *
 
@@ -157,6 +160,14 @@ if __name__ == "__main__":
     elif algorithm == AlgorithmType.PSO:
         print("pymoo PSO algorithm is used.")
         optimizer = PSOOptimizer(
+                              problem=problem,
+                              config=config)
+
+        res = optimizer.run()
+        res.write_results(results_folder=results_folder, params = optimizer.parameters)
+    elif algorithm == AlgorithmType.NSGAIIDT:
+        print("NSGAII-DT algorithm is used.")
+        optimizer = NsgaIIDTOptimizer(
                               problem=problem,
                               config=config)
 

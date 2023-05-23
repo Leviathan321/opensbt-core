@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 
 '''Font in plots'''
-SMALL_SIZE = 10
-MEDIUM_SIZE = 12
+SMALL_SIZE = 14
+MEDIUM_SIZE = 15
 BIGGER_SIZE = 20
 
 font = {'family': 'sans serif',

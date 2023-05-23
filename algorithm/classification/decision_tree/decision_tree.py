@@ -8,7 +8,7 @@ import csv
 
 MIN_SAMPLES_SPLIT = 0.1
 MIN_SAMPLES_LEAF = 5
-CRITICALITY_THRESHOLD_MIN = 0.2
+CRITICALITY_THRESHOLD_MIN = 0.5
 CRITICALITY_THRESHOLD_MAX = 0.95
 DELTA = 0.0  # delta can be set negative to make regions overlap
 MAX_TREE_DEPTH = 100
@@ -34,6 +34,8 @@ def generate_critical_regions(population,
                              min_samples_leaf=MIN_SAMPLES_LEAF, 
                              max_depth=MAX_TREE_DEPTH, 
                              min_impurity_decrease=MIN_IMPURITY_DECREASE,
+                             criticality_threshold_min=CRITICALITY_THRESHOLD_MIN,
+                             criticality_threshold_max=CRITICALITY_THRESHOLD_MAX,
                              save_folder=None):
 
     feature_names = problem.design_names
@@ -134,7 +136,7 @@ def generate_critical_regions(population,
 
     regions_ordered = []
     for region in regions:
-        region.define_critical(CRITICALITY_THRESHOLD_MIN, CRITICALITY_THRESHOLD_MAX)
+        region.define_critical(criticality_threshold_min, criticality_threshold_max)
         if region.is_critical:
             regions_ordered.append(region)
             critical_regions.append(region)

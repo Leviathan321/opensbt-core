@@ -48,9 +48,8 @@ def getExp6() -> Experiment:
     config.population_size = 2
     experiment = Experiment(name="2",
                             problem=problem,
-                            algorithm=AlgorithmType.NSGAII,
+                            algorithm=AlgorithmType.NSGAIIDT,
                             search_configuration=config)
 
     return experiment
-
 experiments_store.register(getExp6())
