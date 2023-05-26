@@ -152,7 +152,7 @@ class FitnessMinTTCVelocity(Fitness):
 
     @property
     def name(self):
-        return "Min TTC, Critical Velocity"
+        return "Min TTC", "Critical Velocity"
 
     def eval(self, simout: SimulationOutput) -> float:
         if "adversary" in simout.location:

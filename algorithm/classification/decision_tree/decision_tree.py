@@ -6,7 +6,7 @@ import pymoo.core.population
 import pydotplus
 import csv
 
-MIN_SAMPLES_SPLIT = 0.1
+MIN_SAMPLES_SPLIT = 0.07
 MIN_SAMPLES_LEAF = 5
 CRITICALITY_THRESHOLD_MIN = 0.5
 CRITICALITY_THRESHOLD_MAX = 1   

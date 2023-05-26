@@ -511,6 +511,37 @@ def all_individuals(res, save_folder):
                 index += 1
         f.close()
 
+def all_critical_individuals(res, save_folder):
+
+    """Output of all critical individuals"""
+    problem = res.problem
+    hist = res.history    # TODO check why when iterating over the algo in the history set is different
+    design_names = problem.design_names
+    objective_names = problem.objective_names
+
+    all = res.obtain_all_population()
+    critical = all.divide_critical_non_critical()[0]
+
+    with open(save_folder + 'all_critical_testcases.csv', 'w', encoding='UTF8', newline='') as f:
+        write_to = csv.writer(f)
+
+        header = ['Index']
+        for i in range(problem.n_var):
+            header.append(design_names[i])
+        for i in range(problem.n_obj):
+                header.append(f"Fitness_"+ objective_names[i])
+                
+        write_to.writerow(header)
+
+        index = 0
+        # for algo in hist:
+        for i in range(len(critical)):
+            row = [index]
+            row.extend(["%.6f" % X_i for X_i in critical.get("X")[i]])
+            row.extend(["%.6f" % F_i for F_i in critical.get("F")[i]])
+            write_to.writerow(row)
+            index += 1
+        f.close()
 
 def simulations(res, save_folder):
     '''Visualization of the results of simulations'''
