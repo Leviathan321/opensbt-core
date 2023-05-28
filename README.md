@@ -11,6 +11,7 @@ A video with a demo of OpenSBT can be found here: https://www.youtube.com/watch?
 ## Architecture
 
 [<img src="doc/OpenSBT_architecture.png" width="500"/>]()
+
 OpenSBT builds upon [Pymoo](Pymoo). It extends internal models as Individual, Result to apply SBT of ADS.
 Further it provides three interfaces/abstractions to integrate 
 SBT component in a modular way.
@@ -35,7 +36,7 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
 
 - Fitness\Criticality function integration:
 
-    Fitness\Criticality Function: implement  `eval` method of the `Fitness` (`Critical`) class.
+    Implement  `eval` method of the `Fitness` (`Critical`) class.
 
     *Consider*: Several fitness ojectives are specified in one fitness instance, i.e. the eval method return a vector valued output if more than objective is optimized.
 
@@ -43,10 +44,8 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
     Integration is done by subclassing `Optimizer` class.
     There are three options for the integration:
     
-    -  If the algorithm exists in `pymoo`, instantiate it in `run` and assign to `algorithm` 
-    
+    - If the algorithm exists in `pymoo`, instantiate it in `run` and assign to `algorithm` 
     - If the algorithm does not exist in pymoo, override `run` and implement the algorithm. The return type should be a `SimulationResult`.
-
     - Implement new algorithm by sublassing `Algorithm` from pymoo and use first approach for integration.
 
  - Search space and experiment definition:
