@@ -1,20 +1,23 @@
-# OpenSBT - An open-source framework for the application of search-based testing for Automated and Autonomous Driving Systems
+# OpenSBT - A Modular Framework for Search-based Testing of Automated Driving Systems
 
 
 ## Intro
 
+OpenSBT provides a modular and extandable code base for the search based testing of automated driving systems. It provides interfaces to integrate search algorithms, fitness/criticality functions and simulation environments in a modular way. That means, one of this components can be replaced by a another component without the need to change the connectivity to other components or adapt the result analysis/visualization. Further it visualizes the test outcome and analysis the critical behaviour of the ADS. 
 
-<div align="center">
+A video with a demo of OpenSBT can be found here: https://www.youtube.com/watch?v=oOyug8rwAB8.
 
-[<img src="doc/video_logo.png" width="500"/>](https://download.fortiss.org/public/OpenSBT/OpenSBT_presentation_final_HD.mp4)
 
-</div>
+## Architecture
 
-OpenSBT provides a modular and extandable code base for the application of search-based testing approaches for the safety assessment of AD/ADAS systems.
+[<img src="doc/OpenSBT_architecture.png" width="500"/>]()
+OpenSBT builds upon [Pymoo](Pymoo). It extends internal models as Individual, Result to apply SBT of ADS.
+Further it provides three interfaces/abstractions to integrate 
+SBT component in a modular way.
 
-## Preliminaries
+## Installation
 
-The tool requires python to be installed. Compatibility has been tested with python 3.7/3.8. To create a virtual environment and install all dependencies run:
+The tool requires python to be installed. Compatibility has been tested with python 3.7/3.8. It is recommented to create a virtual environment and install all dependencies by executing:
 
 ```bash
 bash install.sh
@@ -22,6 +25,78 @@ bash install.sh
 
 ## Usage
 
+OpenSBT provides three interface\abstract classes for the integration of SBT components:
+
+- Simulator integration:
+    1. Implement [simulate]() method of the [`Simulator`]() class. In this method a list scenario instances is passed to the simulator to execute the SUT in the scenario. 
+    2. Convert the simulation output returned by the simulator to generic `Simulator` instance.
+
+    As an example, OpenSBT already provides extensions for CARLA and Prescan Simulator.
+
+- Fitness\Criticality function integration:
+
+    Fitness\Criticality Function: implement  `eval` method of the `Fitness` (`Critical`) class.
+
+    *Consider*: Several fitness ojectives are specified in one fitness instance, i.e. the eval method return a vector valued output if more than objective is optimized.
+
+- Algorithm integration:
+    Integration is done by subclassing `Optimizer` class.
+    There are three options for the integration:
+    
+    -  If the algorithm exists in `pymoo`, instantiate it in `run` and assign to `algorithm` 
+    
+    - If the algorithm does not exist in pymoo, override `run` and implement the algorithm. The return type should be a `SimulationResult`.
+
+    - Implement new algorithm by sublassing `Algorithm` from pymoo and use first approach for integration.
+
+ - Search space and experiment definition:
+
+    The path to the scenario, the input variables and its bounds are passed to `ADASProblem`. The `simulate` function together with the fitness and criticality function is also passed. Consider following exemplary problem definition:
+
+        problem = ADASProblem(
+                            problem_name="PedestrianCrossingStartWalk",
+                            scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
+                            xl=[0.5, 1, 0],
+                            xu=[3, 80, 60],
+                            simulation_variables=[
+                                "PedSpeed",
+                                "EgoSpeed",
+                                "PedDistance"],
+                            fitness_function=FitnessMinDistanceVelocity(),  
+                            critical_function=CriticalAdasDistanceVelocity(),
+                            simulate_function=CarlaSimulator.simulate,
+                            )
+    
+ - Experiment execution:
+
+
+    - To start directly in code
+
+        ```python
+        optimizer = MyOptimizer(problem=problem,
+                            config=DefaultSearchConfiguration())
+        res = optimizer.run()
+        res.write_results(results_folder=results_folder, params = optimizer.parameters)
+        ```
+
+    - To start search via console
+        
+        1. Create new `Experiment`
+
+            ```python
+            experiment = Experiment(name="MyNewExperiment",
+                                    problem=problem,
+                                    algorithm=AlgorithmType.NSGAII, # Registered in AlgorithmType, updated in run.py
+                                    search_configuration=DefaultSearchConfiguration() # Search configuration
+                                    )
+            ```
+        2. To run the experiment with the name "1" we execute:
+
+            ```bash
+            python run.py -e "MyNewExperiment"
+            ```
+
+### Usage Example
 We describe the usage of the framework by testing the BehaviourAgent (AEB) in the CARLA Simulator for collisions and close to collision situations. The example has been implemented on Ubuntu.
 
 As testing scenario we consider a pedestrian that is crossing the lane of the ego vehicle. The scenario is provided as an OpenSCENARIO 1.2 [file](scenarios/PedestrianCrossing.xosc). We vary the speed of ego, the speed of pedestrian, and the distance to the ego vehicle when the pedestrian starts walking.
@@ -252,12 +327,6 @@ Traces of the ego vehicle (yellow box) and the adversary (blue circle) are visua
 
 <img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/26-01-2023_14-15-14/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/>
 
-**HV Plot**
-
-<img src="example/results/single/PedestrianCrossingStartWalk/NSGA2/11-01-2023_18-37-58/hypervolume.png" alt="Hypervolume Plot" width="600"/>
-
-Hypervolume (HV) is a well-applied quality indicator to assess/compare the performance of mulitobjective optimization (MOO) algorithms. The higher the value the better the performances of the algorithm is considered. The plotted graph over the number of evaluations can be used to understand whether the search configuration (i.e. the search time) is well chosen. For instance, when the HV values does not rise drastically anymore, it means that a longer search will most likely not reveal more "optimal/critical" solutions.
-
 Following csv. files are generated:
 
 - all_testcases: Contains a list of all evaluated testcases.
@@ -357,9 +426,8 @@ To reproduce the example setup included with the OpenSBT framework in [Microsoft
 ```
 ## Features to be implemented
 
-- [ ] GUI
 - [ ] Improve the architecture to define algorithms
-- [ ] Decouple SUT from Simulator using FMI and ROS
+- [ ] Implement graphical user interface
 
 ## License
 
@@ -369,4 +437,5 @@ OpenSBT is licensed under the [Apache License, Version 2.0](LICENSE).
 
 Lev Sorokin (sorokin@fortiss.org) \
 Tiziano Munaro (munaro@fortiss.org) \
-Damir Safin (safin@fortiss.org)
+Damir Safin (safin@fortiss.org) 
+
