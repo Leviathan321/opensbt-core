@@ -70,7 +70,7 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
  - Experiment execution:
 
 
-    - To start directly in code
+    - To start search directly in code:
 
         ```python
         optimizer = MyOptimizer(problem=problem,
@@ -79,7 +79,7 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
         res.write_results(results_folder=results_folder, params = optimizer.parameters)
         ```
 
-    - To start search via console
+    - To start search via console:
         
         1. Create new `Experiment`
 
