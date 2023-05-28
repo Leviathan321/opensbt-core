@@ -3,12 +3,12 @@
   <FileHeader revMajor="1" revMinor="0" date="2020-03-24T12:00:00" description="CARLA:PedestrianCrossing" author=""/>
   <ParameterDeclarations>
       <ParameterDeclaration name="SimulationTime" parameterType="double" value="5"/> 
-      <ParameterDeclaration name="FinalHostSpeed" parameterType="double" value="10"/> 
-      <ParameterDeclaration name="PedestrianSpeed" parameterType="double" value="10"/>
+      <ParameterDeclaration name="EgoSpeed" parameterType="double" value="10"/> 
+      <ParameterDeclaration name="PedSpeed" parameterType="double" value="10"/>
       <ParameterDeclaration name="PedestrianDistanceEgoX" parameterType="double" value="50"/>
       <ParameterDeclaration name="PedestrianDistanceEgoY" parameterType="double" value="3"/>
       <ParameterDeclaration name="OverallStartDrivenDistance" parameterType="double" value="19"/>
-      <ParameterDeclaration name="PedestrianEgoDistanceStartWalk" parameterType="double" value="60"/>
+      <ParameterDeclaration name="PedDist" parameterType="double" value="60"/>
   </ParameterDeclarations>
   <CatalogLocations/>
   <RoadNetwork>
@@ -94,7 +94,7 @@
               <SpeedAction>
                 <SpeedActionDynamics dynamicsDimension="time" dynamicsShape="step" value="1" />
                 <SpeedActionTarget>
-                  <AbsoluteTargetSpeed value="$FinalHostSpeed" />
+                  <AbsoluteTargetSpeed value="$EgoSpeed" />
                 </SpeedActionTarget>
               </SpeedAction>
             </LongitudinalAction>
@@ -125,7 +125,7 @@
                     <SpeedAction>
                       <SpeedActionDynamics dynamicsShape="step" value="100" dynamicsDimension="distance"/>
                       <SpeedActionTarget>
-                        <AbsoluteTargetSpeed value="$PedestrianSpeed"/>
+                        <AbsoluteTargetSpeed value="$PedSpeed"/>
                       </SpeedActionTarget>
                     </SpeedAction>
                   </LongitudinalAction>
@@ -139,7 +139,7 @@
                       <EntityRef entityRef="hero"/>
                     </TriggeringEntities>
                     <EntityCondition>
-                    <ReachPositionCondition tolerance="$PedestrianEgoDistanceStartWalk">
+                    <ReachPositionCondition tolerance="$PedDist">
                       <Position>
                         <WorldPosition x="110" y="52" z="0.3" h="1.57079632679"/>
                       </Position>

@@ -6,10 +6,10 @@ import pymoo.core.population
 import pydotplus
 import csv
 
-MIN_SAMPLES_SPLIT = 0.1
+MIN_SAMPLES_SPLIT = 0.07
 MIN_SAMPLES_LEAF = 5
-CRITICALITY_THRESHOLD_MIN = 0.2
-CRITICALITY_THRESHOLD_MAX = 0.95
+CRITICALITY_THRESHOLD_MIN = 0.5
+CRITICALITY_THRESHOLD_MAX = 1   
 DELTA = 0.0  # delta can be set negative to make regions overlap
 MAX_TREE_DEPTH = 100
 MIN_IMPURITY_DECREASE = 0.05
@@ -144,8 +144,15 @@ def generate_critical_regions(population,
 
     if save_folder is not None:
         tree.plot_tree(clf)
-        dot_data = tree.export_graphviz(clf, out_file=None, filled=True, rounded=True,  # leaves_parallel=True,
-                                        special_characters=True, feature_names=feature_names)
+        dot_data = tree.export_graphviz(clf, 
+                                        out_file=None, 
+                                        filled=True, 
+                                        rounded=True,  
+                                        # leaves_parallel=True,
+                                        special_characters=True, 
+                                        class_names=["non-critical", "critical"],
+                                        feature_names=feature_names)
+                                        
         graph = pydotplus.graph_from_dot_data(dot_data)
         graph.write_pdf(save_folder + "tree.pdf")
         
