@@ -15,7 +15,7 @@ A video with a demo of OpenSBT can be found here: https://www.youtube.com/watch?
 OpenSBT builds upon [Pymoo](Pymoo). It extends internal models as Individual, Result to apply SBT of ADS.
 Further it provides three interfaces/abstractions to integrate 
 SBT component in a modular way.
-OpenSBT provides already extensions for the simulation of test cases in the [Prescan](https://git.fortiss.org/opensbt/prescan_runner) and [CARLA Simulator](https://git.fortiss.org/opensbt/carla_-_runner).
+OpenSBT provides already extensions for the simulation of test cases in the [Prescan](https://git.fortiss.org/opensbt/prescan_runner) and [CARLA Simulator](https://git.fortiss.org/opensbt/carla_runner).
 
 ## Installation
 
