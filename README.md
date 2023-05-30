@@ -105,7 +105,7 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
                 res = optimizer.run()
                 res.write_results(results_folder=results_folder, params = optimizer.parameters)
             ``` 
-        3. To run the experiment with the name "1" we execute:
+        3. To run the created Experiment execute:
 
             ```bash
             python run.py -e "MyNewExperiment"
