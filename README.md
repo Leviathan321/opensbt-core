@@ -3,16 +3,16 @@
 
 ## Intro
 
-OpenSBT provides a modular and extandable code base for the search based testing of automated driving systems. It provides interfaces to integrate search algorithms, fitness/criticality functions and simulation environments in a modular way. That means, one of this components can be replaced by a another component without the need to change the connectivity to other components or adapt the result analysis/visualization. Further it visualizes the test outcome and analysis the critical behaviour of the ADS. 
+OpenSBT provides a modular and extandable code base for the search-based testing of automated driving systems. It provides interfaces to integrate search algorithms, fitness/criticality functions and simulation environments in a modular way. That means, one of this components can be replaced by a another component without the need to change the connectivity to other components or adapt the result analysis/visualization. Further it visualizes the test outcome and analysis the critical behaviour of the ADS. 
 
-A video with a demo of OpenSBT can be found here: https://www.youtube.com/watch?v=oOyug8rwAB8.
+A demo video of OpenSBT can be found here: https://www.youtube.com/watch?v=oOyug8rwAB8.
 
 
 ## Architecture
 
 [<img src="doc/OpenSBT_architecture.png" width="500"/>]()
 
-OpenSBT builds upon [Pymoo](Pymoo). It extends internal models as Individual, Result to apply SBT of ADS.
+OpenSBT builds upon [Pymoo](https://pymoo.org/). It extends internal models as Individual, Result to apply SBT of ADS.
 Further it provides three interfaces/abstractions to integrate 
 SBT component in a modular way.
 OpenSBT provides already extensions for the simulation of test cases in the [Prescan](https://git.fortiss.org/opensbt/prescan_runner) and [CARLA Simulator](https://git.fortiss.org/opensbt/carla-runner).
@@ -30,7 +30,7 @@ bash install.sh
 OpenSBT provides three interface\abstract classes for the integration of SBT components:
 
 - Simulator integration:
-    1. Implement [simulate]() method of the [`Simulator`]() class. In this method a list scenario instances is passed to the simulator to execute the SUT in the scenario. 
+    1. Implement the [`simulate`]() method of the [`Simulator`](https://git.fortiss.org/opensbt/opensbt-core/-/blob/main/simulation/simulator.py) class. In this method a list of scenario instances is passed to the simulator to execute the SUT in the scenarios. 
     2. Convert the simulation output returned by the simulator to generic `Simulator` instance.
 
     As an example, OpenSBT already provides extensions for CARLA and Prescan Simulator.
@@ -53,6 +53,7 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
 
     The path to the scenario, the input variables and its bounds are passed to `ADASProblem`. The `simulate` function together with the fitness and criticality function is also passed. Consider following exemplary problem definition:
 
+        ```python
         problem = ADASProblem(
                             problem_name="PedestrianCrossingStartWalk",
                             scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
@@ -66,6 +67,7 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
                             critical_function=CriticalAdasDistanceVelocity(),
                             simulate_function=CarlaSimulator.simulate,
                             )
+        ```                
     
  - Experiment execution:
 
@@ -89,8 +91,21 @@ OpenSBT provides three interface\abstract classes for the integration of SBT com
                                     algorithm=AlgorithmType.NSGAII, # Registered in AlgorithmType, updated in run.py
                                     search_configuration=DefaultSearchConfiguration() # Search configuration
                                     )
-            ```
-        2. To run the experiment with the name "1" we execute:
+            ```                        
+        2. Make sure the algorithm specific switch case section has been added in run.py:
+
+            ```python
+            if (...)
+              [...]
+            else (algorithm == AlgorithmType.NSGAII):
+                optimizer = NsgaIIOptimizer(
+                                    problem=problem,
+                                    config=config)
+
+                res = optimizer.run()
+                res.write_results(results_folder=results_folder, params = optimizer.parameters)
+            ``` 
+        3. To run the experiment with the name "1" we execute:
 
             ```bash
             python run.py -e "MyNewExperiment"
@@ -125,13 +140,8 @@ class FitnessMinDistanceVelocity(Fitness):
         return "Min distance", "Velocity at min distance"
 
     def eval(self, simout: SimulationOutput) -> Tuple[float]:
-        if "adversary" in simout.location:
-            name_adversary = "adversary"
-        else:
-            name_adversary = "other"
-
-        traceEgo = simout.location["ego"]
-        tracePed = simout.location[name_adversary]
+        traceEgo = simout.location["ego"]                     # the ego vehicle has the name "ego"   
+        tracePed = simout.location["adversary"]               # the vulnerable actor has the name adversary 
 
         ind_min_dist = np.argmin(geometric.distPair(traceEgo, tracePed))
 
