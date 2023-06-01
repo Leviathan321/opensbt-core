@@ -17,13 +17,13 @@ def getExp1() -> Experiment:
                           problem_name="PedestrianCrossingStartWalk",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
                           xl=[0.5, 1, 0],
-                          xu=[3, 80, 60],
+                          xu=[3, 22, 60],
                           simulation_variables=[
-                              "PedestrianSpeed",
-                              "FinalHostSpeed",
-                              "PedestrianEgoDistanceStartWalk"],
-                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),  
-                          critical_function=CriticalAdasFrontCollisions(),
+                              "PedSpeed",
+                              "EgoSpeed",
+                              "PedDist"],
+                          fitness_function=FitnessMinDistanceVelocity(),  
+                          critical_function=CriticalAdasDistanceVelocity(),
                           simulate_function=CarlaSimulator.simulate,
                           simulation_time=10,
                           sampling_time=100,
@@ -37,6 +37,33 @@ def getExp1() -> Experiment:
     return experiment
 
 experiments_store.register(getExp1())
+
+def getExp1a() -> Experiment:
+    problem = ADASProblem(
+                          problem_name="PedestrianCrossingStartWalk",
+                          scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
+                          xl=[0.5, 1, 0],
+                          xu=[3, 22, 60],
+                          simulation_variables=[
+                              "PedSpeed",
+                              "EgoSpeed",
+                              "PedDist"],
+                          fitness_function=FitnessMinTTCVelocity(),           # ONLY CHANGE - use TTC instead distance
+                          critical_function=CriticalAdasTTCVelocity(),
+                          simulate_function=CarlaSimulator.simulate,
+                          simulation_time=10,
+                          sampling_time=100,
+                          approx_eval_time=10,
+                          do_visualize = True
+                          )
+    experiment = Experiment(name="1a",
+                            problem=problem,
+                            algorithm=AlgorithmType.NSGAII,
+                            search_configuration=DefaultSearchConfiguration())
+    return experiment
+
+experiments_store.register(getExp1a())
+
 
 '''
     BNH Problem
@@ -76,7 +103,8 @@ def getExp3() -> Experiment:
                           simulate_function=CarlaSimulator.simulate,
                           simulation_time=10,
                           sampling_time=100,
-                          approx_eval_time=10
+                          approx_eval_time=10,
+                          do_visualize=True
                           )
     config = DefaultSearchConfiguration()
     experiment = Experiment(name="3",

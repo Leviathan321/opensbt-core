@@ -14,7 +14,7 @@ from model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
 import argparse
-import logging
+import logging as log
 import os
 import sys
 from algorithm.nsga2_optimizer import *
@@ -23,7 +23,10 @@ from experiment.experiment_store import experiments_store
 from default_experiments import *
 
 os.chmod(os.getcwd(), 0o777)
-logging.basicConfig(filename="log.txt", filemode='w', level=logging.ERROR)
+
+log.basicConfig(handlers=[log.FileHandler(filename="./log.txt", encoding='utf-8', mode='w'),  
+                          log.StreamHandler()],
+                level=log.INFO)
 
 from pymoo.config import Config
 
