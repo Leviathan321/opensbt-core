@@ -1,6 +1,4 @@
 import pymoo
-from algorithm.algorithm import AlgorithmType
-
 from model_ga.individual import IndividualSimulated
 pymoo.core.individual.Individual = IndividualSimulated
 
@@ -13,6 +11,8 @@ pymoo.core.result.Result = SimulationResult
 from model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
+from algorithm.algorithm import AlgorithmType
+from algorithm.ps import PureSampling
 import argparse
 import logging as log
 import os
@@ -163,6 +163,13 @@ if __name__ == "__main__":
                               problem=problem,
                               config=config)
 
+        res = optimizer.run()
+        res.write_results(results_folder=results_folder, params = optimizer.parameters)
+    elif algorithm == AlgorithmType.PS:
+        print("pymoo PureSampling algorithm is used.")
+        optimizer = PureSampling(
+                                    problem=problem,
+                                    config=config)
         res = optimizer.run()
         res.write_results(results_folder=results_folder, params = optimizer.parameters)
     else:
