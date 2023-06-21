@@ -532,7 +532,7 @@ def all_individuals(res, save_folder):
                 row = [index]
                 row.extend(["%.6f" % X_i for X_i in algo.pop.get("X")[i]])
                 row.extend(["%.6f" % F_i for F_i in algo.pop.get("F")[i]])
-                row.extend(["%i" % res.opt.get("CB")[i]])
+                row.extend(["%i" % algo.pop.get("CB")[i]])
                 write_to.writerow(row)
                 index += 1
         f.close()

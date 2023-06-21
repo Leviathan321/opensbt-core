@@ -132,5 +132,22 @@ def getExp4() -> Experiment:
                             search_configuration=config)
 
     return experiment
-    
 experiments_store.register(getExp4())
+
+'''
+Pure Sampling for BNH Problem
+'''
+def getExp99() -> Experiment:
+    problem = PymooTestProblem(
+            'BNH',
+            critical_function=CriticalBnhDivided())
+
+    config = DefaultSearchConfiguration()
+    config.population_size = 27    # defines the number of samples for a single axis
+    experiment = Experiment(name="99",
+                            problem=problem,
+                            algorithm=AlgorithmType.PS,
+                            search_configuration=config)
+
+    return experiment  
+experiments_store.register(getExp99())
