@@ -32,7 +32,7 @@ def getExp1() -> Experiment:
                           )
     experiment = Experiment(name="1",
                             problem=problem,
-                            algorithm=AlgorithmType.NSGAII,
+                            algorithm=AlgorithmType.PS,
                             search_configuration=DefaultSearchConfiguration())
     return experiment
 
@@ -133,6 +133,36 @@ def getExp4() -> Experiment:
 
     return experiment
 experiments_store.register(getExp4())
+
+
+def getExp5() -> Experiment:
+    problem = ADASProblem(
+                          problem_name="PedestrianCrossingStartWalk",
+                          scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
+                          xl=[0.5, 1, 1],
+                          xu=[3, 22, 60],
+                          simulation_variables=[
+                              "PedSpeed",
+                              "EgoSpeed",
+                              "PedDist"],
+                          fitness_function=FitnessMinDistanceVelocity(),  
+                          critical_function=CriticalAdasDistanceVelocity(),
+                          simulate_function=CarlaSimulator.simulate,
+                          simulation_time=10,
+                          sampling_time=100,
+                          approx_eval_time=10,
+                          do_visualize = False
+                          )
+    config  = DefaultSearchConfiguration()
+    config.population_size = 5 
+    experiment = Experiment(name="5",
+                            problem=problem,
+                            algorithm=AlgorithmType.PS,
+                            search_configuration=config)
+    return experiment
+
+experiments_store.register(getExp5())
+
 
 '''
 Pure Sampling for BNH Problem
