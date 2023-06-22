@@ -5,6 +5,7 @@ from simulation.simulator import Simulator, SimulationOutput
 import logging
 import json
 import os
+from model_ga.individual import Individual
 
 SCENARIO_DIR = "/tmp/scenarios"
 
@@ -15,8 +16,8 @@ class CarlaSimulator(Simulator):
     ''' Simulates a set of scenarios and returns the output '''
     @staticmethod
     def simulate(
-        list_individuals,
-        variable_names,
+        list_individuals: List[Individual],
+        variable_names: List[str],
         scenario_path: str,
         sim_time: float,
         time_step: float,

@@ -9,10 +9,12 @@ def duplicate_free(population,precision=6):
 ''' returns indices of elements of array M after elimination of duplicates '''
 def remove_duplicates(M,precision=6):
     res = []
-
+    
     size = M.shape[0]
-    if size == 1:
-        return M
+    if len(M) == 1:
+        return [0]
+    elif len(M) == 0:
+        return []
 
     # round to x.th digit
     D = []
@@ -51,3 +53,12 @@ def remove_duplicates(M,precision=6):
 
 # M3 = np.asarray([[1],[2],[3],[3]])
 # assert ( remove_duplicates(M3) == [0,1,2] )
+
+# M4 = np.asarray([[1.2,3]])
+# assert ( remove_duplicates(M4) == [0] )
+
+# M5 = np.asarray([[1.2,3], [1.2, 3]])
+# assert ( remove_duplicates(M5) == [0] or remove_duplicates(M5) == [1] )
+
+# M6 = np.asarray([])
+# assert ( remove_duplicates(M6) == [] )

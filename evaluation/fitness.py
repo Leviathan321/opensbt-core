@@ -37,8 +37,6 @@ class FitnessMinDistance(Fitness):
             result = np.min(geometric.distPair(traceEgo, tracePed))
         return result
 
-f = FitnessMinDistance()
-
 class FitnessMinDistanceVelocity(Fitness):
     @property
     def min_or_max(self):
@@ -154,7 +152,7 @@ class FitnessMinTTCVelocity(Fitness):
 
     @property
     def name(self):
-        return "Min TTC, Critical Velocity"
+        return "Min TTC", "Critical Velocity"
 
     def eval(self, simout: SimulationOutput) -> float:
         if "adversary" in simout.location:

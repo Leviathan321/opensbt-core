@@ -19,7 +19,6 @@ class PymooTestProblem(Problem):
         if approx_eval_time is not None:
             self.approx_eval_time = approx_eval_time
 
-
     def _instantiate_from_given_problem(self,problem):
 
         # HACK: Copy over attribute values pointer to two functions
