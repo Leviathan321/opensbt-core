@@ -37,7 +37,8 @@ class CarlaSimulator(Simulator):
                 CarlaSimulator._balancer = Balancer(
                     directory = SCENARIO_DIR,
                     jobs = 1,
-                    visualization = do_visualize
+                    visualization = do_visualize,
+                    agent = 'NPCAgent'
                 )
                 CarlaSimulator._balancer.start()
 
