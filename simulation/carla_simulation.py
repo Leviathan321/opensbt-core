@@ -37,7 +37,7 @@ class CarlaSimulator(Simulator):
                     directory = SCENARIO_DIR,
                     jobs = 1,
                     visualization = do_visualize,
-                    agent = 'FMIAgent'
+                    agent = 'NPCAgent'  #FMIAgent 'for Rover-based Agent'
                 )
                 CarlaSimulator._balancer.start()
 

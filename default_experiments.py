@@ -164,6 +164,35 @@ def getExp5() -> Experiment:
 experiments_store.register(getExp5())
 
 
+def getExp6() -> Experiment:
+    problem = ADASProblem(
+                          problem_name="FollowLeadingVehicle",
+                          scenario_path=os.getcwd() + "/scenarios/FollowLeadingVehicleRover.xosc",
+                          xl=[10, 1],
+                          xu=[40, 10],
+                          simulation_variables=[
+                              "leadingSpeed",
+                              "waitingSpeed"
+                          ],
+                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),  
+                          critical_function=CriticalAdasDistanceVelocity(),
+                          simulate_function=CarlaSimulator.simulate,
+                          simulation_time=10,
+                          sampling_time=100,
+                          approx_eval_time=10,
+                          do_visualize = False,
+                          )
+    experiment = Experiment(name="6",
+                            problem=problem,
+                            algorithm=AlgorithmType.NSGAII,
+                            search_configuration=DefaultSearchConfiguration())
+    return experiment
+
+experiments_store.register(getExp6())
+
+
+
+
 '''
 Pure Sampling for BNH Problem
 '''

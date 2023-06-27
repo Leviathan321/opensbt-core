@@ -11,7 +11,7 @@ export PYTHONPATH=/home/sorokin/CARLA/PythonAPI/carla/dist/carla-0.9.13-py3.7-li
 sudo docker stop $(sudo docker ps -aq --filter="name=carla-client")
 sudo docker stop $(sudo docker ps -aq --filter="name=carla-server")
 
-python run.py -e 5 #-i 2 -n 2
+python run.py -e 6 #-i 2 -n 2
 
 sudo docker stop $(sudo docker ps -aq --filter="name=carla-client")
 sudo docker stop $(sudo docker ps -aq --filter="name=carla-server")
