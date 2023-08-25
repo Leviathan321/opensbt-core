@@ -1,0 +1,5 @@
+INFO:root:Selected experiment: 1
+INFO:root:pymoo NSGA-II algorithm is used.
+INFO:root:=====[NSGA2] Writing results to: 
+INFO:root:C:\Users\Lev\Documents\fortiss\projects\testing\open-sbt\opensbt-core/results/BNH\NSGA2\25-08-2023_15-58-38\
+INFO:root:critical_testcases: C:\Users\Lev\Documents\fortiss\projects\testing\open-sbt\opensbt-core/results/BNH\NSGA2\25-08-2023_15-58-38\all_critical_testcases.csv
