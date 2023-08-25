@@ -5,6 +5,7 @@ import os
 import pymoo.core.population
 import pydotplus
 import csv
+import logging as log
 
 MIN_SAMPLES_SPLIT = 0.07
 MIN_SAMPLES_LEAF = 5
@@ -108,7 +109,7 @@ def generate_critical_regions(population,
             if leave_id[sample_id] == node_id:  # <-- changed != to ==
                 pass
                 # continue # <-- comment out
-                # print("leaf node {} reached, no decision here".format(leave_id[sample_id]))  # <--
+                # log.info("leaf node {} reached, no decision here".format(leave_id[sample_id]))  # <--
             else:  # < -- added else to iterate through decision nodes
                 if (X[sample_id][feature[node_id]] <= threshold[node_id]):
                     threshold_sign = "<="

@@ -10,6 +10,7 @@ from simulation.simulator import SimulationOutput
 from pymoo.core.problem import Problem
 from pymoo.core.problem import ElementwiseEvaluationFunction
 from pymoo.core.problem import LoopedElementwiseEvaluation
+import logging as log
 
 class SimulationProblem(Problem):
     def __init__(self,
@@ -204,5 +205,5 @@ class SimulationProblem(Problem):
             pf = self.pareto_front(n_points)
         else:
             pf = None
-            print("No analytical solution provided for the given problem.")
+            log.info("No analytical solution provided for the given problem.")
         return pf

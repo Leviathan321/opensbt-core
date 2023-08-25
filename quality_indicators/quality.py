@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import dill
 import os
 from pathlib import Path
+import logging as log
 
 class Quality(object):
 
@@ -72,10 +73,10 @@ class Quality(object):
                 igd = [metric_igd.do(_F) for _F in hist_F]
                 return EvaluationResult("igd",n_evals, igd)
             else:
-                print("No convergence analysis possible. The Pareto front is not known.")
+                log.info("No convergence analysis possible. The Pareto front is not known.")
                 return None
         else:
-            print("No convergence analysis possible. The history of the run is not given.")
+            log.info("No convergence analysis possible. The history of the run is not given.")
             return None
 
 
@@ -86,14 +87,14 @@ class Quality(object):
         problem = res.problem
 
         if problem.n_obj > 2:
-            print("Uniformity Delta metric is only available for a 2D objective space.")
+            log.info("Uniformity Delta metric is only available for a 2D objective space.")
             return 0
         if hist is not None:
             n_evals, hist_F = res.obtain_history_hitherto()
             uni = [spread(_F) for _F in hist_F]
             return EvaluationResult("spread",n_evals, uni)
         else:
-            print("No uniformity analysis possible. The history of the run is not given.")
+            log.info("No uniformity analysis possible. The history of the run is not given.")
             return None
 
 @dataclass 

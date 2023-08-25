@@ -4,7 +4,7 @@ from pymoo.problems import get_problem
 from evaluation.critical import Critical
 from simulation.simulator import SimulationOutput
 import numpy as np
-
+import logging as log
 @dataclass
 class PymooTestProblem(Problem):
     
@@ -24,7 +24,7 @@ class PymooTestProblem(Problem):
         # HACK: Copy over attribute values pointer to two functions
         super().__init__(**problem.__dict__)
         if hasattr(problem, 'pareto_front'):
-            #print("pareto front set")
+            #log.info("pareto front set")
             setattr(self,"pareto_front",problem.pareto_front)
                 
         if hasattr(problem, '_calc_pareto_front'):

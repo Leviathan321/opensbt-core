@@ -4,6 +4,7 @@ from pymoo.core.problem import Problem
 import numpy as np
 from evaluation.critical import Critical
 from evaluation.fitness import *
+import logging as log
 
 @dataclass
 class ADASProblem(Problem):
@@ -82,12 +83,12 @@ class ADASProblem(Problem):
 
     def _evaluate(self, x, out, *args, **kwargs):
         self.counter = self.counter + 1
-        print(f"Running evaluation number {self.counter}")
+        log.info(f"Running evaluation number {self.counter}")
         try:
             simout_list = self.simulate_function(x, self.simulation_variables, self.scenario_path, sim_time=self.simulation_time,
                                                  time_step=self.sampling_time, do_visualize=self.do_visualize)
         except Exception as e:
-            print("Exception during simulation ocurred: ")
+            log.info("Exception during simulation ocurred: ")
             # TODO handle exception, terminate, so that results are stored
             raise e
         out["SO"] = []
@@ -104,7 +105,7 @@ class ADASProblem(Problem):
         out["F"] = np.vstack(vector_list)
         out["CB"] = label_list
     # self.counter = self.counter + 1
-    # print(f"++ Evaluations executed {self.counter*100/(population_size*num_gen)}% ++")
+    # log.info(f"++ Evaluations executed {self.counter*100/(population_size*num_gen)}% ++")
 
     def is_simulation(self):
         return True

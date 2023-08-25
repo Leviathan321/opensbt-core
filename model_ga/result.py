@@ -8,7 +8,7 @@ import dill
 import os
 from pathlib import Path
 from visualization import visualizer
-
+import logging as log
 RESULTS_FOLDER = os.sep + "results" + os.sep
 WRITE_ALL_INDIVIDUALS = True
 
@@ -69,10 +69,10 @@ class SimulationResult(Result):
         algorithm = self.algorithm
         algorithm_name = algorithm.__class__.__name__        
         
-        print(f"=====[{algorithm_name}] Writing results to: ")
+        log.info(f"=====[{algorithm_name}] Writing results to: ")
 
         save_folder = visualizer.create_save_folder(self.problem, results_folder, algorithm_name)
-        print(save_folder)
+        log.info(save_folder)
 
         # visualizer.convergence_analysis(self, save_folder)
         # visualizer.hypervolume_analysis(self, save_folder)
@@ -83,8 +83,8 @@ class SimulationResult(Result):
         visualizer.objective_space(self, save_folder)
         visualizer.optimal_individuals(self, save_folder)
         visualizer.write_summary_results(self, save_folder)
-        visualizer.write_simulation_output(self,save_folder)
-        visualizer.simulations(self, save_folder)
+        # visualizer.write_simulation_output(self,save_folder)
+        # visualizer.simulations(self, save_folder)
 
         if WRITE_ALL_INDIVIDUALS:
             visualizer.all_individuals(self, save_folder)

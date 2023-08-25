@@ -8,7 +8,7 @@ scenario=$1 #"C:\Users\sorokin\Documents\Projects\testing\FOCETA\experiments\Leu
 n_arga=`expr $# - 1`
 n_dim=`expr $n_arga / 2` # get the number of dimensions
 # read search space (we assume 2-2+n_dim and 5-5+n_dim  are min and upper bounds respectively)
-bound_min=("${@:2:${n_dim}}") 
+bound_min=("${@:2:${n_dim}}")
 bound_max=("${@:5:${n_dim}}") 
 
 # echo "Read bound_min: "${bound_min[@]}

@@ -21,4 +21,4 @@ class Optimizer(ABC):
                 self.algorithm,
                 self.termination,
                 save_history=self.save_history,
-                verbose=True)
+                verbose=False)

@@ -39,7 +39,7 @@ def create_save_folder(problem: Problem, results_folder: str, algorithm_name: st
         save_folder = str(
             os.getcwd()) + results_folder + problem_name + os.sep + algorithm_name + os.sep + datetime.now().strftime(
             "%d-%m-%Y_%H-%M-%S") + os.sep
-    #print(f"save_folder created: {save_folder}")
+    #log.info(f"save_folder created: {save_folder}")
     Path(save_folder).mkdir(parents=True, exist_ok=True)
     return save_folder
 
@@ -116,7 +116,7 @@ def write_simulation_output(res: Result, save_folder: str):
         f.close()
 
 def convergence_analysis(res: Result, save_folder: str, input_pf=None):
-    print("------ Performing igd analysis ------")
+    log.info("------ Performing igd analysis ------")
 
     eval_result = Quality.calculate_igd(res, input_pf=input_pf)
     if eval_result is None:
@@ -151,7 +151,7 @@ def write_metric_history(n_evals, hist_F, metric_name, save_folder):
         f.close()
 
 def hypervolume_analysis(res, save_folder):
-    print("------ Performing hv analysis ------")
+    log.info("------ Performing hv analysis ------")
     eval_result = Quality.calculate_hv_hitherto(res)
     
     if eval_result is None:
@@ -171,7 +171,7 @@ def hypervolume_analysis(res, save_folder):
     write_metric_history(n_evals, hv, 'hv_all', save_folder)
 
 def hypervolume_analysis_local(res, save_folder):
-    print("------ Performing hv analysis ------")
+    log.info("------ Performing hv analysis ------")
 
     eval_result = Quality.calculate_hv(res)
     if eval_result is None:
@@ -191,7 +191,7 @@ def hypervolume_analysis_local(res, save_folder):
     write_metric_history(n_evals, hv,'hv_local_all',save_folder)
 
 def spread_analysis(res, save_folder):
-    print("------ Performing sp analysis ------")
+    log.info("------ Performing sp analysis ------")
 
     eval_result = Quality.calculate_sp(res)
     if eval_result is None:
@@ -536,39 +536,7 @@ def all_individuals(res, save_folder):
                 write_to.writerow(row)
                 index += 1
         f.close()
-
-def all_critical_individuals(res, save_folder):
-    """Output of all critical individuals"""
-    problem = res.problem
-    hist = res.history
-    design_names = problem.design_names
-    objective_names = problem.objective_names
-
-    with open(save_folder + 'all_critical_testcases.csv', 'w', encoding='UTF8', newline='') as f:
-        write_to = csv.writer(f)
-
-        header = ['Index']
-        for i in range(problem.n_var):
-            header.append(design_names[i])
-        for i in range(problem.n_obj):
-            header.append(objective_names[i])
-
-        write_to.writerow(header)
-
-        index = 0
-        for algo in hist:
-            for i in range(len(algo.pop.divide_critical_non_critical()[0])):
-                row = [index]
-                row.extend(["%.6f" % X_i for X_i in algo.pop.get("X")[i]])
-                row.extend(["%.6f" % F_i for F_i in algo.pop.get("F")[i]])
-                write_to.writerow(row)
-                index += 1
-        f.close()
-
-    log.info(f"critical_testcases: {save_folder + 'all_critical_testcases.csv'}")
-
-
-
+        
 def all_critical_individuals(res, save_folder):
 
     """Output of all critical individuals"""
@@ -601,6 +569,9 @@ def all_critical_individuals(res, save_folder):
             index += 1
         f.close()
 
+    log.info(f"critical_testcases: {save_folder + 'all_critical_testcases.csv'}")
+
+
 def simulations(res, save_folder):
     '''Visualization of the results of simulations'''
     problem = res.problem
@@ -613,4 +584,4 @@ def simulations(res, save_folder):
             param_values = res.opt.get("X")[index]
             scenario_plotter.plot_scenario_gif(param_values, simout, save_folder_gif, file_name)
     else:
-        print("No simulation visualization available. The experiment is not a simulation.")
+        log.info("No simulation visualization available. The experiment is not a simulation.")

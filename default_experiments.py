@@ -5,65 +5,6 @@ from problem.pymoo_test_problem import PymooTestProblem
 from experiment.experiment_store import *
 from algorithm.algorithm import *
 from evaluation.critical import *
-from simulation.carla_simulation import CarlaSimulator
-
-'''
-EXAMPLE CARLA SIMULATOR
-ego speed is in km/h
-'''
-
-def getExp1() -> Experiment:
-    problem = ADASProblem(
-                          problem_name="PedestrianCrossingStartWalk",
-                          scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
-                          xl=[0.5, 1, 0],
-                          xu=[3, 22, 60],
-                          simulation_variables=[
-                              "PedSpeed",
-                              "EgoSpeed",
-                              "PedDist"],
-                          fitness_function=FitnessMinDistanceVelocity(),  
-                          critical_function=CriticalAdasDistanceVelocity(),
-                          simulate_function=CarlaSimulator.simulate,
-                          simulation_time=10,
-                          sampling_time=100,
-                          approx_eval_time=10,
-                          do_visualize = False
-                          )
-    experiment = Experiment(name="1",
-                            problem=problem,
-                            algorithm=AlgorithmType.NSGAII,
-                            search_configuration=DefaultSearchConfiguration())
-    return experiment
-
-experiments_store.register(getExp1())
-
-def getExp1a() -> Experiment:
-    problem = ADASProblem(
-                          problem_name="PedestrianCrossingStartWalk",
-                          scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
-                          xl=[0.5, 1, 0],
-                          xu=[3, 22, 60],
-                          simulation_variables=[
-                              "PedSpeed",
-                              "EgoSpeed",
-                              "PedDist"],
-                          fitness_function=FitnessMinTTCVelocity(),           # ONLY CHANGE - use TTC instead distance
-                          critical_function=CriticalAdasTTCVelocity(),
-                          simulate_function=CarlaSimulator.simulate,
-                          simulation_time=10,
-                          sampling_time=100,
-                          approx_eval_time=10,
-                          do_visualize = True
-                          )
-    experiment = Experiment(name="1a",
-                            problem=problem,
-                            algorithm=AlgorithmType.NSGAII,
-                            search_configuration=DefaultSearchConfiguration())
-    return experiment
-
-experiments_store.register(getExp1a())
-
 
 '''
     BNH Problem
@@ -72,18 +13,20 @@ experiments_store.register(getExp1a())
     x∗1=x∗2∈[0,3]  and x∗1∈[3,5], x∗2=3
 '''
 
-def getExp2() -> Experiment:
+def getExp1() -> Experiment:
     problem = PymooTestProblem(
         'BNH',
         critical_function=CriticalBnhDivided())
 
     config = DefaultSearchConfiguration()
-    config.maximal_execution_time = "00:00:01"
-    experiment = Experiment(name="2",
+    config.population_size = 10
+    config.n_generations = 10
+    config.maximal_execution_time = "00:00:05"
+    experiment = Experiment(name="1",
                             problem=problem,
                             algorithm=AlgorithmType.NSGAII,
                             search_configuration=config)
 
     return experiment
 
-experiments_store.register(getExp2())
+experiments_store.register(getExp1())
