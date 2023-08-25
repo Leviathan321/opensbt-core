@@ -79,8 +79,8 @@ class SimulationResult(Result):
         # visualizer.spread_analysis(self, save_folder)
         
         visualizer.write_calculation_properties(self,save_folder,algorithm_name, algorithm_parameters=params)
-        visualizer.design_space(self, save_folder)
-        visualizer.objective_space(self, save_folder)
+        #visualizer.design_space(self, save_folder)
+        #visualizer.objective_space(self, save_folder)
         visualizer.optimal_individuals(self, save_folder)
         visualizer.write_summary_results(self, save_folder)
         # visualizer.write_simulation_output(self,save_folder)

@@ -7,8 +7,8 @@
 SCENARIO=1 # the SUT/Scenario/Experiment to be executed; we can also pass directly a file to the scenario: 
            # number corresponds to default experiments defined in OpenSBT
 
-MIN=(1 2 3) # the lower bounds of the search space
-MAX=(11 13 14)  # the upper bounds of the search space
+MIN=(1 2) # the lower bounds of the search space
+MAX=(11 13)  # the upper bounds of the search space
 
 # output: path to the file with all identified critical test cases
 

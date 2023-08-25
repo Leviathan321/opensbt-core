@@ -7,8 +7,10 @@ scenario=$1
 n_arga=`expr $# - 1`
 n_dim=`expr $n_arga / 2` # get the number of dimensions
 # read search space (we assume 2-2+n_dim and 5-5+n_dim  are min and upper bounds respectively)
+
+ind_next=$((n_dim+2))
 bound_min=("${@:2:${n_dim}}")
-bound_max=("${@:5:${n_dim}}") 
+bound_max=("${@:${ind_next}:${n_dim}}") 
 
 # echo "Read bound_min: "${bound_min[@]}
 # echo "Read bound_max: "${bound_max[@]}
