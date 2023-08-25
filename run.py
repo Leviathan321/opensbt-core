@@ -176,4 +176,4 @@ if __name__ == "__main__":
         raise ValueError("Error: No algorithm with the given code: " + str(algorithm))
 
  
-    print("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")
+    #print("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")

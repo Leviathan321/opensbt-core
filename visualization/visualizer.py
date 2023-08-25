@@ -22,7 +22,7 @@ from model_ga.problem import *
 from model_ga.result import *
 from typing import Dict
 from utils.duplicates import duplicate_free
-
+import logging as log
 
 WRITE_ALL_INDIVIDUALS = True
 BACKUP_FOLDER =  "backup" + os.sep
@@ -564,6 +564,10 @@ def all_critical_individuals(res, save_folder):
                 write_to.writerow(row)
                 index += 1
         f.close()
+
+    log.info(f"critical_testcases: {save_folder + 'all_critical_testcases.csv'}")
+
+
 
 def all_critical_individuals(res, save_folder):
 
