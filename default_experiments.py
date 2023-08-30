@@ -21,7 +21,7 @@ def getExp1() -> Experiment:
     config = DefaultSearchConfiguration()
     config.population_size = 10
     config.n_generations = 10
-    config.maximal_execution_time = "00:00:05"
+    config.maximal_execution_time = "00:00:02"
     experiment = Experiment(name="1",
                             problem=problem,
                             algorithm=AlgorithmType.NSGAII,

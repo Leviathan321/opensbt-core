@@ -115,6 +115,20 @@ def write_simulation_output(res: Result, save_folder: str):
             write_to.writerow(row)
         f.close()
 
+'''output of the simulation data for all solutions (for the moment only partial data)'''
+def write_simulation_traces(res: Result, save_folder: str):
+    
+    problem = res.problem
+
+    # if not problem.is_simulation():
+    #    return
+
+    with open(save_folder + 'traces.csv', 'w', encoding='UTF8', newline='') as f:
+        f.close()
+
+    log.info(f"traces: {save_folder + 'traces.csv'}")
+
+
 def convergence_analysis(res: Result, save_folder: str, input_pf=None):
     log.info("------ Performing igd analysis ------")
 
