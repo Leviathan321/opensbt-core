@@ -55,6 +55,8 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
         write_to.writerow(header)
         write_to.writerow(['Problem', problem.problem_name])
         write_to.writerow(['Algorithm', algorithm_name])
+        write_to.writerow(['Search variables', problem.design_names])        
+        write_to.writerow(['Search space', [v for v in zip(problem.xl,problem.xu)]])
 
         if is_simulation:
             write_to.writerow(['Fitness function', str(problem.fitness_function.__class__.__name__)])
