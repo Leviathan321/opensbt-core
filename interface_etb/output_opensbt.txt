@@ -1,6 +1,6 @@
 INFO:root:Selected experiment: 1
 INFO:root:pymoo NSGA-II algorithm is used.
 INFO:root:=====[NSGA2] Writing results to: 
-INFO:root:/home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/30-08-2023_16-52-14/
-INFO:root:traces: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/30-08-2023_16-52-14/traces.csv
-INFO:root:critical_testcases: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/30-08-2023_16-52-14/all_critical_testcases.csv
+INFO:root:/home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/31-08-2023_09-44-17/
+INFO:root:traces: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/31-08-2023_09-44-17/traces/
+INFO:root:critical_testcases: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/31-08-2023_09-44-17/all_critical_testcases.csv

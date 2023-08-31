@@ -115,18 +115,41 @@ def write_simulation_output(res: Result, save_folder: str):
             write_to.writerow(row)
         f.close()
 
-'''output of the simulation data for all solutions (for the moment only partial data)'''
-def write_simulation_traces(res: Result, save_folder: str):
+'''Output of the simulation data for all test cases (understandable by specmining tool HyTeM)'''
+def write_traces(res: Result, save_folder: str):
     
     problem = res.problem
 
-    # if not problem.is_simulation():
-    #    return
+    save_folder_traces = save_folder + "traces" + os.sep
+    Path(save_folder_traces).mkdir(parents=True, exist_ok=True)  
+    
+    # temporary for the demo
+    if  problem.is_simulation():
+        all_population = res.obtain_all_population()
+        for i,ind in enumerate(all_population):
+            simout = ind.get("SO")
+            with open(save_folder_traces + f'traces_{i}.csv', 'w', encoding='UTF8', newline='') as f:
+                write_to = csv.writer(f)
+                        
+                write_to.writerow(["day_time","day"])
+                write_to.writerow(["visibility","clear"])
+                write_to.writerow(["ped_type","adult"])
+                write_to.writerow(["ego-speed", np.max(simout.speed["ego"])])
+                write_to.writerow(["first_sight_dist",7])
+                write_to.writerow(["crash",simout.otherParams["isCollision"]])
+                write_to.writerow(["time",simout.times])
 
-    with open(save_folder + 'traces.csv', 'w', encoding='UTF8', newline='') as f:
-        f.close()
+                actors = ["ego","adversary"]
+                for ac in actors:
+                    write_to.writerow([f"{ac}_x",[p[0] for p in simout.location[ac]]])
+                    write_to.writerow([f"{ac}_y",[p[1] for p in simout.location[ac]]])
+                    write_to.writerow([f"{ac}_v_x",[p[0] for p in simout.velocity[ac]]])
+                    write_to.writerow([f"{ac}_v_y",[p[1] for p in simout.velocity[ac]]])
+                    write_to.writerow([f"{ac}_a_x",[p[0] for p in simout.acceleration[ac]]])
+                    write_to.writerow([f"{ac}_a_y",[p[1] for p in simout.acceleration[ac]]])
+                f.close()
 
-    log.info(f"traces: {save_folder + 'traces.csv'}")
+    log.info(f"traces: {save_folder_traces}")
 
 
 def convergence_analysis(res: Result, save_folder: str, input_pf=None):
