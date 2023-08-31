@@ -134,6 +134,38 @@ def getExp4() -> Experiment:
     return experiment
 experiments_store.register(getExp4())
 
+''' Dummy Simulation with planar motion planning and simplified AEB
+'''
+
+def getExp5() -> Experiment:
+    from simulation.dummy_simulation import DummySimulator
+
+    problem = ADASProblem(
+                          problem_name="DummySimulatorProblem",
+                          scenario_path="",
+                          xl=[0, 1, 0, 1],
+                          xu=[360, 3,360, 3],
+                          simulation_variables=[
+                              "orientation_ego",
+                              "velocity_ego",
+                              "orientation_ped",
+                              "velocity_ped"],
+                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),
+                          critical_function=CriticalAdasDistanceVelocity(),
+                          simulate_function=DummySimulator.simulate,
+                          simulation_time=10,
+                          sampling_time=0.25
+                          )
+    config = DefaultSearchConfiguration()
+    config.population_size = 20
+    config.n_generations = 20
+    experiment = Experiment(name="5",
+                            problem=problem,
+                            algorithm=AlgorithmType.NSGAII,
+                            search_configuration=config)
+    return experiment
+experiments_store.register(getExp5())
+
 '''
 Pure Sampling for BNH Problem
 '''
