@@ -30,3 +30,36 @@ def getExp1() -> Experiment:
     return experiment
 
 experiments_store.register(getExp1())
+
+############
+''' Dummy Simulator with linear motion'''
+def getExp2() -> Experiment:
+    from simulation.dummy_simulation import DummySimulator
+
+    problem = ADASProblem(
+                          problem_name="DummySimulatorProblem1",
+                          scenario_path="",
+                          xl=[0, 1, 0, 1],
+                          xu=[360, 10,360, 5],
+                          simulation_variables=[
+                              "orientation_ego",
+                              "velocity_ego",
+                              "orientation_ped",
+                              "velocity_ped"],
+                          fitness_function=FitnessAdaptedDistanceSpeed(),
+                          critical_function=CriticalAdasDistanceVelocity(),
+                          simulate_function=DummySimulator.simulate,
+                          simulation_time=5,
+                          sampling_time=0.25)
+    config = DefaultSearchConfiguration()
+    config.population_size = 20
+    config.n_generations = 20
+    experiment = Experiment(
+                            name="2",
+                            problem=problem,
+                            algorithm=AlgorithmType.NSGAII,
+                            search_configuration=config)
+    return experiment
+
+
+experiments_store.register(getExp2())

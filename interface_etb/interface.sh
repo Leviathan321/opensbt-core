@@ -4,7 +4,7 @@ cd ..
 # source venv/Scripts/activate
 
 scenario=$1 
-exp_num=1 #hard coded temporary
+exp_num=2 #hard coded temporary
 n_arga=`expr $# - 1`
 n_dim=`expr $n_arga / 2` # get the number of dimensions
 # read search space (we assume 2-2+n_dim and 5-5+n_dim  are min and upper bounds respectively)

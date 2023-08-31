@@ -1,6 +1,26 @@
-INFO:root:Selected experiment: 1
+INFO:root:Selected experiment: 2
 INFO:root:pymoo NSGA-II algorithm is used.
+INFO:root:Running evaluation number 1
+INFO:root:Running evaluation number 2
+INFO:root:Running evaluation number 3
+INFO:root:Running evaluation number 4
+INFO:root:Running evaluation number 5
+INFO:root:Running evaluation number 6
+INFO:root:Running evaluation number 7
+INFO:root:Running evaluation number 8
+INFO:root:Running evaluation number 9
+INFO:root:Running evaluation number 10
+INFO:root:Running evaluation number 11
+INFO:root:Running evaluation number 12
+INFO:root:Running evaluation number 13
+INFO:root:Running evaluation number 14
+INFO:root:Running evaluation number 15
+INFO:root:Running evaluation number 16
+INFO:root:Running evaluation number 17
+INFO:root:Running evaluation number 18
+INFO:root:Running evaluation number 19
+INFO:root:Running evaluation number 20
 INFO:root:=====[NSGA2] Writing results to: 
-INFO:root:/home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/31-08-2023_09-44-17/
-INFO:root:traces: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/31-08-2023_09-44-17/traces/
-INFO:root:critical_testcases: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/BNH/NSGA2/31-08-2023_09-44-17/all_critical_testcases.csv
+INFO:root:/home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/DummySimulatorProblem1/NSGA2/31-08-2023_10-02-14/
+INFO:root:traces: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/DummySimulatorProblem1/NSGA2/31-08-2023_10-02-14/traces/
+INFO:root:critical_testcases: /home/sorokin/Projects/testing/OpenSBT/opensbt-core/results/DummySimulatorProblem1/NSGA2/31-08-2023_10-02-14/all_critical_testcases.csv

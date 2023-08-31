@@ -84,6 +84,7 @@ class SimulationResult(Result):
         visualizer.optimal_individuals(self, save_folder)
         visualizer.write_summary_results(self, save_folder)
         visualizer.write_traces(self, save_folder)
+        
         # visualizer.write_simulation_output(self,save_folder)
         # visualizer.simulations(self, save_folder)
 
