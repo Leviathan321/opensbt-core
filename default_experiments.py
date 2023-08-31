@@ -37,7 +37,7 @@ def getExp2() -> Experiment:
     from simulation.dummy_simulation import DummySimulator
 
     problem = ADASProblem(
-                          problem_name="DummySimulatorProblem1",
+                          problem_name="DummySimulatorProblem",
                           scenario_path="",
                           xl=[0, 1, 0, 1],
                           xu=[360, 10,360, 5],
