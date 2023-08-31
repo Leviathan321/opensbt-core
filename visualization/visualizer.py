@@ -143,13 +143,16 @@ def write_traces(res: Result, save_folder: str):
                 for ac in actors:
                     write_to.writerow([f"{ac}_x",[p[0] for p in simout.location[ac]]])
                     write_to.writerow([f"{ac}_y",[p[1] for p in simout.location[ac]]])
+                    print()
                     write_to.writerow([f"{ac}_v_x",[p[0] for p in simout.velocity[ac]]])
                     write_to.writerow([f"{ac}_v_y",[p[1] for p in simout.velocity[ac]]])
                     write_to.writerow([f"{ac}_a_x",[p[0] for p in simout.acceleration[ac]]])
                     write_to.writerow([f"{ac}_a_y",[p[1] for p in simout.acceleration[ac]]])
-                f.close()
+                f.close()  
+                
+                log.info(f"traces: {save_folder_traces + f'traces_{i}.csv'}")
 
-    log.info(f"traces: {save_folder_traces}")
+  
 
 
 def convergence_analysis(res: Result, save_folder: str, input_pf=None):

@@ -18,8 +18,8 @@ bound_max=("${@:${ind_next}:${n_dim}}")
 
 file="interface_etb/output_opensbt.txt"
 opensbt=$(python run.py -e "$exp_num" -min ""${bound_min[@]} -max ""${bound_max[@]} > $file 2>&1 >/dev/null)
-echo $(tail -n 2 $file | grep -oP '^INFO:root:critical_testcases:\s*\K.*' )
-echo $(tail -n 2 $file | grep -oP '^INFO:root:traces:\s*\K.*' )
+echo $(tail -n 10000 $file | grep -oP -U '^INFO:root:critical_testcases:\s*\K.*' )
+echo "$(tail -n 10000 $file | grep -oP -U '^INFO:root:traces:\s*\K.*' )"
 
 #rm interface_etb/output_opensbt.txt
  

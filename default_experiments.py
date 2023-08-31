@@ -52,8 +52,8 @@ def getExp2() -> Experiment:
                           simulation_time=5,
                           sampling_time=0.25)
     config = DefaultSearchConfiguration()
-    config.population_size = 20
-    config.n_generations = 20
+    config.population_size = 2
+    config.n_generations = 5
     experiment = Experiment(
                             name="2",
                             problem=problem,
