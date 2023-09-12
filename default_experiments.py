@@ -167,7 +167,7 @@ def getExp5() -> Experiment:
 experiments_store.register(getExp5())
 
 '''
-Pure Sampling for BNH Problem
+Random Sampling for BNH Problem
 '''
 def getExp99() -> Experiment:
     problem = PymooTestProblem(
@@ -175,10 +175,10 @@ def getExp99() -> Experiment:
             critical_function=CriticalBnhDivided())
 
     config = DefaultSearchConfiguration()
-    config.population_size = 27    # defines the number of samples for a single axis
+    config.population_size = 10   # defines the number of samples for a single axis
     experiment = Experiment(name="99",
                             problem=problem,
-                            algorithm=AlgorithmType.PS,
+                            algorithm=AlgorithmType.PS_RAND,
                             search_configuration=config)
 
     return experiment  

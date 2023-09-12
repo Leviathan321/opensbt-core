@@ -1,4 +1,5 @@
 import pymoo
+
 from model_ga.individual import IndividualSimulated
 pymoo.core.individual.Individual = IndividualSimulated
 
@@ -11,14 +12,18 @@ pymoo.core.result.Result = SimulationResult
 from model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
+from algorithm.ps_fps import PureSamplingFPS
+from algorithm.ps_grid import PureSamplingGrid
+from algorithm.ps_rand import PureSamplingRand
+from algorithm.nsga2_optimizer import *
+from algorithm.pso_optimizer import *
 from algorithm.algorithm import AlgorithmType
-from algorithm.ps import PureSampling
+
 import argparse
 import logging as log
 import os
 import sys
-from algorithm.nsga2_optimizer import *
-from algorithm.pso_optimizer import *
+
 from experiment.experiment_store import experiments_store
 from default_experiments import *
 
@@ -154,26 +159,30 @@ if __name__ == "__main__":
         optimizer = NsgaIIOptimizer(
                               problem=problem,
                               config=config)
-
-        res = optimizer.run()
-        res.write_results(results_folder=results_folder, params = optimizer.parameters)
     elif algorithm == AlgorithmType.PSO:
         print("pymoo PSO algorithm is used.")
         optimizer = PSOOptimizer(
                               problem=problem,
                               config=config)
-
-        res = optimizer.run()
-        res.write_results(results_folder=results_folder, params = optimizer.parameters)
-    elif algorithm == AlgorithmType.PS:
+    elif algorithm == AlgorithmType.PS_RAND:
         print("pymoo PureSampling algorithm is used.")
-        optimizer = PureSampling(
-                                    problem=problem,
-                                    config=config)
-        res = optimizer.run()
-        res.write_results(results_folder=results_folder, params = optimizer.parameters)
+        optimizer = PureSamplingRand(
+                              problem=problem,
+                              config=config)
+    elif algorithm == AlgorithmType.PS_GRID:
+        print("pymoo PureSampling algorithm is used.")
+        optimizer = PureSamplingGrid(
+                              problem=problem,
+                              config=config)
+    elif algorithm == AlgorithmType.PS_FPS:
+        print("pymoo PureSampling algorithm is used.")
+        optimizer = PureSamplingFPS(
+                              problem=problem,
+                              config=config)
     else:
         raise ValueError("Error: No algorithm with the given code: " + str(algorithm))
 
- 
+    res = optimizer.run()
+    res.write_results(results_folder=results_folder, params = optimizer.parameters)
+
     print("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")

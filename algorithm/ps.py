@@ -1,9 +1,22 @@
 
 
 import pymoo
+
+from model_ga.individual import IndividualSimulated
+pymoo.core.individual.Individual = IndividualSimulated
+
+from model_ga.population import PopulationExtended
+pymoo.core.population.Population = PopulationExtended
+
+from model_ga.result  import SimulationResult
+pymoo.core.result.Result = SimulationResult
+
+from model_ga.problem import SimulationProblem
+pymoo.core.problem.Problem = SimulationProblem
+
+from pymoo.core.algorithm import Algorithm
 from algorithm.optimizer import Optimizer
-from simulation.simulator import SimulationOutput
-from utils.sampling import CartesianSampling
+
 import os
 import sys
 from pathlib import Path
@@ -27,38 +40,110 @@ from evaluation.critical import Critical
 from experiment.search_configuration import DefaultSearchConfiguration, SearchConfiguration
 from problem.pymoo_test_problem import PymooTestProblem
 from simulation.simulator import SimulationOutput
+from visualization import visualizer
 import quality_indicators.metrics.spread as qi
 import logging as log
-
+from utils.evaluation import evaluate_individuals
 from model_ga.result import *
+import time
 
 ALGORITHM_NAME = "RS"
 RESULTS_FOLDER = os.sep + "results" + os.sep + "single" +  os.sep
 WRITE_ALL_INDIVIDUALS = True
 
-''' We used the NSGAII algorithm, but with only one iteration.
-    I.e. individuals are only evaluated which have been genereated using a sampling strategy
-'''
 class PureSampling(Optimizer):
     
     algorithm_name = ALGORITHM_NAME
 
     def __init__(self,
                 problem: Problem,
-                config: SearchConfiguration):
+                config: SearchConfiguration,
+                sampling_type = FloatRandomSampling):
 
         self.config = config
         self.problem = problem
         self.res = None
-        self.algorithm = NSGA2(
-            pop_size=config.population_size,                 
-            sampling=CartesianSampling(),        # specify the rs sampling method here
-            eliminate_duplicates=True)
-        self.parameters = {
-           "number_of_samples" : pow(config.population_size, problem.n_var)
+        self.sampling_type = sampling_type
+        self.sample_size = config.population_size
+        self.n_splits = 10 # divide the population by this size 
+                         # to make the algorithm iterative for further analysis
+        self.parameters = { 
+                            "sample_size" : self.sample_size
         }
-        # only one iteration means we only evaluate on time pop size solutions
-        self.termination = get_termination("n_gen", 1)
-        self.save_history = True
-        
         log.info(f"Initialized algorithm with config: {config.__dict__}")
+
+    def run(self) -> SimulationResult:
+
+        problem = self.problem
+        sample_size = self.sample_size
+        sampled = self.sampling_type()(problem,sample_size)
+        n_splits = self.n_splits
+        start_time = time.time()
+
+        pop = evaluate_individuals(sampled, problem)
+
+        execution_time = time.time() - start_time
+
+        # create result object
+
+        self.res = PureSampling.create_result(problem, pop, execution_time, n_splits)
+        
+        return self.res 
+    
+    def create_result(problem, pop, execution_time, n_splits):
+        res_holder = SimulationResult()
+        res_holder.algorithm = Algorithm()
+        res_holder.algorithm.pop = pop
+        res_holder.algorithm.evaluator.n_eval = len(pop)
+        res_holder.problem = problem
+        res_holder.algorithm.problem = problem
+        res_holder.exec_time = execution_time
+        res_holder.opt = get_nondominated_population(pop)
+        res_holder.algorithm.opt = res_holder.opt
+
+        res_holder.history = []  # history is the same instance 
+        n_bucket = len(pop) // n_splits
+    
+        pop_sofar = 0
+        for i in range(0,n_splits):
+            
+            algo = Algorithm()
+            algo.pop = pop[(i*n_bucket):min((i+1)*n_bucket,len(pop))]
+            pop_sofar += len(algo.pop)
+            algo.evaluator.n_eval = pop_sofar
+            algo.opt = get_nondominated_population(algo.pop)
+            res_holder.history.append(algo)
+        
+        return res_holder
+
+    # def write_results(self, results_folder = RESULTS_FOLDER, params=None):
+    #     algorithm_name = self.algorithm_name
+    #     if self.res is None:
+    #         log.info("Result object is None. Execute algorithm first, before writing results.")
+    #         return
+    #     log.info(f"=====[{ALGORITHM_NAME}] Writing results...")
+    #     config = self.config
+    #     res = self.res
+    
+    #     save_folder = visualizer.create_save_folder(res.problem, results_folder, algorithm_name)
+        
+    #     # Analysis
+    #     visualizer.convergence_analysis(self, save_folder)
+    #     visualizer.hypervolume_analysis(self, save_folder)
+    #     visualizer.spread_analysis(self, save_folder)
+        
+    #     # Basis Output
+    #     visualizer.write_calculation_properties(res,save_folder,algorithm_name,params)
+    #     visualizer.design_space(res, save_folder)
+    #     visualizer.objective_space(res, save_folder)
+    #     visualizer.optimal_individuals(res, save_folder)
+    #     visualizer.write_summary_results(res, save_folder)
+    #     visualizer.write_simulation_output(res,save_folder)
+    #     visualizer.simulations(res, save_folder)
+    #     visualizer.all_critical_individuals(res, save_folder)
+
+    #     if WRITE_ALL_INDIVIDUALS:
+    #         visualizer.all_individuals(res, save_folder)
+
+    #     #persist results object
+    #     res.persist(save_folder + "backup")

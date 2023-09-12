@@ -3,6 +3,7 @@ import numpy as np
 from pymoo.core.result import Result
 from model_ga.population import PopulationExtended as Population
 from model_ga.individual import IndividualSimulated as Individual
+from pymoo.core.algorithm import Algorithm
 from utils.sorting import *
 import dill
 import os
@@ -67,13 +68,23 @@ class SimulationResult(Result):
         
     def write_results(self, results_folder = RESULTS_FOLDER, params=None):
         algorithm = self.algorithm
-        algorithm_name = algorithm.__class__.__name__        
-        
+
+
+        # WHen algorithm is developed without subclassing pymoos Algorithm,
+        # we need to use the explicit algorithm name passed via params
+
+        if type(algorithm) is Algorithm:
+            algorithm_name = params["algorithm_name"] 
+        else:
+            algorithm_name = algorithm.__class__.__name__ 
+          
         print(f"=====[{algorithm_name}] Writing results to: ")
 
         save_folder = visualizer.create_save_folder(self.problem, results_folder, algorithm_name)
         print(save_folder)
-
+        
+        # Mostly for algorithm evaluation relevant
+        
         # visualizer.convergence_analysis(self, save_folder)
         # visualizer.hypervolume_analysis(self, save_folder)
         # visualizer.spread_analysis(self, save_folder)

@@ -5,4 +5,6 @@ from enum import Enum
 class AlgorithmType(Enum):
     NSGAII = 1
     PSO = 2 
-    PS = 99
+    PS_RAND= 3 
+    PS_GRID = 4 
+    PS_FPS = 5
