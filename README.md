@@ -33,7 +33,7 @@ bash install.sh
 
 ## Getting Started
 After installing OpenSBT, you can try following examples which show how to use OpenSBT for testing. We have also provided a virtual machine
-where you can try OpenSBT on the first example (TODO).
+where you can execute these example (TODO).
 
 - CARLA PID Agent Testing in CARLA Simulator 
 - AEB Agent Testing in CARLA Simulator
@@ -41,7 +41,7 @@ where you can try OpenSBT on the first example (TODO).
 - Simple Agent Testing in Dummy Simulator (Check whether this is the right place)
 
 Also we have provided [jupyter notebooks](doc/jupyter/) which explain step-by-step 
-a) (How to define fitness functions)[]
+a) (How to run the implemented testing examples)[]
 b) (How to integrate/implement a new testing algorithm in OpenSBT)[]
 c) (How to define a testing experiment)[]
 
