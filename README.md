@@ -40,7 +40,7 @@ where you can try OpenSBT on the first example (TODO).
 - Simulink-based Agent Testing in PreScan Simulator (Can we call it example if we cannot share code)
 - Simple Agent Testing in Dummy Simulator (Check whether this is the right place)
 
-Also we have provided [jupyter notebooks]() which explain step-by-step 
+Also we have provided [jupyter notebooks](doc/jupyter/) which explain step-by-step 
 a) (How to define fitness functions)[]
 b) (How to integrate/implement a new testing algorithm in OpenSBT)[]
 c) (How to define a testing experiment)[]
@@ -66,6 +66,7 @@ In the following we describe how to execute the examples implemented in OpenSBT 
 (download the moduls, build, pip install, adjust paths should be fine)
 
 (+ *in CarlaSimulation the agent flag should be set.@Tiziano: can we pass this directly when we define the experiment*)
+
 2. Run the experiment X in default experiments (need to check whether we put the experiments in an extra folder, since this should not be part of the "basic" opensbt files)
 
 3. Observe that output files are generated
@@ -76,7 +77,9 @@ In the following we describe how to execute the examples implemented in OpenSBT 
 1. Goto PrescanRunner repo, follow the instructions to install the PrescanRunner 
 (download the moduls, build, pip install)
 
-*Important:  
+2. Run the experiment X in default experiments (need to check whether we put the experiments in an extra folder, since this should not be part of the "basic" opensbt files)
+
+3. Observe that output files are generated
 
 
 ## Usage
