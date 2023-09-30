@@ -1,9 +1,7 @@
 import numpy as np
-
 from pymoo.core.result import Result
 from model_ga.population import PopulationExtended as Population
 from model_ga.individual import IndividualSimulated as Individual
-from pymoo.core.algorithm import Algorithm
 from utils.sorting import *
 import dill
 import os
@@ -69,14 +67,14 @@ class SimulationResult(Result):
     def write_results(self, results_folder = RESULTS_FOLDER, params=None):
         algorithm = self.algorithm
 
-
         # WHen algorithm is developed without subclassing pymoos Algorithm,
         # we need to use the explicit algorithm name passed via params
 
-        if type(algorithm) is Algorithm:
-            algorithm_name = params["algorithm_name"] 
-        else:
-            algorithm_name = algorithm.__class__.__name__ 
+        # if type(algorithm) is Algorithm:
+        #     algorithm_name = params["algorithm_name"] 
+        # else:
+        # 
+        algorithm_name = algorithm.__class__.__name__ 
           
         print(f"=====[{algorithm_name}] Writing results to: ")
 
