@@ -29,9 +29,7 @@ from default_experiments import *
 from utils.log_utils import *
 os.chmod(os.getcwd(), 0o777)
 
-# log.basicConfig(handlers=[log.FileHandler(filename="./log.txt", encoding='utf-8', mode='w'),  
-#                           log.StreamHandler()],
-#                 level=log.INFO)
+logger = log.getLogger(__name__)
 
 setup_logging("./log.txt")
 disable_pymoo_warnings()
@@ -154,27 +152,27 @@ if __name__ == "__main__":
     execTime = None
     opt = None
     if algorithm == AlgorithmType.NSGAII:
-        log.info("pymoo NSGA-II algorithm is used.")
+        log.info("Pymoo NSGA-II algorithm is used.")
         optimizer = NsgaIIOptimizer(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PSO:
-        log.info("pymoo PSO algorithm is used.")
+        log.info("Pymoo PSO algorithm is used.")
         optimizer = PSOOptimizer(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_RAND:
-        log.info("pymoo PureSampling algorithm is used.")
+        log.info("Pymoo PureSampling algorithm is used.")
         optimizer = PureSamplingRand(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_GRID:
-        log.info("pymoo PureSampling algorithm is used.")
+        log.info("Pymoo PureSampling algorithm is used.")
         optimizer = PureSamplingGrid(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_FPS:
-        log.info("pymoo PureSampling algorithm is used.")
+        log.info("Pymoo PureSampling algorithm is used.")
         optimizer = PureSamplingFPS(
                               problem=problem,
                               config=config)

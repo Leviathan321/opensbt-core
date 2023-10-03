@@ -337,7 +337,8 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
                                                   facecolor=region_color, alpha=0.05))
 
             ax = plt.subplot(111)
-            plt.title("Design Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
+
+            plt.title(f"{res.algorithm.__class__.__name__}\nDesign Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
 
             if classification_type == ClassificationType.DT:
                 for algo in hist:
@@ -413,7 +414,7 @@ def objective_space(res, save_folder, iteration=None):
     for axis_x in range(n_obj - 1):
         for axis_y in range(axis_x + 1, n_obj):
             ax = plt.subplot(111)
-            plt.title("Objective Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
+            plt.title(f"{res.algorithm.__class__.__name__}\nObjective Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
 
             if True: #classification_type == ClassificationType.DT:
                 for algo in hist:
