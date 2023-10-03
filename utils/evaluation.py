@@ -8,6 +8,5 @@ def evaluate_individuals(population: Population, problem: Problem):
         dict_individual = {}
         for item,value in out_all.items():
             dict_individual[item] = value[index]
-        #print(f"setting evaluation result {dict_individual}")
         ind.set_by_dict(**dict_individual)
     return population

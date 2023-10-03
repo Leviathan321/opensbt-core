@@ -26,16 +26,15 @@ import sys
 
 from experiment.experiment_store import experiments_store
 from default_experiments import *
-
+from utils.log_utils import *
 os.chmod(os.getcwd(), 0o777)
 
-log.basicConfig(handlers=[log.FileHandler(filename="./log.txt", encoding='utf-8', mode='w'),  
-                          log.StreamHandler()],
-                level=log.INFO)
+# log.basicConfig(handlers=[log.FileHandler(filename="./log.txt", encoding='utf-8', mode='w'),  
+#                           log.StreamHandler()],
+#                 level=log.INFO)
 
-from pymoo.config import Config
-
-Config.warnings['not_compiled'] = False
+setup_logging("./log.txt")
+disable_pymoo_warnings()
 
 results_folder = '/results/'
 
@@ -79,10 +78,10 @@ args = parser.parse_args()
 
 
 if args.show_info:
-    print("Experiments with the following names are defined:")
+    log.info("Experiments with the following names are defined:")
     store = experiments_store.get_store()
     for name in store.keys():
-        print(name)
+        log.info(name)
     
     sys.exit(0)
 
@@ -90,16 +89,16 @@ parser.add_argument('-list', dest='show_info', action='store_false',
                     help='List name of all defined experiments')
 
 if args.exp_number and args.scenario_path:
-    print("Flags set not correctly: Experiment file and example experiment cannot be set at the same time")
+    log.info("Flags set not correctly: Experiment file and example experiment cannot be set at the same time")
     sys.exit()
 elif not (args.exp_number or args.scenario_path):
-    print("Flags set not correctly: No file is provided or no example experiment selected.")
+    log.info("Flags set not correctly: No file is provided or no example experiment selected.")
     sys.exit()
 
 ###### set experiment
 ####### have indiviualized imports
 if args.exp_number:
-    print(f"Selected experiment: {args.exp_number}")
+    log.info(f"Selected experiment: {args.exp_number}")
     experiment = experiments_store.load(experiment_name=args.exp_number)
     config = experiment.search_configuration
     problem = experiment.problem
@@ -111,20 +110,20 @@ elif (args.scenario_path):
     var_max = []
     #TODO create an ADASProblem from user input
     #TODO create an experiment from user input
-    print("-- Experiment provided by file")
+    log.info("-- Experiment provided by file")
 
     if args.var_min is None:
-        print("-- Minimal bounds for search are not set.")
+        log.info("-- Minimal bounds for search are not set.")
         sys.exit()
 
     if args.var_max is None:
-        print("-- Maximal bounds for search are not set.")
+        log.info("-- Maximal bounds for search are not set.")
         sys.exit()
 
-    print("Creating an experiment from user input not yet supported. Use default_experiments.py to create experiment")
+    log.info("Creating an experiment from user input not yet supported. Use default_experiments.py to create experiment")
     sys.exit()
 else:
-    print("-- No file provided and no experiment selected")
+    log.info("-- No file provided and no experiment selected")
     sys.exit()
 
 '''
@@ -155,27 +154,27 @@ if __name__ == "__main__":
     execTime = None
     opt = None
     if algorithm == AlgorithmType.NSGAII:
-        print("pymoo NSGA-II algorithm is used.")
+        log.info("pymoo NSGA-II algorithm is used.")
         optimizer = NsgaIIOptimizer(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PSO:
-        print("pymoo PSO algorithm is used.")
+        log.info("pymoo PSO algorithm is used.")
         optimizer = PSOOptimizer(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_RAND:
-        print("pymoo PureSampling algorithm is used.")
+        log.info("pymoo PureSampling algorithm is used.")
         optimizer = PureSamplingRand(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_GRID:
-        print("pymoo PureSampling algorithm is used.")
+        log.info("pymoo PureSampling algorithm is used.")
         optimizer = PureSamplingGrid(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_FPS:
-        print("pymoo PureSampling algorithm is used.")
+        log.info("pymoo PureSampling algorithm is used.")
         optimizer = PureSamplingFPS(
                               problem=problem,
                               config=config)
@@ -185,4 +184,4 @@ if __name__ == "__main__":
     res = optimizer.run()
     res.write_results(results_folder=results_folder, params = optimizer.parameters)
 
-    print("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")
+    log.info("====== Algorithm search time: " + str("%.2f" % res.exec_time) + " sec")

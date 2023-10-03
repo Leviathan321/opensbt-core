@@ -22,6 +22,7 @@ from model_ga.problem import *
 from model_ga.result import *
 from typing import Dict
 from utils.duplicates import duplicate_free
+import logging as log
 
 
 WRITE_ALL_INDIVIDUALS = True
@@ -39,7 +40,7 @@ def create_save_folder(problem: Problem, results_folder: str, algorithm_name: st
         save_folder = str(
             os.getcwd()) + results_folder + problem_name + os.sep + algorithm_name + os.sep + datetime.now().strftime(
             "%d-%m-%Y_%H-%M-%S") + os.sep
-    #print(f"save_folder created: {save_folder}")
+    #log.info(f"save_folder created: {save_folder}")
     Path(save_folder).mkdir(parents=True, exist_ok=True)
     return save_folder
 
@@ -118,7 +119,7 @@ def write_simulation_output(res: Result, save_folder: str):
         f.close()
 
 def convergence_analysis(res: Result, save_folder: str, input_pf=None):
-    print("------ Performing igd analysis ------")
+    log.info("------ Performing igd analysis ------")
 
     eval_result = Quality.calculate_igd(res, input_pf=input_pf)
     if eval_result is None:
@@ -153,7 +154,7 @@ def write_metric_history(n_evals, hist_F, metric_name, save_folder):
         f.close()
 
 def hypervolume_analysis(res, save_folder):
-    print("------ Performing hv analysis ------")
+    log.info("------ Performing hv analysis ------")
     eval_result = Quality.calculate_hv_hitherto(res)
     
     if eval_result is None:
@@ -173,7 +174,7 @@ def hypervolume_analysis(res, save_folder):
     write_metric_history(n_evals, hv, 'hv_all', save_folder)
 
 def hypervolume_analysis_local(res, save_folder):
-    print("------ Performing hv analysis ------")
+    log.info("------ Performing hv analysis ------")
 
     eval_result = Quality.calculate_hv(res)
     if eval_result is None:
@@ -193,7 +194,7 @@ def hypervolume_analysis_local(res, save_folder):
     write_metric_history(n_evals, hv,'hv_local_all',save_folder)
 
 def spread_analysis(res, save_folder):
-    print("------ Performing sp analysis ------")
+    log.info("------ Performing sp analysis ------")
 
     eval_result = Quality.calculate_sp(res)
     if eval_result is None:
@@ -611,4 +612,4 @@ def simulations(res, save_folder):
             param_values = res.opt.get("X")[index]
             scenario_plotter.plot_scenario_gif(param_values, simout, save_folder_gif, file_name)
     else:
-        print("No simulation visualization available. The experiment is not a simulation.")
+        log.info("No simulation visualization available. The experiment is not a simulation.")

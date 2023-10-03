@@ -13,7 +13,6 @@ from pymoo.util.normalization import denormalize
    ((TODO Pass number of samples for each axis via algorithm definition))
 '''
 def cartesian_by_bounds(n_var, xl, xu, n_samples_one_axis):
-    print(n_samples_one_axis)
     n_samples_by_axis = [n_samples_one_axis] * n_var
     X = [np.linspace(0, 1, n) for n in n_samples_by_axis]
     grid = np.meshgrid(*X)

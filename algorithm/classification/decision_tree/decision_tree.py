@@ -5,6 +5,7 @@ import os
 import pymoo.core.population
 import pydotplus
 import csv
+import logging as log
 
 MIN_SAMPLES_SPLIT = 0.07
 MIN_SAMPLES_LEAF = 5

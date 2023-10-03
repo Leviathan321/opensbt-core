@@ -7,6 +7,7 @@ import dill
 import os
 from pathlib import Path
 from visualization import visualizer
+import logging as log
 
 RESULTS_FOLDER = os.sep + "results" + os.sep
 WRITE_ALL_INDIVIDUALS = True
@@ -76,10 +77,10 @@ class SimulationResult(Result):
         # 
         algorithm_name = algorithm.__class__.__name__ 
           
-        print(f"=====[{algorithm_name}] Writing results to: ")
+        log.info(f"=====[{algorithm_name}] Writing results to: ")
 
         save_folder = visualizer.create_save_folder(self.problem, results_folder, algorithm_name)
-        print(save_folder)
+        log.info(save_folder)
         
         # Mostly for algorithm evaluation relevant
         
