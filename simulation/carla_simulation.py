@@ -1,11 +1,14 @@
 from pathlib import Path
 from typing import List, Dict
-from carla_simulation.balancer import Balancer
 from simulation.simulator import Simulator, SimulationOutput
-import logging
+import logging as log
 import json
 import os
 from model_ga.individual import Individual
+try:
+    from carla_simulation.balancer import Balancer
+except Exception:
+    log.info("Carla Simulation adapter could not have been imported")
 
 SCENARIO_DIR = "/tmp/scenarios"
 

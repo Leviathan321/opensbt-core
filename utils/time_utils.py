@@ -1,5 +1,4 @@
 def convert_pymoo_time_to_seconds(pymoo_time: str) -> int:
-    print(pymoo_time)
     res = pymoo_time.split(":")
     H = int(res[0])
     M = int(res[1])

@@ -4,7 +4,7 @@ from math import sin, cos, pi, ceil
 import numpy as np
 from random import random
 from utils.geometric import *
-
+import logging as log
 from utils import geometric
 import json
 
@@ -75,7 +75,7 @@ class DummySimulator(Simulator):
         # first position is real
         k = 1
         for i in range(1,n_steps):
-            #print(f"current index: {i}")
+            #log.info(f"current index: {i}")
             current_size = real_ego_traj[1,:]
             if len(current_size) < n_steps:
                 pos_ego = [real_ego_traj[1,-1],real_ego_traj[2,-1]]
@@ -93,7 +93,7 @@ class DummySimulator(Simulator):
                     new_state =  np.asarray([[new_t],[new_x],[new_y], [new_v], [new_yaw]])
                     real_ego_traj = np.append(real_ego_traj, new_state, axis = 1)
                     # waiting_steps += t_stop - 1
-                    # print(f"waiting_steps: {waiting_steps}")
+                    # log.info(f"waiting_steps: {waiting_steps}")
                 else:     
                     new_t =  plan_ego_traj[0, k] 
                     new_x =  plan_ego_traj[1, k] 
@@ -106,7 +106,7 @@ class DummySimulator(Simulator):
                     new_state =  np.asarray([[new_t],[new_x],[new_y], [new_v], [new_yaw]])
                     real_ego_traj = np.append(real_ego_traj, new_state, axis = 1)
                     k += 1
-                #print(f"len(real_ego_traj[3, :]): {len(real_ego_traj[3, :])}")
+                #log.info(f"len(real_ego_traj[3, :]): {len(real_ego_traj[3, :])}")
 
         # add some noise to location vector
         ego_location = [pos for pos in zip(list(real_ego_traj[1, :]), list(real_ego_traj[2, :]))]
@@ -205,5 +205,5 @@ def planMotion(startingPosition, orientation, velocity, simTime, samplingTime):
     # arrayV_y = arrayV * cos(theta * pi / 180)
     arrayYaw = theta * np.ones(arrayTime.size)
 
-    # print('theta = ', theta, 'v_x = ', arrayV_x, 'v_y = ', arrayV_y)
+    # log.info('theta = ', theta, 'v_x = ', arrayV_x, 'v_y = ', arrayV_y)
     return np.concatenate((arrayTime, arrayX, arrayY, arrayV, arrayYaw)).reshape(5, asize)
