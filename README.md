@@ -12,82 +12,29 @@ A demo video of OpenSBT can be found here: https://www.youtube.com/watch?v=oOyug
 
 [<img src="doc/figures/OpenSBT_architecture.png" width="500"/>]()
 
-OpenSBT builds upon [Pymoo](https://pymoo.org/). It extends internal models as Individual, Result to apply SBT of ADS.
-Further it provides three interfaces/abstractions to integrate 
-SBT component in a modular way.
-OpenSBT provides already extensions for the simulation of test cases in the [Prescan](https://git.fortiss.org/opensbt/prescan_runner) and [CARLA Simulator](https://git.fortiss.org/opensbt/carla-runner). 
-
-In this branch is an example of SBT using the CARLA Simulator provided. An examplary integration of PRESCAN with the Prescan runner is provided here:
-https://git.fortiss.org/opensbt/opensbt-core/-/tree/ASE_prescan_experiment.
+OpenSBT builds upon [Pymoo](https://pymoo.org/) and extends internal optimization related models to tailor heuristic search algorithms for testing ADS systems.
 
 ## Installation
 
-OpenSBT is available as a [PIP-package](TODO). OpenSBT requires python to be installed. Compatibility has been tested with python 3.7 and 3.8. 
-If OpenSBT is downloaded directly from this repo, it is recommented to create a virtual environment and install all dependencies in this environment by executing:
+OpenSBT requires python to be installed and its compatibality has been tested with python 3.7 and 3.8. OpenSBT can be run as a standalone application or can be imported as a library. To use it in the standalone mode follow the installation instructions [here](/doc/jupyter/01_Installation.ipynb). To import it as a library you need to install the correspnding pip package [PIP-package](TODO). 
 
-```bash
-bash install.sh
-```
-
-*Note: For windows use as the second command 'source venv/Scripts/activate' instead.*
-
-## Getting Started
-After installing OpenSBT, you can try following examples which show how to use OpenSBT for testing. We have also provided a virtual machine
-where you can execute these example (TODO).
-
-- CARLA PID Agent Testing in CARLA Simulator 
-- AEB Agent Testing in CARLA Simulator
-- Simulink-based Agent Testing in PreScan Simulator (Can we call it example if we cannot share code)
-- Simple Agent Testing in Dummy Simulator (Check whether this is the right place)
-
-Also we have provided [jupyter notebooks](doc/jupyter/) which explain step-by-step 
-a) (How to run the implemented testing examples)[]
-b) (How to integrate/implement a new testing algorithm in OpenSBT)[]
-c) (How to define a testing experiment)[]
-
-OpenSBT can be run as a standalone application or can be imported as a library. To import it as a library you just need to install the correspnding pip package. To use it standalone you need to run `python run.py` with different flags (TODO) from the OpenSBTs main folder.
-
-This will invoke experiments which are registered in OpenSBT. The benefit of using the standalone mode is that we can by setting flags vary search parameters, the search space, the algorithm or the experiment without modifying the python code.
-
-In the following we describe how to execute the examples implemented in OpenSBT using the standalone mode.
-
-### PID Agent (CARLA)
-
-1. Goto CarlaRunner repo, follow the instructions to install the CarlaRunner 
-(download the moduls, build, pip install, adjust paths should be fine)
-
-2. Run the experiment Y in default experiments (need to check whether we put the experiments in an extra folder, since this should not be part of the "basic" opensbt files)
-
-3. Observe that output files are generated
-
-### Rover Agent (CARLA)
-
-1. Goto CarlaRunner repo, follow the instructions to install the CarlaRunner 
-(download the moduls, build, pip install, adjust paths should be fine)
-
-(+ *in CarlaSimulation the agent flag should be set.@Tiziano: can we pass this directly when we define the experiment*)
-
-2. Run the experiment X in default experiments (need to check whether we put the experiments in an extra folder, since this should not be part of the "basic" opensbt files)
-
-3. Observe that output files are generated
-
-### Simulink-based Agent (PreScan) 
-(*We can only provide a demo, if we an share some example Prescan experiment?*)
-
-1. Goto PrescanRunner repo, follow the instructions to install the PrescanRunner 
-(download the moduls, build, pip install)
-
-2. Run the experiment X in default experiments (need to check whether we put the experiments in an extra folder, since this should not be part of the "basic" opensbt files)
-
-3. Observe that output files are generated
-
+The benefit of using the standalone mode is that we can modify and execute existing testing experiments by using command line flags/operations.
 
 ## Usage
 
+After having installed OpenSBT, you can follow the tutorials provided as [jupyter notebooks](doc/jupyter/) which explain step-by-step of how to use OpenSBT.
+In these tutorials, we have integrated 
 
-### Optional Parameters
+- [1] A simplified SUT simulated in very simplistic simulator (linear motion planning) 
+- [2] A real AEB agent simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner).
 
-All flags that can be set are (get options by -h flag):
+Note: We have also implemented a [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) for the execution of Prescan experiments.
+
+We have also provided a [virtual machine]() where you can execute the jupyter notebooks with the dummy simulator.
+
+## Flags
+
+Following flags can be set when running OpenSBT in the standalone mode (via python run.py):
 
 ```
  -h, --help            show this help message and exit
@@ -108,11 +55,6 @@ All flags that can be set are (get options by -h flag):
   -v                    Whether to use the simuator's visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.
   -info                 Names of all defined experiments.
 ```
-
-## Features to be implemented
-
-- [ ] Improve the architecture to define algorithms
-- [ ] Implement graphical user interface
 
 ## FAQs
 
