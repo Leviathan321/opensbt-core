@@ -22,5 +22,6 @@ venv/
 
 # Temporary files
 carla_simulation/temp
+doc/jupyter/.ipynb_checkpoints/*
 
 results

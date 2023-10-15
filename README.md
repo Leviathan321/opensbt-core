@@ -32,7 +32,25 @@ Note: We have also implemented a [simulator adapter](https://git.fortiss.org/ope
 
 We have also provided a [virtual machine]() where you can execute the jupyter notebooks with the dummy simulator.
 
+
+## Results Output
+
+OpenSBT produces several artefacts. All artefacts are written into the *results* folder in a folder named as the problem name. 
+OpenSBT generates the following outputs:
+
+
+| Type | Description | Example | 
+|:--------------|:-------------:|--------------:|
+| Design Space Plot | Visualization of all evaluated test cases in the input space + of predited critical regions using the decision tree algorithm. Constraints of derived regions are stored in CSV file [bounds_regions.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/bounds_regions.csv) and the learned tree in [tree.pdf](example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/tree.pdf) | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>  |
+| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/gif/0_trajectory.gif" alt="Scenario Visualization" width="600"/> |
+Objective Space Plot | Visualization of fitness values of evaluated test cases   | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex1/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/> |
+| All Testcases |  CSV file of all test inputs of all evaluated testcases | [all_testcases.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/all_testcases.csv) |
+| All Critical Testcases |  CSV file of all critical test inputs of all evaluated testcases | [critical_testcases.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/critical_testcases.csv)|
+| Calculation Properties |  CSV file of all experiment configuration parameters (e.g. algorithm parameters, such as population size, number iterations; search space, fitness function etc..).  | [calculation_properties.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/calculation_properties.csv) |
+| Evaluation Results |  CSV file containing performance values of the algorithm, e.g., number critical test cases found in relation to all evaluations, execution time.| [summary_results.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/summary_results.csv)|
+
 ## Flags
+
 
 Following flags can be set when running OpenSBT in the standalone mode (via python run.py):
 
