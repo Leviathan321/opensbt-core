@@ -170,7 +170,7 @@ class DummySimulator(Simulator):
         else:
             otherParams['isCollision'] = False
         result["otherParams"] = otherParams
-
+      
         return SimulationOutput.from_json(json.dumps(result))
     
 def are_actors_nearby(pos_ego, pos_others, detection_dist=3):

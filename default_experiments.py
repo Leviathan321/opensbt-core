@@ -144,7 +144,7 @@ def getExp5() -> Experiment:
 
     problem = ADASProblem(
                           problem_name="DummySimulatorProblem",
-                          scenario_path="",
+                          scenario_path="scenarios/dummy_scenario.xosc",
                           xl=[0, 1, 0, 1],
                           xu=[360, 3,360, 3],
                           simulation_variables=[
