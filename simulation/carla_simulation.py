@@ -29,12 +29,12 @@ class CarlaSimulator(Simulator):
         xosc = scenario_path
         try:
             for ind in list_individuals:
-                logging.info("provided following values:")
+                log.info("provided following values:")
                 instance_values = [v for v in zip(variable_names,ind)]
-                logging.info(instance_values)
+                log.info(instance_values)
                 CarlaSimulator.create_scenario_instance_xosc(xosc, dict(instance_values), outfolder=SCENARIO_DIR)
 
-            logging.info("++ running scenarios with carla ++ ")
+            log.info("++ running scenarios with carla ++ ")
 
             if CarlaSimulator._balancer is None:
                 CarlaSimulator._balancer = Balancer(
@@ -58,7 +58,7 @@ class CarlaSimulator(Simulator):
 
         finally:
 
-            logging.info("++ removing temporary scenarios ++")
+            log.info("++ removing temporary scenarios ++")
 
             file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".xosc") ]
             for f in file_list:

@@ -28,7 +28,7 @@ def getExp1() -> Experiment:
                           simulation_time=10,
                           sampling_time=100,
                           approx_eval_time=10,
-                          do_visualize = False
+                          do_visualize = True
                           )
     experiment = Experiment(name="1",
                             problem=problem,
