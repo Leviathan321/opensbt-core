@@ -30,9 +30,6 @@ In these tutorials, we have integrated
 
 Note: We have also implemented a [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) for the execution of Prescan experiments.
 
-We have also provided a [virtual machine]() where you can execute the jupyter notebooks with the dummy simulator.
-
-
 ## Results Output
 
 OpenSBT produces several artefacts. All artefacts are written into the *results* folder in a folder named as the problem name. 
