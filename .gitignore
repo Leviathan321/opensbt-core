@@ -25,3 +25,9 @@ carla_simulation/temp
 doc/jupyter/.ipynb_checkpoints/*
 
 /results
+
+# Testing
+doc/jupyter/opensbt-core
+doc/jupyter/tmp
+doc/jupyter/venv
+doc/jupyter/.ipynb_checkpoints
