@@ -63,9 +63,7 @@ class SimulationOutput(object):
 
 
 class Simulator(ABC):
-    sim_time = 10
-    time_step = 0.01
-    
+        
     @abstractstaticmethod
     def simulate(list_individuals: List[Individual], 
                 variable_names: List[str], 
