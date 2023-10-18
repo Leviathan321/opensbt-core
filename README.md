@@ -27,7 +27,7 @@ The main difference is that using the standalone mode allows us to modify and ex
 After having installed OpenSBT, you can follow the tutorials provided as [jupyter notebooks](/doc/jupyter) which explain step-by-step of how to use OpenSBT. In these tutorials, we have integrated:
 
 -  A simplified SUT simulated in very simplistic simulator (linear motion planning, no GPU required) 
--  A real AEB agent simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner).
+-  A real-world FMI-based AEB agent simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner). (link to fortiss lab)
 
 _Note: We have also implemented a [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) for the execution of Prescan experiments._
 
