@@ -10,8 +10,9 @@ A demo video of OpenSBT can be found here: https://www.youtube.com/watch?v=oOyug
 
 ## Architecture
 
-
+<p align="center">
 <div style="text-align:center"><img src="doc/figures/OpenSBT_architecture.png" width="500"/></div>
+</p>
 
 OpenSBT builds upon [Pymoo](https://pymoo.org/) and extends internal optimization related models to tailor heuristic search algorithms for testing ADS systems.
 
@@ -25,7 +26,7 @@ The main difference is that using the standalone mode allows us to modify and ex
 
 After having installed OpenSBT, you can follow the tutorials provided as [jupyter notebooks](/doc/jupyter) which explain step-by-step of how to use OpenSBT. In these tutorials, we have integrated:
 
--  A simplified SUT simulated in very simplistic simulator (linear motion planning) 
+-  A simplified SUT simulated in very simplistic simulator (linear motion planning, no GPU required) 
 -  A real AEB agent simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner).
 
 _Note: We have also implemented a [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) for the execution of Prescan experiments._
@@ -38,7 +39,7 @@ OpenSBT generates the following outputs:
 
 
 | Type | Description | Example | 
-|:--------------|:-------------:|--------------:|
+|:--------------|:-------------|:--------------|
 | Design Space Plot | Visualization of all evaluated test cases in the input space + of predited critical regions using the decision tree algorithm. Constraints of derived regions are stored in CSV file [bounds_regions.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/bounds_regions.csv) and the learned tree in [tree.pdf](example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/tree.pdf) | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="600"/>  |
 | Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/gif/0_trajectory.gif" alt="Scenario Visualization" width="600"/> |
 Objective Space Plot | Visualization of fitness values of evaluated test cases   | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex1/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="600"/> |
