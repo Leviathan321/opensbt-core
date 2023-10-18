@@ -1,0 +1,13 @@
+Attribute,Value
+Problem,PedestrianCrossingStartWalk
+Algorithm,NSGA2
+Fitness function,FitnessMinDistanceVelocityFrontOnly
+Critical function,CriticalAdasFrontCollisions
+Search time,4881.42 sec
+Population size,20
+Number of generations,5
+Number of offsprings,None
+Crossover probability,0.7
+Crossover eta,20
+Mutation probability,0.3333333333333333
+Mutation eta,15

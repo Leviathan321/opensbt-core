@@ -1,0 +1,4 @@
+Index,PedestrianSpeed,FinalHostSpeed,PedestrianEgoDistanceStartWalk,Fitness_Min distance,Fitness_Velocity at min distance
+0,0.814375,25.521336,47.882324,0.260304,-3.660963
+1,0.821739,33.783824,48.706003,0.272687,-5.960930
+2,0.555306,25.559299,8.020245,0.104902,-2.775732
