@@ -12,7 +12,7 @@ class PopulationExtended(Population):
     def divide_critical_non_critical(self):
         if self.size == 0:
             return self, self
-        n_crit = sum(self.get("CB"))
+        n_crit = int(sum(self.get("CB")))
         critical_population = Population.empty(n_crit)
         notcritical_population = Population.empty(len(self) - n_crit)
         i_crit = 0

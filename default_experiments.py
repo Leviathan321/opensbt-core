@@ -28,7 +28,7 @@ def getExp1() -> Experiment:
                           simulation_time=10,
                           sampling_time=100,
                           approx_eval_time=10,
-                          do_visualize = False
+                          do_visualize = True
                           )
     experiment = Experiment(name="1",
                             problem=problem,
@@ -79,6 +79,8 @@ def getExp2() -> Experiment:
 
     config = DefaultSearchConfiguration()
     config.maximal_execution_time = "00:00:01"
+    config.n_generations = 10
+    config.population_size = 10
     experiment = Experiment(name="2",
                             problem=problem,
                             algorithm=AlgorithmType.NSGAII,
@@ -142,7 +144,7 @@ def getExp5() -> Experiment:
 
     problem = ADASProblem(
                           problem_name="DummySimulatorProblem",
-                          scenario_path="",
+                          scenario_path="scenarios/dummy_scenario.xosc",
                           xl=[0, 1, 0, 1],
                           xu=[360, 3,360, 3],
                           simulation_variables=[
