@@ -14,7 +14,7 @@ A demo video of OpenSBT can be found here: https://www.youtube.com/watch?v=oOyug
 <div style="text-align:center"><img src="doc/figures/OpenSBT_architecture.png" width="500"/></div>
 </p>
 
-OpenSBT builds upon [Pymoo](https://pymoo.org/) and extends internal optimization related models to tailor heuristic search algorithms for testing ADS systems.
+OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optimization related models, to tailor heuristic search algorithms for testing ADS systems.
 
 ## Installation
 
