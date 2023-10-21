@@ -2,7 +2,7 @@
 
 In this folder several tutorials are provided of how to use OpenSBT and apply if for a specific testing problem. The tutorials can be directly executed using the Jupyter Notebook environment. 
 
-Following commands are required to install the Jupyter Notebook environment (On Linux, where Python3.7 is installed):
+Following commands are required to install the Jupyter Notebook environment (On Linux, where Python3.8 is installed):
 
 ```python -m pip install virtualenv```
 ```python -m virtualenv venv```
