@@ -18,7 +18,7 @@ OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optim
 
 ## Installation
 
-OpenSBT requires python to be installed and its compatibality has been tested with python 3.8. OpenSBT can be run as a standalone application or can be imported as a library.  To import it as a library you need to install the correspnding pip package [PIP-package](TODO).
+OpenSBT requires python to be installed and its compatibality has been tested with python 3.8. OpenSBT can be run as a standalone application or can be imported as a library.
 
 Installation instructions are available in the following [jupyter notebook](/doc/jupyter/01_Installation.ipynb).
 
