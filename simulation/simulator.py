@@ -72,10 +72,3 @@ class Simulator(ABC):
                 time_step: float = 0.01, 
                 do_visualize: bool = True) -> List[SimulationOutput]:
         pass
-        #raise NotImplementedError("Implement the simulation of a batch of scenario instances.")
-      
-class SimulationType(Enum):
-    DUMMY = 0
-    CARLA = 1
-    PRESCAN = 2
-    NONE = 3
