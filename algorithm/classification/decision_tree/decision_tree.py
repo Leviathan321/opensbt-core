@@ -1,11 +1,8 @@
 from sklearn import tree
 import numpy as np
 import copy
-import os
 import pymoo.core.population
-import pydotplus
 import csv
-import logging as log
 
 MIN_SAMPLES_SPLIT = 0.07
 MIN_SAMPLES_LEAF = 5
@@ -146,19 +143,16 @@ def generate_critical_regions(population,
     regions = regions_ordered
 
     if save_folder is not None:
+        clns = ["non-critical", "critical"]
         tree.plot_tree(clf)
-        dot_data = tree.export_graphviz(clf, 
-                                        out_file=None, 
-                                        filled=True, 
-                                        rounded=True,  
-                                        # leaves_parallel=True,
-                                        special_characters=True, 
-                                        class_names=["non-critical", "critical"],
-                                        feature_names=feature_names)
-                                        
-        graph = pydotplus.graph_from_dot_data(dot_data)
-        graph.write_pdf(save_folder + "tree.pdf")
-        
+        from matplotlib import pyplot as plt
+        fig, _ = plt.subplots(nrows = 1, ncols = 1, figsize = (4,4), dpi = 300)
+        tree.plot_tree(clf,
+               feature_names = feature_names, 
+               class_names=clns,
+               filled = True,
+               rounded=True)
+        fig.savefig(save_folder + "tree.pdf")
         save_bounds_regions = save_folder + "bounds_regions.csv"
         with open(save_bounds_regions, 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
