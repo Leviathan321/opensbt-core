@@ -18,7 +18,7 @@ OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optim
 
 ## Installation
 
-OpenSBT requires python to be installed and its compatibality has been tested with python 3.8. OpenSBT can be run as a standalone application or can be imported as a library.  To import it as a library you need to install the correspnding pip package [PIP-package](TODO).
+OpenSBT requires python to be installed and its compatibality has been tested with python 3.8. OpenSBT can be run as a standalone application or can be imported as a library.
 
 Installation instructions are available in the following [jupyter notebook](/doc/jupyter/01_Installation.ipynb).
 
@@ -40,8 +40,8 @@ OpenSBT generates the following outputs:
 
 | Type | Description | Example | 
 |:--------------|:-------------|:--------------|
-| Design Space Plot | Visualization of all evaluated test cases in the input space + of predited critical regions using the decision tree algorithm, pairwise. Constraints of derived regions are stored in CSV file [bounds_regions.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/bounds_regions.csv) and the learned tree in [tree.pdf](example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/tree.pdf) | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="400"/>  |
-| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/gif/0_trajectory.gif" alt="Scenario Visualization" width="400"/> |
+| Design Space Plot | Visualization of all evaluated test cases in the input space + of predited critical regions using the decision tree algorithm, pairwise. Constraints of derived regions are stored in CSV file [bounds_regions.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/bounds_regions.csv) and the learned tree in [tree.pdf](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/classification/tree.pdf) | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/design_space/FinalHostSpeed_PedestrianEgoDistanceStartWalk.png" alt="Design Space Plot" width="400"/>  |
+| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/gif/0_trajectory.gif" alt="Scenario Visualization" width="330"/> |
 Objective Space Plot | Visualization of fitness values of evaluated test cases, pairwise.   | <img src="doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/objective_space/Min%20distance_Velocity%20at%20min%20distance.png" alt="Objective Space Plot" width="400"/> |
 | All Testcases |  CSV file of all test inputs of all evaluated testcases | [all_testcases.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/all_testcases.csv) |
 | All Critical Testcases |  CSV file of all critical test inputs of all evaluated testcases | [critical_testcases.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2/ex2/critical_testcases.csv)|
