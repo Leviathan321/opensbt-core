@@ -5,7 +5,6 @@ from problem.pymoo_test_problem import PymooTestProblem
 from experiment.experiment_store import *
 from algorithm.algorithm import *
 from evaluation.critical import *
-from simulation.carla_simulation import CarlaSimulator
 
 '''
 EXAMPLE CARLA SIMULATOR
@@ -13,6 +12,7 @@ ego speed is in km/h
 '''
 
 def getExp1() -> Experiment:
+    from simulation.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="PedestrianCrossingStartWalk",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
@@ -39,6 +39,7 @@ def getExp1() -> Experiment:
 experiments_store.register(getExp1())
 
 def getExp1a() -> Experiment:
+    from simulation.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="PedestrianCrossingStartWalk",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
@@ -91,6 +92,7 @@ def getExp2() -> Experiment:
 experiments_store.register(getExp2())
 
 def getExp3() -> Experiment:
+    from simulation.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="TwoPedestriansCrossing",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossingSecond.xosc",
