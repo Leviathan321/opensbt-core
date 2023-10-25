@@ -5,13 +5,13 @@
 
 OpenSBT provides a modular and extandable code base for the search-based testing of automated driving systems. It provides interfaces to integrate search algorithms, fitness/criticality functions and simulation environments in a modular way. It allows to visualize testing results and analyse the critical behaviour of the tested system. 
 
-A demo video of OpenSBT can be found here: https://www.youtube.com/watch?v=oOyug8rwAB8.
+An introductory video of OpenSBT can be found here: https://youtu.be/6csl_UAOD_4?si=JOUtN2gOo8hTRTLf.
 
 
 ## Architecture
 
 <p align="center">
-<div style="text-align:center"><img src="doc/figures/OpenSBT_architecture.png" width="500"/></div>
+<div style="text-align:center"><img src="doc/figures/OpenSBT_architecture.png" width="500">
 </p>
 
 OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optimization related models, to tailor heuristic search algorithms for testing ADS systems.
@@ -24,10 +24,10 @@ Installation instructions are available in the following [jupyter notebook](/doc
 
 ## Usage
 
-After having installed OpenSBT, you can follow the tutorials provided as [jupyter notebooks](/doc/jupyter) which explain step-by-step of how to use OpenSBT. In these tutorials, we have integrated:
+You can find several tutorials as [jupyter notebooks](/doc/jupyter) which explain step-by-step of how to use OpenSBT. In these tutorials, we have integrated:
 
 -  A simplified SUT simulated in very simplistic simulator (linear motion planning, no GPU required) 
--  A real-world FMI-based AEB agent simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner). (link to fortiss lab)
+-  A real-world FMI-based AEB agent developed in the [fortiss Mobility lab](https://www.fortiss.org/forschung/fortiss-labs/detail/mobility-lab) which is simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner).
 
 _Note: We have also implemented a [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) for testing Simulink-based SUTs in Prescan._
 
