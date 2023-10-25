@@ -22,6 +22,7 @@ from visualization.configuration import *
 from experiment.search_configuration import SearchConfiguration
 from model_ga.result import *
 import logging as log
+from algorithm.optimizer import Optimizer
 
 import copy
 import sys
@@ -35,7 +36,7 @@ DO_EVAL_APPROXIMATION = True
 WRITE_ALL_INDIVIDUALS = False
 EXPERIMENTAL_MODE=False
 
-class NsgaIIDTOptimizer(object):
+class NsgaIIDTOptimizer(Optimizer):
 
     algorithm_name = ALGORITHM_NAME
 
