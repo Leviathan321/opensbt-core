@@ -29,7 +29,7 @@ After having installed OpenSBT, you can follow the tutorials provided as [jupyte
 -  A simplified SUT simulated in very simplistic simulator (linear motion planning, no GPU required) 
 -  A real-world FMI-based AEB agent simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner). (link to fortiss lab)
 
-_Note: We have also implemented a [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) for the execution of Prescan experiments._
+_Note: We have also implemented a [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) for testing Simulink-based SUTs in Prescan._
 
 
 ## Output

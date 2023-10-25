@@ -2,8 +2,6 @@ deap
 numpy
 scipy
 matplotlib
-pydotplus
-graphviz
 docker
 pandas
 setuptools
