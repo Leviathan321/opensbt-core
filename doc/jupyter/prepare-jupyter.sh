@@ -1,5 +1,5 @@
-python -m pip install virtualenv
-python -m virtualenv venv
+python3.8 -m pip install virtualenv
+python3.8 -m virtualenv venv
 source venv/bin/activate
 python -m pip install ipykernel
-python3 -m ipykernel install --user --name=venv
+#python -m ipykernel install --user --name=venv
