@@ -1,0 +1,4 @@
+Index,orientation_ego,velocity_ego,orientation_ped,velocity_ped,Fitness_Min Adapted Distance,Fitness_Velocity At Min Adapted Distance,Critical
+0,39.842981,2.782942,326.433659,2.652239,-0.930517,-2.782942,1
+1,40.375945,2.681472,328.786053,2.521387,-0.989263,-2.681472,1
+2,93.031367,2.417047,230.548440,2.686094,-0.991069,-2.417047,1
