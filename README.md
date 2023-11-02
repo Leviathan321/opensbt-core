@@ -8,7 +8,7 @@ OpenSBT provides a modular and extandable code base to facilitate search-based t
 An introductory video of OpenSBT can be found here: https://youtu.be/6csl_UAOD_4?si=JOUtN2gOo8hTRTLf.
 
 
-## Architecture
+## Overview
 
 <p align="center">
 <div style="text-align:center"><img src="doc/figures/OpenSBT_architecture.png" width="500">
