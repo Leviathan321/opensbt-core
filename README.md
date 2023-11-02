@@ -3,7 +3,7 @@
 
 ## Intro
 
-OpenSBT provides a modular and extandable code base for the search-based testing of automated driving systems. It provides interfaces to integrate search algorithms, fitness/criticality functions and simulation environments in a modular way. It allows to visualize testing results and analyse the critical behaviour of the tested system. 
+OpenSBT provides a modular and extandable code base to facilitate search-based testing of automated driving systems. It provides interfaces to integrate search algorithms, fitness/criticality functions and simulation environments in a modular way. It allows to visualize testing results and analyse the critical behaviour of the tested system. 
 
 An introductory video of OpenSBT can be found here: https://youtu.be/6csl_UAOD_4?si=JOUtN2gOo8hTRTLf.
 
@@ -14,7 +14,7 @@ An introductory video of OpenSBT can be found here: https://youtu.be/6csl_UAOD_4
 <div style="text-align:center"><img src="doc/figures/OpenSBT_architecture.png" width="500">
 </p>
 
-OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optimization related models such as `Problem`, `Result`, to tailor heuristic search algorithms for testing ADS systems.
+OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optimization related models, such as `Problem`, `Result`, to tailor heuristic search algorithms for testing ADS systems.
 
 ## Installation
 
@@ -48,14 +48,18 @@ Objective Space Plot | Visualization of fitness values of evaluated test cases, 
 | Calculation Properties |  CSV file of all experiment configuration parameters (e.g. algorithm parameters, such as population size, number iterations; search space, fitness function etc..).  | [calculation_properties.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/calculation_properties.csv) |
 | Evaluation Results |  CSV file containing performance values of the algorithm, e.g., number critical test cases found in relation to all evaluations, execution time.| [summary_results.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/summary_results.csv)|
 
+## Contribution
+
+If you like to contribute please contact one of the developers listed below.
+
+## Acknowledgements
+
+OpenSBT has been developed by Lev Sorokin (sorokin@fortiss.org), Tiziano Munaro (munaro@fortiss.org) and Damir Safin (safin@fortiss.org) within the 
+[FOCETA Project](https://www.foceta-project.eu/tools/). 
+
+Special thanks go to Brian Hsuan-Cheng Liao (h.liao@eu.denso.com) and Adam Molin (a.molin@eu.denso.com) from [DENSO AUTOMOTIVE Deutschland GmbH](https://www.denso.com/de/de/about-us/company-information/dnde/) for their valuable feedback and evaluation of OpenSBT on the AVP Case Study in the Prescan simulator.
+
 
 ## License
 
 OpenSBT is licensed under the [Apache License, Version 2.0](LICENSE).
-
-## Authors
-
-Lev Sorokin (sorokin@fortiss.org) \
-Tiziano Munaro (munaro@fortiss.org) \
-Damir Safin (safin@fortiss.org) 
-
