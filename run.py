@@ -18,6 +18,7 @@ from algorithm.ps_rand import PureSamplingRand
 from algorithm.nsga2_optimizer import *
 from algorithm.pso_optimizer import *
 from algorithm.algorithm import AlgorithmType
+from algorithm.nsga2dt_optimizer import NsgaIIDTOptimizer
 
 import argparse
 import logging as log
@@ -162,18 +163,23 @@ if __name__ == "__main__":
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_RAND:
-        log.info("Pymoo PureSampling algorithm is used.")
+        log.info("Random Sampling Algorithm is used.")
         optimizer = PureSamplingRand(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_GRID:
-        log.info("Pymoo PureSampling algorithm is used.")
+        log.info("Grid Sampling Algorithm is used.")
         optimizer = PureSamplingGrid(
                               problem=problem,
                               config=config)
     elif algorithm == AlgorithmType.PS_FPS:
-        log.info("Pymoo PureSampling algorithm is used.")
+        log.info("Furthes Point Sampling Algorithm is used.")
         optimizer = PureSamplingFPS(
+                              problem=problem,
+                              config=config)
+    elif algorithm == AlgorithmType.NSGAII_DT:
+        log.info("NSGAII_DT algorithm is used.")
+        optimizer = NsgaIIDTOptimizer(
                               problem=problem,
                               config=config)
     else:

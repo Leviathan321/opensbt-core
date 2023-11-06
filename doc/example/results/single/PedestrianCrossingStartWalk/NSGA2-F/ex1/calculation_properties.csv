@@ -1,0 +1,15 @@
+Attribute,Value
+Problem,DummySimulatorProblem_Filtered
+Algorithm,NSGA-II
+Search variables,"['orientation_ego', 'velocity_ego', 'orientation_ped', 'velocity_ped']"
+Search space,"[(0.0, 360.0), (1.0, 3.0), (0.0, 360.0), (1.0, 3.0)]"
+Fitness function,"('Min Adapted Distance', 'Velocity At Min Adapted Distance')"
+Critical function,CriticalAdasDistanceVelocity
+Search time,6.10 sec
+Population size,50
+Number of generations,10
+Number of offsprings,None
+Crossover probability,0.7
+Crossover eta,20
+Mutation probability,0.25
+Mutation eta,15
