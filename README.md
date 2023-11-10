@@ -52,10 +52,10 @@ Objective Space Plot | Visualization of fitness values of evaluated test cases, 
 
 ## Application Use Cases
 
-OpenSBT has been already applied 
+OpenSBT has been already applied:
 
-- for a replication experiment to replicate the results of a surrogate assisted testing technique, s. [here](https://github.com/Leviathan321/reflection_study)
-- in an industrial case study to validate a systems behaviour for different operating scenarios, s. [here](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing).
+- For a replication experiment to replicate the results of a surrogate assisted testing technique, s. [here](https://github.com/Leviathan321/reflection_study).
+- In an industrial case study to validate a systems behaviour for different operating scenarios, s. [here](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing).
 
 ## Contribution
 
@@ -63,10 +63,8 @@ If you like to contribute please contact one of the developers listed below.
 
 ## Acknowledgements
 
-OpenSBT has been developed by Lev Sorokin (sorokin@fortiss.org), Tiziano Munaro (munaro@fortiss.org) and Damir Safin (safin@fortiss.org) within the 
-[FOCETA Project](https://www.foceta-project.eu/tools/). 
-
-Special thanks go to Brian Hsuan-Cheng Liao (h.liao@eu.denso.com) and Adam Molin (a.molin@eu.denso.com) from [DENSO AUTOMOTIVE Deutschland GmbH](https://www.denso.com/de/de/about-us/company-information/dnde/) for their valuable feedback and evaluation of OpenSBT on the AVP Case Study in the Prescan simulator.
+OpenSBT has been developed by [Lev Sorokin](sorokin@fortiss.org), [Tiziano Munaro](munaro@fortiss.org) and [Damir Safin](safin@fortiss.org) within the 
+[FOCETA Project](https://www.foceta-project.eu/tools/). Special thanks go to [Brian Hsuan-Cheng Liao](h.liao@eu.denso.com) and [Adam Molin](a.molin@eu.denso.com) from [DENSO AUTOMOTIVE Deutschland GmbH](https://www.denso.com/de/de/about-us/company-information/dnde/) for their valuable feedback and evaluation of OpenSBT on the AVP Case Study in the Prescan simulator.
 
 ## License
 
