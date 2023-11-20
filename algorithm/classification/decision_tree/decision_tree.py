@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from sklearn import tree
 import numpy as np
 import copy
@@ -144,15 +145,15 @@ def generate_critical_regions(population,
 
     if save_folder is not None:
         clns = ["non-critical", "critical"]
-        tree.plot_tree(clf)
-        from matplotlib import pyplot as plt
         fig, _ = plt.subplots(nrows = 1, ncols = 1, figsize = (4,4), dpi = 300)
         tree.plot_tree(clf,
                feature_names = feature_names, 
                class_names=clns,
                filled = True,
                rounded=True)
+        plt.ioff()
         fig.savefig(save_folder + "tree.pdf")
+        plt.close()
         save_bounds_regions = save_folder + "bounds_regions.csv"
         with open(save_bounds_regions, 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
