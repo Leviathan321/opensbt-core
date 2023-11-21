@@ -48,17 +48,23 @@ Objective Space Plot | Visualization of fitness values of evaluated test cases, 
 | Calculation Properties |  CSV file of all experiment configuration parameters (e.g. algorithm parameters, such as population size, number iterations; search space, fitness function etc..).  | [calculation_properties.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/calculation_properties.csv) |
 | Evaluation Results |  CSV file containing performance values of the algorithm, e.g., number critical test cases found in relation to all evaluations, execution time.| [summary_results.csv](doc/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/summary_results.csv)|
 
+
+
+## Application Use Cases
+
+OpenSBT has been already applied:
+
+- For a replication experiment to replicate the results of a surrogate assisted testing technique, s. [here](https://github.com/Leviathan321/reflection_study).
+- In an industrial case study to validate a systems behaviour for different operating scenarios, s. [here](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing).
+
 ## Contribution
 
 If you like to contribute please contact one of the developers listed below.
 
 ## Acknowledgements
 
-OpenSBT has been developed by Lev Sorokin (sorokin@fortiss.org), Tiziano Munaro (munaro@fortiss.org) and Damir Safin (safin@fortiss.org) within the 
-[FOCETA Project](https://www.foceta-project.eu/tools/). 
-
-Special thanks go to Brian Hsuan-Cheng Liao (h.liao@eu.denso.com) and Adam Molin (a.molin@eu.denso.com) from [DENSO AUTOMOTIVE Deutschland GmbH](https://www.denso.com/de/de/about-us/company-information/dnde/) for their valuable feedback and evaluation of OpenSBT on the AVP Case Study in the Prescan simulator.
-
+OpenSBT has been developed by [Lev Sorokin](mailto:sorokin@fortiss.org), [Tiziano Munaro](mailto:munaro@fortiss.org) and [Damir Safin](mailto:safin@fortiss.org) within the 
+[FOCETA Project](https://www.foceta-project.eu/tools/). Special thanks go to [Brian Hsuan-Cheng Liao](mailto:h.liao@eu.denso.com) and Adam Molin from [DENSO AUTOMOTIVE Deutschland GmbH](https://www.denso.com/de/de/about-us/company-information/dnde/) for their valuable feedback and evaluation of OpenSBT on the AVP Case Study in the Prescan simulator.
 
 ## License
 

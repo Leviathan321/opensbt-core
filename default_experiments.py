@@ -162,7 +162,7 @@ def getExp5() -> Experiment:
                           )
     config = DefaultSearchConfiguration()
     config.population_size = 50
-    config.n_generations = 10
+    config.n_generations = 20
     experiment = Experiment(name="5",
                             problem=problem,
                             algorithm=AlgorithmType.NSGAII,
