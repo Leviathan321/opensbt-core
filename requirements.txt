@@ -6,4 +6,4 @@ docker
 pandas
 setuptools
 scikit-learn
-pymoo
+pymoo==0.6.0.1
