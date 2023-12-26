@@ -66,6 +66,20 @@ If you like to contribute please contact one of the developers listed below.
 OpenSBT has been developed by [Lev Sorokin](mailto:sorokin@fortiss.org), [Tiziano Munaro](mailto:munaro@fortiss.org) and [Damir Safin](mailto:safin@fortiss.org) within the 
 [FOCETA Project](https://www.foceta-project.eu/tools/). Special thanks go to [Brian Hsuan-Cheng Liao](mailto:h.liao@eu.denso.com) and Adam Molin from [DENSO AUTOMOTIVE Deutschland GmbH](https://www.denso.com/de/de/about-us/company-information/dnde/) for their valuable feedback and evaluation of OpenSBT on the AVP Case Study in the Prescan simulator.
 
+## Reference
+
+If you use or extend OpenSBT please cite our framework. Here is an example BibTeX entry:
+
+```bibtex
+@misc{sorokin2023opensbt,
+      title={OpenSBT: A Modular Framework for Search-based Testing of Automated Driving Systems}, 
+      author={Lev Sorokin and Tiziano Munaro and Damir Safin and Brian Hsuan-Cheng Liao and Adam Molin},
+      year={2023},
+      eprint={2306.10296},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE}
+}
+```
 ## License
 
 OpenSBT is licensed under the [Apache License, Version 2.0](LICENSE).
