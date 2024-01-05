@@ -23,7 +23,7 @@ from model_ga.result import *
 from typing import Dict
 from utils.duplicates import duplicate_free
 import logging as log
-
+import uuid
 
 WRITE_ALL_INDIVIDUALS = True
 BACKUP_FOLDER =  "backup" + os.sep
@@ -44,21 +44,27 @@ def create_save_folder(problem: Problem, results_folder: str, algorithm_name: st
     Path(save_folder).mkdir(parents=True, exist_ok=True)
     return save_folder
 
-
-def write_calculation_properties(res: Result, save_folder: str, algorithm_name: str, algorithm_parameters: Dict = None, **kwargs):
+def write_calculation_properties(res: Result, save_folder: str, algorithm_name: str, algorithm_parameters: Dict, **kwargs):
     problem = res.problem
     # algorithm_name = type(res.algorithm).__name__
     is_simulation = problem.is_simulation()
+
+    now = datetime.now() # current date and time
+    date_time = now.strftime("%d-%m-%Y_%H:%M:%S")
+    uid = str(uuid.uuid4())
+
     with open(save_folder + 'calculation_properties.csv', 'w', encoding='UTF8', newline='') as f:
         write_to = csv.writer(f)
 
         header = ['Attribute', 'Value']
         write_to.writerow(header)
+        write_to.writerow(['Id', uid])
+        write_to.writerow(['Timestamp', date_time])
         write_to.writerow(['Problem', problem.problem_name])
         write_to.writerow(['Algorithm', algorithm_name])
         write_to.writerow(['Search variables', problem.design_names])        
         write_to.writerow(['Search space', [v for v in zip(problem.xl,problem.xu)]])
-
+        
         if is_simulation:
             write_to.writerow(['Fitness function', str(problem.fitness_function.__class__.__name__)])
         else:
@@ -68,16 +74,14 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
         # write_to.writerow(['Number of maximal tree generations', str(max_tree_iterations)])
         write_to.writerow(['Search time', str("%.2f" % res.exec_time + " sec")])
 
-        if algorithm_parameters is not None:
-            for item,value in algorithm_parameters.items():
-                    write_to.writerow([item, value])
+        for item,value in algorithm_parameters.items():
+            write_to.writerow([item, value])
 
         _additional_description(res, save_folder, algorithm_name, **kwargs)
 
         f.close()
 
     _calc_properties(res, save_folder, algorithm_name, **kwargs)
-
 
 def _calc_properties(res, save_folder, algorithm_name, **kwargs):
     pass
