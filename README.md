@@ -55,7 +55,7 @@ Objective Space Plot | Visualization of fitness values of evaluated test cases, 
 OpenSBT has been already applied:
 
 - For a replication experiment to replicate the results of a surrogate assisted testing technique, s. [here](https://github.com/Leviathan321/reflection_study).
-- In an industrial case study to validate a systems behaviour for different operating scenarios, s. [here](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing).
+- In an industrial case study to validate a systems behaviour for different operating scenarios, s. [here](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing) and here: [https://doi.org/10.1007/978-3-031-46002-9_15](https://doi.org/10.1007/978-3-031-46002-9_15)
 
 ## Contribution
 
@@ -66,6 +66,20 @@ If you like to contribute please contact one of the developers listed below.
 OpenSBT has been developed by [Lev Sorokin](mailto:sorokin@fortiss.org), [Tiziano Munaro](mailto:munaro@fortiss.org) and [Damir Safin](mailto:safin@fortiss.org) within the 
 [FOCETA Project](https://www.foceta-project.eu/tools/). Special thanks go to [Brian Hsuan-Cheng Liao](mailto:h.liao@eu.denso.com) and Adam Molin from [DENSO AUTOMOTIVE Deutschland GmbH](https://www.denso.com/de/de/about-us/company-information/dnde/) for their valuable feedback and evaluation of OpenSBT on the AVP Case Study in the Prescan simulator.
 
+## Reference
+
+If you use or extend OpenSBT please cite our framework. Here is an example BibTeX entry:
+
+```bibtex
+@misc{sorokin2023opensbt,
+      title={OpenSBT: A Modular Framework for Search-based Testing of Automated Driving Systems}, 
+      author={Lev Sorokin and Tiziano Munaro and Damir Safin and Brian Hsuan-Cheng Liao and Adam Molin},
+      year={2023},
+      eprint={2306.10296},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE}
+}
+```
 ## License
 
 OpenSBT is licensed under the [Apache License, Version 2.0](LICENSE).
