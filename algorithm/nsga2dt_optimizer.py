@@ -23,22 +23,14 @@ from experiment.search_configuration import SearchConfiguration
 from model_ga.result import *
 import logging as log
 from algorithm.optimizer import Optimizer
-
 import copy
 import sys
 import time
 import os
 
-'''General flags'''
-ALGORITHM_NAME = "NSGA-II-DT" 
-RESULTS_FOLDER = os.sep + "results" + os.sep + "single" +  os.sep
-DO_EVAL_APPROXIMATION = True
-WRITE_ALL_INDIVIDUALS = False
-EXPERIMENTAL_MODE=False
-
 class NsgaIIDTOptimizer(Optimizer):
 
-    algorithm_name = ALGORITHM_NAME
+    algorithm_name = "NSGA-II-DT" 
 
     def __init__(self,
                  problem: Problem,

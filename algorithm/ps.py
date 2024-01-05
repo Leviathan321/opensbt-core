@@ -47,13 +47,9 @@ from utils.evaluation import evaluate_individuals
 from model_ga.result import *
 import time
 
-ALGORITHM_NAME = "RS"
-RESULTS_FOLDER = os.sep + "results" + os.sep + "single" +  os.sep
-WRITE_ALL_INDIVIDUALS = True
-
 class PureSampling(Optimizer):
     
-    algorithm_name = ALGORITHM_NAME
+    algorithm_name = "RS"
 
     def __init__(self,
                 problem: Problem,

@@ -9,8 +9,7 @@ from pathlib import Path
 from visualization import visualizer
 import logging as log
 
-RESULTS_FOLDER = os.sep + "results" + os.sep
-WRITE_ALL_INDIVIDUALS = True
+from config import RESULTS_FOLDER, WRITE_ALL_INDIVIDUALS
 
 class SimulationResult(Result):
 
