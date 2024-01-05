@@ -28,14 +28,17 @@ import sys
 from experiment.experiment_store import experiments_store
 from default_experiments import *
 from utils.log_utils import *
+from config import RESULTS_FOLDER, LOG_FILE
+
 os.chmod(os.getcwd(), 0o777)
 
 logger = log.getLogger(__name__)
 
-setup_logging("./log.txt")
+setup_logging(LOG_FILE)
+
 disable_pymoo_warnings()
 
-results_folder = '/results/'
+results_folder = RESULTS_FOLDER
 
 algorithm = None
 problem = None
@@ -62,8 +65,8 @@ parser.add_argument('-max', dest='var_max', nargs="+", type=float, action='store
                     help='The upper bound of each search parameter.')
 parser.add_argument('-m', dest='design_names', nargs="+", type=str, action='store',
                     help='The names of the variables to modify.')
-parser.add_argument('-o', dest='results_folder', type=str, action='store', default=os.sep + "results" + os.sep,
-                    help='The name of the folder where the results of the search are stored (default: \\results\\single\\)')
+parser.add_argument('-o', dest='results_folder', type=str, action='store', default=RESULTS_FOLDER,
+                    help='The name of the folder where the results of the search are stored (default: \\results\\)')
 parser.add_argument('-v', dest='do_visualize', action='store_true',
                     help='Whether to use the simuator\'s visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.')
 parser.add_argument('-info', dest='show_info', action='store_true',

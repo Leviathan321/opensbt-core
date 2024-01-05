@@ -153,7 +153,7 @@ def generate_critical_regions(population,
                rounded=True)
         plt.ioff()
         fig.savefig(save_folder + "tree.pdf")
-        plt.close()
+        plt.close(fig)
         save_bounds_regions = save_folder + "bounds_regions.csv"
         with open(save_bounds_regions, 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
