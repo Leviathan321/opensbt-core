@@ -26,7 +26,7 @@ import os
 import sys
 
 from experiment.experiment_store import experiments_store
-from default_experiments import *
+from opensbt.default_experiments import *
 from utils.log_utils import *
 from config import RESULTS_FOLDER, LOG_FILE
 

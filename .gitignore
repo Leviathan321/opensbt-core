@@ -31,3 +31,7 @@ doc/jupyter/opensbt-core
 doc/jupyter/tmp
 doc/jupyter/venv
 doc/jupyter/.ipynb_checkpoints
+
+#build
+*/*egg-info
+*/dist/*

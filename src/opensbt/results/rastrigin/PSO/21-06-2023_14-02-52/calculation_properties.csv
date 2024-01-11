@@ -1,0 +1,8 @@
+Attribute,Value
+Problem,rastrigin
+Algorithm,PSO
+Fitness function,<No name available>
+Critical function,CriticalRastrigin
+Search time,1.03 sec
+Population size,20
+Max number of generations,5

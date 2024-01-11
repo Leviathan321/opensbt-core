@@ -1,0 +1,7 @@
+Attribute,Value
+Problem,BNH
+Algorithm,NSGA2
+Fitness function,<No name available>
+Critical function,CriticalBnhDivided
+Search time,0.23 sec
+Number of samples,20
