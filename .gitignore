@@ -35,3 +35,8 @@ doc/jupyter/.ipynb_checkpoints
 #build
 */*egg-info
 */dist/*
+opensbt.egg-info/dependency_links.txt
+opensbt.egg-info/PKG-INFO
+opensbt.egg-info/requires.txt
+opensbt.egg-info/SOURCES.txt
+opensbt.egg-info/top_level.txt
