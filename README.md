@@ -10,9 +10,8 @@ An introductory video of OpenSBT can be found here: https://www.youtube.com/watc
 
 ## Overview
 
-<p align="center">
-<div style="text-align:center"><img src="https://drive.google.com/uc?id=1i7buYPiDcKlGdXctZKPSyaTlDKVPYXsA" width="500">
-</p>
+<img src="https://drive.google.com/uc?id=1i7buYPiDcKlGdXctZKPSyaTlDKVPYXsA" width="500">
+
 
 OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optimization related models, such as `Problem`, `Result`, to tailor heuristic search algorithms for testing ADS systems.
 
@@ -40,9 +39,9 @@ OpenSBT generates the following outputs:
 
 | Type | Description | Example | 
 |:--------------|:-------------|:--------------|
-| Design Space Plot | Visualization of all evaluated test cases in the input space + of predicted critical regions using the decision tree algorithm, pairwise. Constraints of derived regions are stored in CSV file [bounds_regions.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/bounds_regions.csv) and the learned tree in [tree.pdf](https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/tree.pdf) | <img src="docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/design_space/orientation_ego_orientation_ped.png" alt="Design Space Plot" width="400"/>  |
-| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/gif/0_trajectory.gif" alt="Scenario Visualization" width="300"/> |
-Objective Space Plot | Visualization of fitness values of evaluated test cases, pairwise.   | <img src="docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/objective_space/Min Adapted Distance_Velocity At Min Adapted Distance.png" alt="Objective Space Plot" width="400"/> |
+| Design Space Plot | Visualization of all evaluated test cases in the input space + of predicted critical regions using the decision tree algorithm, pairwise. Constraints of derived regions are stored in CSV file [bounds_regions.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/bounds_regions.csv) and the learned tree in [tree.pdf](https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/tree.pdf) | <img src="https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/design_space/orientation_ego_orientation_ped.png" alt="Design Space Plot" width="400"/>  |
+| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/gif/0_trajectory.gif" alt="Scenario Visualization" width="300"/> |
+Objective Space Plot | Visualization of fitness values of evaluated test cases, pairwise.   | <img src="https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/objective_space/Min Adapted Distance_Velocity At Min Adapted Distance.png" alt="Objective Space Plot" width="400"/> |
 | All Testcases |  CSV file of all test inputs of all evaluated testcases | [all_testcases.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_testcases.csv) |
 | All Critical Testcases |  CSV file of all critical test inputs of all evaluated testcases | [all_critical_testcases.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_critical_testcases.csv)|
 | Calculation Properties |  CSV file of all experiment configuration parameters (e.g. algorithm parameters, such as population size, number iterations; search space, fitness function etc..).  | [calculation_properties.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/packaging/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/calculation_properties.csv) |
