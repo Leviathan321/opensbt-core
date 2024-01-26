@@ -18,7 +18,8 @@ setup(
         '': ['*.pyc', 
              'opensbt/results/*'
              '*.pyx',
-             '*/*log.txt'],
+             '*/*log.txt',
+             '*/results/*'],
     },
     long_description=long_description,
     long_description_content_type='text/markdown',
