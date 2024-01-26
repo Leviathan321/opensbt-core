@@ -1,10 +1,10 @@
 from pathlib import Path
 from typing import List, Dict
-from simulation.simulator import Simulator, SimulationOutput
+from opensbt.simulation.simulator import Simulator, SimulationOutput
 import logging as log
 import json
 import os
-from model_ga.individual import Individual
+from opensbt.model_ga.individual import Individual
 try:
     from carla_simulation.balancer import Balancer
 except Exception:

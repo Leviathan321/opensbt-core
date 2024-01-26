@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from pymoo.core.problem import ElementwiseProblem, Problem
 from pymoo.problems import get_problem
-from evaluation.critical import Critical
-from simulation.simulator import SimulationOutput
+from opensbt.evaluation.critical import Critical
+from opensbt.simulation.simulator import SimulationOutput
 import numpy as np
 
 @dataclass

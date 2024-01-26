@@ -1,7 +1,7 @@
-from model_ga.problem import *
-from simulation.simulator import *
-from algorithm.algorithm import *
-from experiment.search_configuration import *
+from opensbt.model_ga.problem import *
+from opensbt.simulation.simulator import *
+from opensbt.algorithm.algorithm import *
+from opensbt.experiment.search_configuration import *
 
 @dataclass
 class Experiment(object):

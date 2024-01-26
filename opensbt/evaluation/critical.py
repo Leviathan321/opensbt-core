@@ -1,4 +1,4 @@
-from simulation.simulator import SimulationOutput
+from opensbt.simulation.simulator import SimulationOutput
 from typing import Tuple
 import numpy as np
 import math

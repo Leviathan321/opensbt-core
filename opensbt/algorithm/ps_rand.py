@@ -1,22 +1,22 @@
 import pymoo
 
-from model_ga.individual import IndividualSimulated
+from opensbt.model_ga.individual import IndividualSimulated
 pymoo.core.individual.Individual = IndividualSimulated
 
-from model_ga.population import PopulationExtended
+from opensbt.model_ga.population import PopulationExtended
 pymoo.core.population.Population = PopulationExtended
 
-from model_ga.result  import SimulationResult
+from opensbt.model_ga.result  import SimulationResult
 pymoo.core.result.Result = SimulationResult
 
-from model_ga.problem import SimulationProblem
+from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
-from algorithm.ps import PureSampling
-from experiment.search_configuration import SearchConfiguration
-from model_ga.problem import SimulationProblem
-from model_ga.result import SimulationResult
-from utils.sorting import get_nondominated_population
+from opensbt.algorithm.ps import PureSampling
+from opensbt.experiment.search_configuration import SearchConfiguration
+from opensbt.model_ga.problem import SimulationProblem
+from opensbt.model_ga.result import SimulationResult
+from opensbt.utils.sorting import get_nondominated_population
 
 from pymoo.core.problem import Problem
 from pymoo.operators.sampling.rnd import FloatRandomSampling

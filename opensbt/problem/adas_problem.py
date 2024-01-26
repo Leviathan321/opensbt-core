@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from typing import Dict
 from pymoo.core.problem import Problem
 import numpy as np
-from evaluation.critical import Critical
-from evaluation.fitness import *
+from opensbt.evaluation.critical import Critical
+from opensbt.evaluation.fitness import *
 import logging as log
 
 @dataclass

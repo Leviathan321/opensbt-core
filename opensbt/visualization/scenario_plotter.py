@@ -1,5 +1,5 @@
 from math import sqrt
-from simulation.simulator import SimulationOutput
+from opensbt.simulation.simulator import SimulationOutput
 from matplotlib import pyplot as plt
 from matplotlib.transforms import Affine2D
 from matplotlib.animation import FuncAnimation, PillowWriter
@@ -11,7 +11,7 @@ from matplotlib.colors import colorConverter
 from matplotlib.collections import PatchCollection
 import os
 import numpy as np
-from visualization.configuration import *
+from opensbt.visualization.configuration import *
 
 
 def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None, fileName=None):

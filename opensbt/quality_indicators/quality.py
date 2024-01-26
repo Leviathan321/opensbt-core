@@ -2,7 +2,7 @@
 from ast import List
 from pymoo.indicators.hv import *
 from pymoo.indicators.igd import *
-from quality_indicators.metrics.spread import *
+from opensbt.quality_indicators.metrics.spread import *
 from dataclasses import dataclass
 import dill
 import os

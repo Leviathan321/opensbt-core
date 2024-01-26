@@ -1,10 +1,10 @@
 import os
-from evaluation.fitness import *
-from problem.adas_problem import ADASProblem
-from problem.pymoo_test_problem import PymooTestProblem
-from experiment.experiment_store import *
-from algorithm.algorithm import *
-from evaluation.critical import *
+from opensbt.evaluation.fitness import *
+from opensbt.problem.adas_problem import ADASProblem
+from opensbt.problem.pymoo_test_problem import PymooTestProblem
+from opensbt.experiment.experiment_store import *
+from opensbt.algorithm.algorithm import *
+from opensbt.evaluation.critical import *
 
 '''
 EXAMPLE CARLA SIMULATOR
@@ -12,7 +12,7 @@ ego speed is in km/h
 '''
 
 def getExp1() -> Experiment:
-    from src.opensbt.simulation.carla_simulation import CarlaSimulator
+    from opensbt.simulation.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="PedestrianCrossingStartWalk",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
@@ -39,7 +39,7 @@ def getExp1() -> Experiment:
 experiments_store.register(getExp1())
 
 def getExp1a() -> Experiment:
-    from src.opensbt.simulation.carla_simulation import CarlaSimulator
+    from opensbt.simulation.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="PedestrianCrossingStartWalk",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
@@ -92,7 +92,7 @@ def getExp2() -> Experiment:
 experiments_store.register(getExp2())
 
 def getExp3() -> Experiment:
-    from src.opensbt.simulation.carla_simulation import CarlaSimulator
+    from opensbt.simulation.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="TwoPedestriansCrossing",
                           scenario_path=os.getcwd() + "/scenarios/PedestrianCrossingSecond.xosc",
@@ -142,7 +142,7 @@ experiments_store.register(getExp4())
 '''
 
 def getExp5() -> Experiment:
-    from src.opensbt.simulation.dummy_simulation import DummySimulator
+    from opensbt.simulation.dummy_simulation import DummySimulator
 
     problem = ADASProblem(
                           problem_name="DummySimulatorProblem",

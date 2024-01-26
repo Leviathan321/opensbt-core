@@ -13,12 +13,12 @@ from pymoo.operators.mutation.pm import PM
 from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
-from algorithm.classification.classifier import ClassificationType
-from algorithm.classification.decision_tree.decision_tree import *
-from algorithm.optimizer import Optimizer
-from experiment.search_configuration import SearchConfiguration
-import quality_indicators.metrics.spread as qi
-from model_ga.result import *
+from opensbt.algorithm.classification.classifier import ClassificationType
+from opensbt.algorithm.classification.decision_tree.decision_tree import *
+from opensbt.algorithm.optimizer import Optimizer
+from opensbt.experiment.search_configuration import SearchConfiguration
+import opensbt.quality_indicators.metrics.spread as qi
+from opensbt.model_ga.result import *
 import logging as log
 
 class PSOOptimizer(Optimizer):

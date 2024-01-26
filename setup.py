@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from opensbt.version import __version__
 from os import path
 
 # The directory containing this file
@@ -10,12 +11,18 @@ with open(path.join(HERE, "README.md"), encoding="utf-8") as f:
 
 setup(
     name='opensbt',
-    version='0.1.5',
-    packages=find_packages(),
+    version=__version__,
+    packages=find_packages(include=['opensbt', 'opensbt.*']),
+    include_package_data=True,
+    exclude_package_data={
+        '': ['*.pyc', 
+             'opensbt/results/*'
+             '*.pyx',
+             '*/*log.txt'],
+    },
     long_description=long_description,
     long_description_content_type='text/markdown',
     description="OpenSBT is a Modular Framework for Search-based Testing of Automated Driving Systems",
-    include_package_data=True,
     author="Lev Sorokin",
     author_email="sorokin@fortiss.org",
     license="Apache",

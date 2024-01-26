@@ -1,4 +1,4 @@
-from experiment.experiment import *
+from opensbt.experiment.experiment import *
 import logging as log
 
 class Singleton(object):

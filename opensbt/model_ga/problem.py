@@ -5,7 +5,7 @@ import numpy as np
 import pymoo.gradient.toolbox as anp
 from pymoo.util.cache import Cache
 from pymoo.util.misc import at_least_2d_array
-from simulation.simulator import SimulationOutput
+from opensbt.simulation.simulator import SimulationOutput
 
 from pymoo.core.problem import Problem
 from pymoo.core.problem import ElementwiseEvaluationFunction

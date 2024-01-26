@@ -1,15 +1,15 @@
 import numpy as np
 from pymoo.core.result import Result
-from model_ga.population import PopulationExtended as Population
-from model_ga.individual import IndividualSimulated as Individual
-from utils.sorting import *
+from opensbt.model_ga.population import PopulationExtended as Population
+from opensbt.model_ga.individual import IndividualSimulated as Individual
+from opensbt.utils.sorting import *
 import dill
 import os
 from pathlib import Path
-from visualization import visualizer
+from opensbt.visualization import visualizer
 import logging as log
 
-from config import RESULTS_FOLDER, WRITE_ALL_INDIVIDUALS
+from opensbt.config import RESULTS_FOLDER, WRITE_ALL_INDIVIDUALS
 
 class SimulationResult(Result):
 

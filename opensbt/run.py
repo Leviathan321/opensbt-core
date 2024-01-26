@@ -1,34 +1,34 @@
 import pymoo
 
-from model_ga.individual import IndividualSimulated
+from opensbt.model_ga.individual import IndividualSimulated
 pymoo.core.individual.Individual = IndividualSimulated
 
-from model_ga.population import PopulationExtended
+from opensbt.model_ga.population import PopulationExtended
 pymoo.core.population.Population = PopulationExtended
 
-from model_ga.result  import SimulationResult
+from opensbt.model_ga.result  import SimulationResult
 pymoo.core.result.Result = SimulationResult
 
-from model_ga.problem import SimulationProblem
+from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
-from algorithm.ps_fps import PureSamplingFPS
-from algorithm.ps_grid import PureSamplingGrid
-from algorithm.ps_rand import PureSamplingRand
-from algorithm.nsga2_optimizer import *
-from algorithm.pso_optimizer import *
-from algorithm.algorithm import AlgorithmType
-from algorithm.nsga2dt_optimizer import NsgaIIDTOptimizer
+from opensbt.algorithm.ps_fps import PureSamplingFPS
+from opensbt.algorithm.ps_grid import PureSamplingGrid
+from opensbt.algorithm.ps_rand import PureSamplingRand
+from opensbt.algorithm.nsga2_optimizer import *
+from opensbt.algorithm.pso_optimizer import *
+from opensbt.algorithm.algorithm import AlgorithmType
+from opensbt.algorithm.nsga2dt_optimizer import NsgaIIDTOptimizer
 
 import argparse
 import logging as log
 import os
 import sys
 
-from experiment.experiment_store import experiments_store
+from opensbt.experiment.experiment_store import experiments_store
 from opensbt.default_experiments import *
-from utils.log_utils import *
-from config import RESULTS_FOLDER, LOG_FILE
+from opensbt.utils.log_utils import *
+from opensbt.config import RESULTS_FOLDER, LOG_FILE
 
 os.chmod(os.getcwd(), 0o777)
 

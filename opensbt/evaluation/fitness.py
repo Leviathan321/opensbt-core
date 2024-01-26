@@ -1,10 +1,10 @@
 import sys
 from typing import List, Tuple
-from simulation.simulator import SimulationOutput
+from opensbt.simulation.simulator import SimulationOutput
 import numpy as np
 import math
 from scipy.spatial.distance import cdist
-from utils import geometric
+from opensbt.utils import geometric
 
 class Fitness():
     @property

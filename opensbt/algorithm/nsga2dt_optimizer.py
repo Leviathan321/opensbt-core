@@ -1,5 +1,5 @@
-from model_ga.result  import SimulationResult
-from evaluation.critical import *
+from opensbt.model_ga.result  import SimulationResult
+from opensbt.evaluation.critical import *
 from pymoo.termination import get_termination
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.population import Population
@@ -10,19 +10,19 @@ from pymoo.operators.sampling.lhs import LHS
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
 from pymoo.core.problem import Problem
-from exception.configuration import RestrictiveConfigException
-from utils.time_utils import convert_pymoo_time_to_seconds
+from opensbt.exception.configuration import RestrictiveConfigException
+from opensbt.utils.time_utils import convert_pymoo_time_to_seconds
 from pymoo.core.population import Population
-from visualization.configuration import *
-from algorithm.classification.decision_tree import decision_tree
-from utils.evaluation import evaluate_individuals
-from utils.sorting import *
-from utils.time_utils import convert_pymoo_time_to_seconds
-from visualization.configuration import *
-from experiment.search_configuration import SearchConfiguration
-from model_ga.result import *
+from opensbt.visualization.configuration import *
+from opensbt.algorithm.classification.decision_tree import decision_tree
+from opensbt.utils.evaluation import evaluate_individuals
+from opensbt.utils.sorting import *
+from opensbt.utils.time_utils import convert_pymoo_time_to_seconds
+from opensbt.visualization.configuration import *
+from opensbt.experiment.search_configuration import SearchConfiguration
+from opensbt.model_ga.result import *
 import logging as log
-from algorithm.optimizer import Optimizer
+from opensbt.algorithm.optimizer import Optimizer
 import copy
 import sys
 import time

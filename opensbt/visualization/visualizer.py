@@ -5,23 +5,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from datetime import datetime
-import algorithm.classification.decision_tree.decision_tree as decision_tree
+import opensbt.algorithm.classification.decision_tree.decision_tree as decision_tree
 import matplotlib.patches as mpatches
 from matplotlib.patches import Rectangle
 from matplotlib.lines import Line2D
 from matplotlib.legend_handler import HandlerPatch
-from visualization import scenario_plotter
+from opensbt.visualization import scenario_plotter
 from pymoo.indicators.igd import IGD
 from pymoo.indicators.hv import Hypervolume
 from pymoo.core.population import Population
-from visualization.configuration import *
-from utils.sorting import *
-from algorithm.classification.classifier import ClassificationType
-from quality_indicators.quality import Quality
-from model_ga.problem import *
-from model_ga.result import *
+from opensbt.visualization.configuration import *
+from opensbt.utils.sorting import *
+from opensbt.algorithm.classification.classifier import ClassificationType
+from opensbt.quality_indicators.quality import Quality
+from opensbt.model_ga.problem import *
+from opensbt.model_ga.result import *
 from typing import Dict
-from utils.duplicates import duplicate_free
+from opensbt.utils.duplicates import duplicate_free
 import logging as log
 import uuid
 

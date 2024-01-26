@@ -1,11 +1,11 @@
 from typing import List
-from simulation.simulator import Simulator, SimulationOutput
+from opensbt.simulation.simulator import Simulator, SimulationOutput
 from math import sin, cos, pi, ceil
 import numpy as np
 from random import random
-from utils.geometric import *
+from opensbt.utils.geometric import *
 import logging as log
-from utils import geometric
+from opensbt.utils import geometric
 import json
 
 ''' Simulation based on linear motion of two actors. 

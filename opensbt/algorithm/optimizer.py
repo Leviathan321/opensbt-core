@@ -1,8 +1,8 @@
 from abc import ABC, abstractclassmethod, abstractmethod
 
-from experiment.search_configuration import SearchConfiguration
-from model_ga.problem import SimulationProblem
-from model_ga.result import SimulationResult
+from opensbt.experiment.search_configuration import SearchConfiguration
+from opensbt.model_ga.problem import SimulationProblem
+from opensbt.model_ga.result import SimulationResult
 from pymoo.optimize import minimize
 
 class Optimizer(ABC):

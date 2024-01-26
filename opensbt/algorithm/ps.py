@@ -2,20 +2,20 @@
 
 import pymoo
 
-from model_ga.individual import IndividualSimulated
+from opensbt.model_ga.individual import IndividualSimulated
 pymoo.core.individual.Individual = IndividualSimulated
 
-from model_ga.population import PopulationExtended
+from opensbt.model_ga.population import PopulationExtended
 pymoo.core.population.Population = PopulationExtended
 
-from model_ga.result  import SimulationResult
+from opensbt.model_ga.result  import SimulationResult
 pymoo.core.result.Result = SimulationResult
 
-from model_ga.problem import SimulationProblem
+from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
 from pymoo.core.algorithm import Algorithm
-from algorithm.optimizer import Optimizer
+from opensbt.algorithm.optimizer import Optimizer
 
 import os
 import sys
@@ -34,17 +34,17 @@ from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.operators.sampling.lhs import LHS
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
-from algorithm.classification.classifier import ClassificationType
-from algorithm.classification.decision_tree.decision_tree import *
-from evaluation.critical import Critical
-from experiment.search_configuration import DefaultSearchConfiguration, SearchConfiguration
-from problem.pymoo_test_problem import PymooTestProblem
-from simulation.simulator import SimulationOutput
-from visualization import visualizer
-import quality_indicators.metrics.spread as qi
+from opensbt.algorithm.classification.classifier import ClassificationType
+from opensbt.algorithm.classification.decision_tree.decision_tree import *
+from opensbt.evaluation.critical import Critical
+from opensbt.experiment.search_configuration import DefaultSearchConfiguration, SearchConfiguration
+from opensbt.problem.pymoo_test_problem import PymooTestProblem
+from opensbt.simulation.simulator import SimulationOutput
+from opensbt.visualization import visualizer
+import opensbt.quality_indicators.metrics.spread as qi
 import logging as log
-from utils.evaluation import evaluate_individuals
-from model_ga.result import *
+from opensbt.utils.evaluation import evaluate_individuals
+from opensbt.model_ga.result import *
 import time
 
 class PureSampling(Optimizer):

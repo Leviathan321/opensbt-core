@@ -1,5 +1,5 @@
 from pymoo.core.population import Population
-from model_ga.individual import IndividualSimulated
+from opensbt.model_ga.individual import IndividualSimulated
 import numpy as np
 
 class PopulationExtended(Population):
