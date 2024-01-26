@@ -59,7 +59,7 @@ OpenSBT has been already applied:
 
 ## Contribution
 
-If you like to contribute please contact one of the developers listed below.
+If you like to contribute please contact one of the developers listed below or create a pull request. If you face any issue with OpenSBT feel free to create an issue or contact the developers.
 
 ## Acknowledgements
 
