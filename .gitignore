@@ -22,15 +22,15 @@ venv/
 
 # Temporary files
 carla_simulation/temp
-doc/jupyter/.ipynb_checkpoints/*
+docs/jupyter/.ipynb_checkpoints/*
 
 /results
 
 # Testing
-doc/jupyter/opensbt-core
-doc/jupyter/tmp
-doc/jupyter/venv
-doc/jupyter/.ipynb_checkpoints
+docs/jupyter/opensbt-core
+docs/jupyter/tmp
+docs/jupyter/venv
+docs/jupyter/.ipynb_checkpoints
 
 #build
 */*egg-info
