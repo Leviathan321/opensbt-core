@@ -10,7 +10,7 @@ An introductory video of OpenSBT can be found here: https://www.youtube.com/watc
 
 ## Overview
 
-<img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/figures/OpenSBT_architecture.png?raw=True" width=500 >
+<div align="center"><img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/figures/OpenSBT_architecture.png?raw=True" width=500 ></div>
 
 OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0 and extends internal optimization related models, such as `Problem`, `Result`, to tailor heuristic search algorithms for testing ADS systems.
 
