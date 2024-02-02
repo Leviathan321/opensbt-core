@@ -6,16 +6,15 @@ from opensbt.experiment.experiment_store import *
 from opensbt.algorithm.algorithm import *
 from opensbt.evaluation.critical import *
 
-'''
-EXAMPLE CARLA SIMULATOR
-ego speed is in km/h
-'''
+#########################################
+### Carla Examples,  ego speed is in km/h
+##################################
 
 def getExp1() -> Experiment:
-    from opensbt.simulation.carla_simulation import CarlaSimulator
+    from examples.carla.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="PedestrianCrossingStartWalk",
-                          scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
+                          scenario_path=os.getcwd() + "/examples/carla/scenarios/PedestrianCrossing.xosc",
                           xl=[0.5, 1, 0],
                           xu=[3, 22, 60],
                           simulation_variables=[
@@ -39,10 +38,10 @@ def getExp1() -> Experiment:
 experiments_store.register(getExp1())
 
 def getExp1a() -> Experiment:
-    from opensbt.simulation.carla_simulation import CarlaSimulator
+    from examples.carla.carla_simulation import CarlaSimulator
     problem = ADASProblem(
                           problem_name="PedestrianCrossingStartWalk",
-                          scenario_path=os.getcwd() + "/scenarios/PedestrianCrossing.xosc",
+                          scenario_path=os.getcwd() + "/examples/carla/scenarios/PedestrianCrossing.xosc",
                           xl=[0.5, 1, 0],
                           xu=[3, 22, 60],
                           simulation_variables=[
@@ -65,7 +64,38 @@ def getExp1a() -> Experiment:
 
 experiments_store.register(getExp1a())
 
+def getExp3() -> Experiment:
+    from examples.carla.carla_simulation import CarlaSimulator
+    problem = ADASProblem(
+                          problem_name="TwoPedestriansCrossing",
+                          scenario_path=os.getcwd() + "/examples/carla/scenarios/PedestrianCrossingSecond.xosc",
+                          xl=[0.5, 1, 0],
+                          xu=[3, 80, 60],
+                          simulation_variables=[
+                              "PedestrianSpeed",
+                              "FinalHostSpeed",
+                              "PedestrianEgoDistanceStartWalk"],
+                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),  
+                          critical_function=CriticalAdasFrontCollisions(),
+                          simulate_function=CarlaSimulator.simulate,
+                          simulation_time=10,
+                          sampling_time=100,
+                          approx_eval_time=10,
+                          do_visualize=True
+                          )
+    config = DefaultSearchConfiguration()
+    experiment = Experiment(name="3",
+                            problem=problem,
+                            algorithm=AlgorithmType.NSGAII,
+                            search_configuration=config)
 
+    return experiment
+    
+experiments_store.register(getExp3())
+
+#########################################
+### Mathematical Test Problems
+##################################
 '''
     BNH Problem
 
@@ -91,35 +121,6 @@ def getExp2() -> Experiment:
 
 experiments_store.register(getExp2())
 
-def getExp3() -> Experiment:
-    from opensbt.simulation.carla_simulation import CarlaSimulator
-    problem = ADASProblem(
-                          problem_name="TwoPedestriansCrossing",
-                          scenario_path=os.getcwd() + "/scenarios/PedestrianCrossingSecond.xosc",
-                          xl=[0.5, 1, 0],
-                          xu=[3, 80, 60],
-                          simulation_variables=[
-                              "PedestrianSpeed",
-                              "FinalHostSpeed",
-                              "PedestrianEgoDistanceStartWalk"],
-                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),  
-                          critical_function=CriticalAdasFrontCollisions(),
-                          simulate_function=CarlaSimulator.simulate,
-                          simulation_time=10,
-                          sampling_time=100,
-                          approx_eval_time=10,
-                          do_visualize=True
-                          )
-    config = DefaultSearchConfiguration()
-    experiment = Experiment(name="3",
-                            problem=problem,
-                            algorithm=AlgorithmType.NSGAII,
-                            search_configuration=config)
-
-    return experiment
-    
-experiments_store.register(getExp3())
-
 '''
 Rastrigin SOO problem (n_var = 2, n_obj = 1), test for PSO
 '''
@@ -138,6 +139,28 @@ def getExp4() -> Experiment:
     return experiment
 experiments_store.register(getExp4())
 
+'''
+Random Sampling for BNH Problem
+'''
+def getExp99() -> Experiment:
+    problem = PymooTestProblem(
+            'BNH',
+            critical_function=CriticalBnhDivided())
+
+    config = DefaultSearchConfiguration()
+    config.population_size = 10   # defines the number of samples for a single axis
+    experiment = Experiment(name="99",
+                            problem=problem,
+                            algorithm=AlgorithmType.PS_RAND,
+                            search_configuration=config)
+
+    return experiment  
+experiments_store.register(getExp99())
+
+#########################################
+### Dummy Simulation Problems (Toy Example)
+##################################
+
 ''' Dummy Simulation with planar motion planning and simplified AEB
 '''
 
@@ -146,7 +169,7 @@ def getExp5() -> Experiment:
 
     problem = ADASProblem(
                           problem_name="DummySimulatorProblem",
-                          scenario_path="scenarios/dummy_scenario.xosc",
+                          scenario_path="./dummy_scenario",
                           xl=[0, 1, 0, 1],
                           xu=[360, 3,360, 3],
                           simulation_variables=[
@@ -169,21 +192,3 @@ def getExp5() -> Experiment:
                             search_configuration=config)
     return experiment
 experiments_store.register(getExp5())
-
-'''
-Random Sampling for BNH Problem
-'''
-def getExp99() -> Experiment:
-    problem = PymooTestProblem(
-            'BNH',
-            critical_function=CriticalBnhDivided())
-
-    config = DefaultSearchConfiguration()
-    config.population_size = 10   # defines the number of samples for a single axis
-    experiment = Experiment(name="99",
-                            problem=problem,
-                            algorithm=AlgorithmType.PS_RAND,
-                            search_configuration=config)
-
-    return experiment  
-experiments_store.register(getExp99())
