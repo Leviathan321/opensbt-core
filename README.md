@@ -9,8 +9,6 @@ An introductory video of OpenSBT can be found here: https://www.youtube.com/watc
 
 
 ## Overview
-<!-- 
-<img src="https://drive.google.com/uc?id=1i7buYPiDcKlGdXctZKPSyaTlDKVPYXsA" width="500"> -->
 
 <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/figures/OpenSBT_architecture.png?raw=True" width=500 >
 
