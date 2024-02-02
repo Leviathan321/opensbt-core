@@ -9,9 +9,12 @@ HERE = path.abspath(path.dirname(__file__))
 with open(path.join(HERE, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
+__url__ = "https://git.fortiss.org/opensbt/opensbt-core"
+
 setup(
     name='opensbt',
     version=__version__,
+    url=__url__,
     packages=find_packages(include=['opensbt', 'opensbt.*']),
     include_package_data=True,
     exclude_package_data={
@@ -31,7 +34,10 @@ setup(
          "Programming Language :: Python :: 3.8",
          "Programming Language :: Python :: 3.9",
          "License :: OSI Approved :: Apache Software License",
-         "Operating System :: POSIX :: Linux"
+         "Operating System :: POSIX :: Linux",
+         "Topic :: Software Development :: Testing",
+         "Topic :: Software Development :: Testing :: Acceptance",
+         "Topic :: Scientific/Engineering"
     ],
     install_requires=[
         'deap==1.4.1',
