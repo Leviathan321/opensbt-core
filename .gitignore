@@ -41,3 +41,6 @@ opensbt.egg-info/PKG-INFO
 opensbt.egg-info/requires.txt
 opensbt.egg-info/SOURCES.txt
 opensbt.egg-info/top_level.txt
+
+#tests
+tests/output/**

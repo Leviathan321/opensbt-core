@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import pymoo
 
 from opensbt.model_ga.individual import IndividualSimulated
@@ -19,14 +20,30 @@ from opensbt.experiment.search_configuration import DefaultSearchConfiguration
 from opensbt.evaluation.fitness import *
 from opensbt.problem.adas_problem import ADASProblem
 
+import time
 
 class TestExperiments():
+    WAIT_RESULTS_TIME = 10
 
-    def test_dummy_experiment(self):
+    @staticmethod
+    def results_correctly_written(results_path):
+        req_folders = ["gif", "design_space", "objective_space", "classification"]
+
+        for folder in req_folders:
+            if not os.path.isdir(results_path + folder):
+                print(f"tocheck: {results_path + folder}")
+                return False
+        
+        return True
+            
+
+
+    @staticmethod
+    def test_dummy_experiment():
         from opensbt.simulation.dummy_simulation import DummySimulator
         
         results_folder = '/tests/output/'
-
+ 
         problem = ADASProblem(
                             problem_name="DummySimulatorProblem",
                             scenario_path="./dummy_scenario",
@@ -55,3 +72,17 @@ class TestExperiments():
         res = algo.run()        
         res.write_results(results_folder=results_folder,
                         params = algo.parameters)
+
+        algo_name = "NSGA2"
+
+        exp_folder = os.getcwd() + results_folder + os.sep + problem.problem_name + os.sep  + \
+                             algo_name + os.sep
+                             
+        paths = sorted(Path(exp_folder).iterdir(), key=os.path.getmtime)
+        
+        results_path = str(paths[-1]) + os.sep
+
+        time.sleep(TestExperiments.WAIT_RESULTS_TIME)
+        
+        assert TestExperiments.results_correctly_written(results_path=results_path)
+
