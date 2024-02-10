@@ -1,5 +1,4 @@
 import csv
-import math
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,31 +16,41 @@ from pymoo.core.population import Population
 from opensbt.visualization.configuration import *
 from opensbt.utils.sorting import *
 from opensbt.algorithm.classification.classifier import ClassificationType
-from opensbt.quality_indicators.quality import Quality
+from opensbt.analysis.quality_indicators.quality import Quality
 from opensbt.model_ga.problem import *
 from opensbt.model_ga.result import *
 from typing import Dict
 from opensbt.utils.duplicates import duplicate_free
 import logging as log
 import uuid
+import shutil
+from opensbt.visualization.visualization3d import visualize_3d
+from opensbt.visualization import scenario_plotter
+from opensbt.config import BACKUP_FOLDER, CONSIDER_HIGH_VAL_OS_PLOT,  \
+                            PENALTY_MAX, PENALTY_MIN, WRITE_ALL_INDIVIDUALS, \
+                                METRIC_PLOTS_FOLDER, LAST_ITERATION_ONLY_DEFAULT \
 
-WRITE_ALL_INDIVIDUALS = True
-BACKUP_FOLDER =  "backup" + os.sep
 
-def create_save_folder(problem: Problem, results_folder: str, algorithm_name: str):
+def create_save_folder(problem: Problem, results_folder: str, algorithm_name: str, is_experimental=False):
     problem_name = problem.problem_name
-    # algorithm_name = type(res.algorithm).__name__
     # if results folder is already a valid folder, do not create it in parent, use it relative
+
     if os.path.isdir(results_folder):
         save_folder = results_folder 
-        #+ problem_name + os.sep + algorithm_name + os.sep + datetime.now().strftime(
-        #   "%d-%m-%Y_%H-%M-%S") + os.sep
+    elif is_experimental:
+        save_folder = str(
+            os.getcwd()) + results_folder + problem_name + os.sep + algorithm_name + os.sep + "temp" + os.sep
     else:
         save_folder = str(
             os.getcwd()) + results_folder + problem_name + os.sep + algorithm_name + os.sep + datetime.now().strftime(
             "%d-%m-%Y_%H-%M-%S") + os.sep
-    #log.info(f"save_folder created: {save_folder}")
-    Path(save_folder).mkdir(parents=True, exist_ok=True)
+    
+    if Path(save_folder).exists() and Path(save_folder).is_dir():
+        shutil.rmtree(save_folder)
+        log.info(f"Old save_folder deleted.")
+
+    Path(save_folder).mkdir(parents=True, exist_ok=True)  
+    log.info(f"Save_folder created: {save_folder}")
     return save_folder
 
 def write_calculation_properties(res: Result, save_folder: str, algorithm_name: str, algorithm_parameters: Dict, **kwargs):
@@ -70,28 +79,28 @@ def write_calculation_properties(res: Result, save_folder: str, algorithm_name: 
         else:
             write_to.writerow(['Fitness function', "<No name available>"])
 
-        write_to.writerow(['Critical function', str(problem.critical_function.name)])
+        write_to.writerow(['Critical function', str(problem.critical_function.__class__.__name__)])
         # write_to.writerow(['Number of maximal tree generations', str(max_tree_iterations)])
         write_to.writerow(['Search time', str("%.2f" % res.exec_time + " sec")])
 
         for item,value in algorithm_parameters.items():
             write_to.writerow([item, value])
 
-        _additional_description(res, save_folder, algorithm_name, **kwargs)
+        _additional_descritption(res, save_folder, algorithm_name, **kwargs)
 
         f.close()
 
     _calc_properties(res, save_folder, algorithm_name, **kwargs)
 
+
 def _calc_properties(res, save_folder, algorithm_name, **kwargs):
     pass
 
-def _additional_description(res, save_folder, algorithm_name, **kwargs):
+def _additional_descritption(res, save_folder, algorithm_name, **kwargs):
     pass
 
-'''output of the simulation data for all solutions (for the moment only partial data)'''
+'''Output of the simulation data for all solutions (for the moment only partial data)'''
 def write_simulation_output(res: Result, save_folder: str):
-    
     problem = res.problem
 
     if not problem.is_simulation():
@@ -121,101 +130,6 @@ def write_simulation_output(res: Result, save_folder: str):
                     row.extend([value])
             write_to.writerow(row)
         f.close()
-
-def convergence_analysis(res: Result, save_folder: str, input_pf=None):
-    log.info("------ Performing igd analysis ------")
-
-    eval_result = Quality.calculate_igd(res, input_pf=input_pf)
-    if eval_result is None:
-        return
-
-    # store 
-    eval_result.persist(save_folder + BACKUP_FOLDER)
-
-    n_evals, igd = eval_result.steps, eval_result.values
-    f = plt.figure()
-    plt.plot(n_evals, igd, color='black', lw=0.7)
-    plt.scatter(n_evals, igd, facecolor='none', edgecolor='black', marker='o')
-    plt.title("Convergence Analysis")
-    plt.xlabel("Function Evaluations")
-    plt.ylabel("IGD")
-    # plt.yscale("log")
-    plt.savefig(save_folder + 'igd.png')
-    plt.clf()
-    plt.close(f)
-
-    write_metric_history(n_evals, igd,'igd_all',save_folder)
-
-def write_metric_history(n_evals, hist_F, metric_name, save_folder):
-    history_folder = save_folder + "history" + os.sep
-    Path(history_folder).mkdir(parents=True, exist_ok=True)
-    with open(history_folder+ '' + metric_name + '.csv', 'w', encoding='UTF8', newline='') as f:
-        write_to = csv.writer(f)
-        header = ['n_evals', metric_name]
-        write_to.writerow(header)
-        for i,val in enumerate(n_evals):
-            write_to.writerow([n_evals[i], hist_F[i]])
-        f.close()
-
-def hypervolume_analysis(res, save_folder):
-    log.info("------ Performing hv analysis ------")
-    eval_result = Quality.calculate_hv_hitherto(res)
-    
-    if eval_result is None:
-        return
-    
-    eval_result.persist(save_folder + BACKUP_FOLDER)
-    n_evals, hv = eval_result.steps, eval_result.values
-
-    plt.figure(figsize=(7, 5))
-    plt.plot(n_evals, hv, color='black', lw=0.7)
-    plt.scatter(n_evals, hv, facecolor="none", edgecolor='black', marker='o')
-    plt.title("Performance Analysis")
-    plt.xlabel("Function Evaluations")
-    plt.ylabel("Hypervolume")
-    plt.savefig(save_folder + 'hypervolume.png')
-
-    write_metric_history(n_evals, hv, 'hv_all', save_folder)
-
-def hypervolume_analysis_local(res, save_folder):
-    log.info("------ Performing hv analysis ------")
-
-    eval_result = Quality.calculate_hv(res)
-    if eval_result is None:
-        return
-    eval_result.persist(save_folder + BACKUP_FOLDER)
-        
-    n_evals, hv = eval_result.steps, eval_result.values
-
-    plt.figure(figsize=(7, 5))
-    plt.plot(n_evals, hv, color='black', lw=0.7)
-    plt.scatter(n_evals, hv, facecolor="none", edgecolor='black', marker='o')
-    plt.title("Performance Analysis")
-    plt.xlabel("Function Evaluations")
-    plt.ylabel("Hypervolume")
-    plt.savefig(save_folder + 'hypervolume_local.png')
-
-    write_metric_history(n_evals, hv,'hv_local_all',save_folder)
-
-def spread_analysis(res, save_folder):
-    log.info("------ Performing sp analysis ------")
-
-    eval_result = Quality.calculate_sp(res)
-    if eval_result is None:
-        return
-        
-    eval_result.persist(save_folder + BACKUP_FOLDER)
-    n_evals, uniformity = eval_result.steps, eval_result.values
-
-    plt.figure(figsize=(7, 5))
-    plt.plot(n_evals, uniformity, color='black', lw=0.7)
-    plt.scatter(n_evals, uniformity, facecolor="none", edgecolor='black', marker='o')
-    plt.title("Spreadness/Uniformity Analysis")
-    plt.xlabel("Function Evaluations")
-    plt.ylabel("SP")
-    plt.savefig(save_folder + 'spread.png')
-
-    write_metric_history(n_evals,uniformity,'spread_all',save_folder)
 
 class HandlerCircle(HandlerPatch):
     def create_artists(self, legend, orig_handle,
@@ -255,14 +169,17 @@ def write_summary_results(res, save_folder):
     all_population = res.obtain_all_population()
     best_population = res.opt
 
-    critical_best, non_critical_best = best_population.divide_critical_non_critical()
-    critical_all, non_critical_all = all_population.divide_critical_non_critical()
-
+    critical_best,_ = best_population.divide_critical_non_critical()
+    critical_all,_ = all_population.divide_critical_non_critical()
+    
     n_crit_all_dup_free = len(duplicate_free(critical_all))
     n_all_dup_free = len(duplicate_free(all_population))
     n_crit_best_dup_free = len(duplicate_free(critical_best))
     n_best_dup_free = len(duplicate_free(best_population))
 
+    # write down when first critical solutions found + which fitness value it has
+    iter_crit, inds_critical = res.get_first_critical()
+    
     '''Output of summery of the performance'''
     with open(save_folder + 'summary_results.csv', 'w', encoding='UTF8', newline='') as f:
         write_to = csv.writer(f)
@@ -287,8 +204,16 @@ def write_summary_results(res, save_folder):
         write_to.writerow(['Ratio Best Critical/Best Scenarios', '{0:.2f}'.format(len(critical_best) / len(best_population))])
         write_to.writerow(['Ratio Best Critical/Best Scenarios (duplicate free)', '{0:.2f}'.format(n_crit_best_dup_free/n_best_dup_free)])
 
+        
+        write_to.writerow(['Iteration first critical found', '{}'.format(iter_crit)])
+        write_to.writerow(['Fitness value of critical (first of population of interest)','{}'.format(str(inds_critical[0].get("F")) if len(inds_critical) > 0 else None) ])
+        write_to.writerow(['Input value of critical (first of population of interest)','{}'.format(str(inds_critical[0].get("X")) if len(inds_critical) > 0 else None) ])
+
         f.close()
 
+    log.info(['Number Critical Scenarios (duplicate free)', n_crit_all_dup_free])
+    log.info(['Number All Scenarios (duplicate free)', n_all_dup_free])
+    log.info(['Ratio Critical/All scenarios (duplicate free)', '{0:.2f}'.format(n_crit_all_dup_free/n_all_dup_free)])
 
 def design_space(res, save_folder, classification_type=ClassificationType.DT, iteration=None):
     save_folder_design = save_folder + "design_space" + os.sep
@@ -300,7 +225,6 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
         Path(save_folder_design_iteration).mkdir(parents=True, exist_ok=True)
         save_folder_plot = save_folder_design_iteration
  
-    hist = res.history
     problem = res.problem
     design_names = problem.design_names
     n_var = problem.n_var
@@ -308,21 +232,16 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
     xu = problem.xu
 
     all_population = res.obtain_all_population()
-    critical_all, non_critical_all = all_population.divide_critical_non_critical()
+    critical_all, _ = all_population.divide_critical_non_critical()
 
     if classification_type == ClassificationType.DT:
         save_folder_classification = save_folder + "classification" + os.sep
         Path(save_folder_classification).mkdir(parents=True, exist_ok=True)
-        regions = decision_tree.generate_critical_regions(all_population, 
-                                                          problem, 
-                                                          criticality_threshold_min=0.7,
-                                                          criticality_threshold_max=1,
-                                                          save_folder=save_folder_classification)
+        regions = decision_tree.generate_critical_regions(all_population, problem, save_folder=save_folder_classification)
     
     f = plt.figure(figsize=(12, 10))
     for axis_x in range(n_var - 1):
         for axis_y in range(axis_x + 1, n_var):
-
             if classification_type == ClassificationType.DT:
                 for region in regions:
                     x_rectangle = region.xl[axis_x]
@@ -341,33 +260,34 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
                                                   facecolor=region_color, alpha=0.05))
 
             ax = plt.subplot(111)
-
             plt.title(f"{res.algorithm.__class__.__name__}\nDesign Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
 
             if classification_type == ClassificationType.DT:
-                for algo in hist:
-                    critical, not_critical = algo.pop.divide_critical_non_critical()
-                    if len(not_critical) != 0:
-                        ax.scatter(not_critical.get("X")[:, axis_x], not_critical.get("X")[:, axis_y],
-                                   s=40,
-                                   facecolors=color_not_optimal,
-                                   edgecolors=color_not_critical, marker='o')
-                    if len(critical) != 0:
-                        ax.scatter(critical.get("X")[:, axis_x], critical.get("X")[:, axis_y], s=40,
-                                   facecolors=color_not_optimal,
-                                   edgecolors=color_critical, marker='o')
-
-                critical, not_critical = res.opt.divide_critical_non_critical()  # classification of optimal individuals
-
+                critical, not_critical = all_population.divide_critical_non_critical()
                 if len(not_critical) != 0:
-                    ax.scatter(not_critical.get("X")[:, axis_x], not_critical.get("X")[:, axis_y], s=40,
+                    ax.scatter(not_critical.get("X")[:, axis_x], not_critical.get("X")[:, axis_y],
+                                s=40,
+                                facecolors=color_not_optimal,
+                                edgecolors=color_not_critical, marker='o')
+                if len(critical) != 0:
+                    ax.scatter(critical.get("X")[:, axis_x], critical.get("X")[:, axis_y], s=40,
+                                facecolors=color_not_optimal,
+                                edgecolors=color_critical, marker='o')
+
+                
+                opt = get_nondominated_population(all_population)
+                critical_opt, not_critical_opt = opt.divide_critical_non_critical()
+
+                if len(critical_opt) != 0:
+                    ax.scatter(critical_opt.get("X")[:, axis_x], critical_opt.get("X")[:, axis_y], s=40,
+                               facecolors=color_optimal,
+                               edgecolors=color_critical, marker='o')
+                                
+                if len(not_critical_opt) != 0:
+                    ax.scatter(not_critical_opt.get("X")[:, axis_x], not_critical_opt.get("X")[:, axis_y], s=40,
                                facecolors=color_optimal,
                                edgecolors=color_not_critical, marker='o')
 
-                if len(critical) != 0:
-                    ax.scatter(critical.get("X")[:, axis_x], critical.get("X")[:, axis_y], s=40,
-                               facecolors=color_optimal,
-                               edgecolors=color_critical, marker='o')
 
             eta_x = (xu[axis_x] - xl[axis_x]) / 10
             eta_y = (xu[axis_y] - xl[axis_y]) / 10
@@ -383,19 +303,29 @@ def design_space(res, save_folder, classification_type=ClassificationType.DT, it
             markers = marker_list[:-1]
 
             plt.legend(handles=markers,
-                       loc='center left', 
-                       bbox_to_anchor=(1, 0.5), 
-                       handler_map={mpatches.Circle: HandlerCircle()})
+                       loc='center left', bbox_to_anchor=(1, 0.5), handler_map={mpatches.Circle: HandlerCircle()})
 
             plt.savefig(save_folder_plot + design_names[axis_x] + '_' + design_names[axis_y] + '.png')
             plt.savefig(save_folder_plot + design_names[axis_x] + '_' + design_names[axis_y] + '.pdf', format="pdf")
 
             plt.clf()
+    
+    # output 3d plots
+    if n_var == 3:
+        visualize_3d(all_population, save_folder_design, design_names, mode="critical", markersize=20, do_save=True)
 
     plt.close(f)
 
+def backup_problem(res,save_folder):
+    save_folder_problem = save_folder + BACKUP_FOLDER
+    Path(save_folder_problem).mkdir(parents=True, exist_ok=True)   
 
-def objective_space(res, save_folder, iteration=None):
+    import dill
+    with open(save_folder_problem + os.sep + "problem", "wb") as f:
+        dill.dump(res.problem, f)
+
+
+def objective_space(res, save_folder, iteration=None, show=False, last_iteration=LAST_ITERATION_ONLY_DEFAULT):
     save_folder_objective = save_folder + "objective_space" + os.sep
     Path(save_folder_objective).mkdir(parents=True, exist_ok=True)   
     save_folder_plot = save_folder_objective
@@ -411,87 +341,118 @@ def objective_space(res, save_folder, iteration=None):
     n_obj = problem.n_obj
     objective_names = problem.objective_names
 
-    all_population = res.obtain_all_population()
-    critical_all, non_critical_all = all_population.divide_critical_non_critical()
+    all_population = Population()
+    for i, generation in enumerate(res.history):
+        all_population = Population.merge(all_population, generation.pop)
+        # all_population = res.obtain_all_population()
 
-    f = plt.figure(figsize=(12, 10))
-    for axis_x in range(n_obj - 1):
-        for axis_y in range(axis_x + 1, n_obj):
-            ax = plt.subplot(111)
-            plt.title(f"{res.algorithm.__class__.__name__}\nObjective Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
+        critical_all, _ = all_population.divide_critical_non_critical()
+        
+        # plot only last iteration if requested
+        if last_iteration and i < len(res.history) -1 :
+            continue
+        
+        save_folder_iteration = save_folder_objective + f"iteration_{i}" + os.sep
+        Path(save_folder_iteration).mkdir(parents=True, exist_ok=True)
+        save_folder_plot = save_folder_iteration
 
-            if True: #classification_type == ClassificationType.DT:
-                for algo in hist:
-                    critical, not_critical = algo.pop.divide_critical_non_critical()
-                    if len(not_critical) != 0:
-                        ax.scatter(not_critical.get("F")[:, axis_x], not_critical.get("F")[:, axis_y], s=40,
-                                   facecolors=color_not_optimal,
-                                   edgecolors=color_not_critical, marker='o')
-                    if len(critical) != 0:
-                        ax.scatter(critical.get("F")[:, axis_x], critical.get("F")[:, axis_y], s=40,
-                                   facecolors=color_not_optimal, edgecolors=color_critical, marker='o')
+        f = plt.figure(figsize=(12, 10))
+        for axis_x in range(n_obj - 1):
+            for axis_y in range(axis_x + 1, n_obj):
+                ax = plt.subplot(111)
+                plt.title(f"{res.algorithm.__class__.__name__}\nObjective Space" + " (" + str(len(all_population)) + " testcases, " + str(len(critical_all)) + " of which are critical)")
 
-            if pf is not None:
-                ax.plot(pf[:, axis_x], pf[:, axis_y], color='blue', lw=0.7, zorder=1)
+                if True: #classification_type == ClassificationType.DT:
+                    critical, not_critical = all_population.divide_critical_non_critical()
 
-            if True: #classification_type == ClassificationType.DT:
-                critical, not_critical = res.opt.divide_critical_non_critical()
-                if len(not_critical) != 0:
-                    ax.scatter(not_critical.get("F")[:, axis_x], not_critical.get("F")[:, axis_y], s=40,
-                               facecolors=color_optimal, edgecolors=color_not_critical, marker='o')
-                if len(critical) != 0:
-                    ax.scatter(critical.get("F")[:, axis_x], critical.get("F")[:, axis_y], s=40,
-                               facecolors=color_optimal, edgecolors=color_critical, marker='o')
-            
-            # limit axes bounds, since we do not want to show fitness values as 1000 or int.max, 
-            # that assign bad quality to worse scenarios
-            CONSIDER_HIGH_VAL = True
-            if CONSIDER_HIGH_VAL:
-                MAX_VALUE = 1000
-                MIN_VALUE = -1000
+                    critical_clean = duplicate_free(critical)
+                    not_critical_clean = duplicate_free(not_critical)
+                    
+                    if len(not_critical_clean) != 0:
+                        ax.scatter(not_critical_clean.get("F")[:, axis_x], not_critical_clean.get("F")[:, axis_y], s=40,
+                                    facecolors=color_not_optimal,
+                                    edgecolors=color_not_critical, marker='o')
+                    if len(critical_clean) != 0:
+                        ax.scatter(critical_clean.get("F")[:, axis_x], critical_clean.get("F")[:, axis_y], s=40,
+                                    facecolors=color_not_optimal, edgecolors=color_critical, marker='o')
+
+                if pf is not None:
+                    ax.plot(pf[:, axis_x], pf[:, axis_y], color='blue', lw=0.7, zorder=1)
+
+                if True: #classification_type == ClassificationType.DT:
+                    optimal_pop = get_nondominated_population(all_population)
+                    critical, not_critical = optimal_pop.divide_critical_non_critical()
+                    critical_clean = duplicate_free(critical)
+                    not_critical_clean = duplicate_free(not_critical)
+                    
+                    if len(not_critical_clean) != 0:
+                        ax.scatter(not_critical_clean.get("F")[:, axis_x], not_critical_clean.get("F")[:, axis_y], s=40,
+                                facecolors=color_optimal, edgecolors=color_not_critical, marker='o')
+                    if len(critical_clean) != 0:
+                        ax.scatter(critical_clean.get("F")[:, axis_x], critical_clean.get("F")[:, axis_y], s=40,
+                                facecolors=color_optimal, edgecolors=color_critical, marker='o')
+
+                #limit axes bounds, since we do not want to show fitness values as 1000 or int.max, 
+                # that assign bad quality to worse scenarios
+                if CONSIDER_HIGH_VAL_OS_PLOT:                    
+                    pop_f_x = all_population.get("F")[:,axis_x]
+                    clean_pop_x = np.delete(pop_f_x, np.where(pop_f_x == PENALTY_MAX))
+                    max_x_f_ind = max(clean_pop_x)
+                    clean_pop_x = np.delete(pop_f_x, np.where(pop_f_x == PENALTY_MIN))
+                    min_x_f_ind = min(clean_pop_x)
+
+                    pop_f_y = all_population.get("F")[:,axis_y]
+                    clean_pop_y = np.delete(pop_f_y, np.where(pop_f_y == PENALTY_MAX))
+                    max_y_f_ind = max(clean_pop_y)
+                    clean_pop_y = np.delete(pop_f_y, np.where(pop_f_y == PENALTY_MIN))
+                    min_y_f_ind = min(clean_pop_y)
+
+                    eta_x = abs(max_x_f_ind - min_x_f_ind) / 10
+                    eta_y = abs(max_y_f_ind- min_y_f_ind) / 10
+                    
+                    plt.xlim(min_x_f_ind - eta_x, max_x_f_ind  + eta_x)
+                    plt.ylim(min_y_f_ind - eta_y, max_y_f_ind  + eta_y)
+                    
+                plt.xlabel(objective_names[axis_x])
+                plt.ylabel(objective_names[axis_y])
+
+                box = ax.get_position()
+                ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+                marker_list = create_markers()
+                if pf is not None:
+                    markers = marker_list[2:]
+                else:
+                    markers = marker_list[2:-1]
+
+                plt.legend(handles=markers,
+                        loc='center left', bbox_to_anchor=(1, 0.5), handler_map={mpatches.Circle: HandlerCircle()})
+
+                if show:
+                    plt.show()
+                plt.savefig(save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png')
+                plt.savefig(save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.pdf', format='pdf')
                 
-                pop_f_x = all_population.get("F")[:,axis_x]
-                clean_pop_x = np.delete(pop_f_x, np.where(pop_f_x == MAX_VALUE))
-                max_x_f_ind = max(clean_pop_x)
-                clean_pop_x = np.delete(pop_f_x, np.where(pop_f_x == MIN_VALUE))
-                min_x_f_ind = min(clean_pop_x)
 
-                pop_f_y = all_population.get("F")[:,axis_y]
-                clean_pop_y = np.delete(pop_f_y, np.where(pop_f_y == MAX_VALUE))
-                max_y_f_ind = max(clean_pop_y)
-                clean_pop_y = np.delete(pop_f_y, np.where(pop_f_y == MIN_VALUE))
-                min_y_f_ind = min(clean_pop_y)
+                plt.clf()
+        plt.close(f)
 
-                eta_x = abs(max_x_f_ind - min_x_f_ind) / 10
-                eta_y = abs(max_y_f_ind- min_y_f_ind) / 10
-                
-                plt.xlim(min_x_f_ind - eta_x, max_x_f_ind  + eta_x)
-                plt.ylim(min_y_f_ind - eta_y, max_y_f_ind  + eta_y)
-                
-            plt.xlabel(objective_names[axis_x])
-            plt.ylabel(objective_names[axis_y])
+    # output 3d plots
+    if n_obj == 3:
+        visualize_3d(all_population, 
+            save_folder_objective, 
+            objective_names, 
+            mode="critical", 
+            markersize=20, 
+            do_save=True,
+            dimension="F",
+            angles=[(45,-45),(45,45),(45,135)],
+            show=show)
+    print(f"Objective Space: {save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png'}")
 
-            box = ax.get_position()
-            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-
-            marker_list = create_markers()
-            if pf is not None:
-                markers = marker_list[2:]
-            else:
-                markers = marker_list[2:-1]
-
-            plt.legend(handles=markers,
-                       loc='center left', 
-                       bbox_to_anchor=(1, 0.5), 
-                       handler_map={mpatches.Circle: HandlerCircle()})
-
-            plt.savefig(save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png')
-            plt.clf()
-            
-    plt.close(f)
 
 def optimal_individuals(res, save_folder):
-    """output of optimal individuals"""
+    """Output of optimal individuals (duplicate free)"""
     problem = res.problem
     design_names = problem.design_names
     objective_names = problem.objective_names
@@ -505,12 +466,18 @@ def optimal_individuals(res, save_folder):
         for i in range(problem.n_obj):
             header.append(f"Fitness_"+ objective_names[i])
 
+        # column to indicate wheter individual is critical or not 
+        header.append(f"Critical")
+
         write_to.writerow(header)
 
-        for index in range(len(res.opt)):
+        clean_pop = duplicate_free(res.opt)
+
+        for index in range(len(clean_pop)):
             row = [index]
-            row.extend(["%.6f" % X_i for X_i in res.opt.get("X")[index]])
-            row.extend(["%.6f" % F_i for F_i in res.opt.get("F")[index]])
+            row.extend(["%.6f" % X_i for X_i in clean_pop.get("X")[index]])
+            row.extend(["%.6f" % F_i for F_i in clean_pop.get("F")[index]])
+            row.extend(["%i" % clean_pop.get("CB")[index]])
             write_to.writerow(row)
         f.close()
 
@@ -528,7 +495,7 @@ def all_individuals(res, save_folder):
         for i in range(problem.n_var):
             header.append(design_names[i])
         for i in range(problem.n_obj):
-            header.append(objective_names[i])
+            header.append(f"Fitness_{objective_names[i]}")
         # column to indicate wheter individual is critical or not 
         header.append(f"Critical")
 
@@ -546,35 +513,6 @@ def all_individuals(res, save_folder):
         f.close()
 
 def all_critical_individuals(res, save_folder):
-    """Output of all critical individuals"""
-    problem = res.problem
-    hist = res.history
-    design_names = problem.design_names
-    objective_names = problem.objective_names
-
-    with open(save_folder + 'all_critical_testcases.csv', 'w', encoding='UTF8', newline='') as f:
-        write_to = csv.writer(f)
-
-        header = ['Index']
-        for i in range(problem.n_var):
-            header.append(design_names[i])
-        for i in range(problem.n_obj):
-            header.append(objective_names[i])
-
-        write_to.writerow(header)
-
-        index = 0
-        for algo in hist:
-            for i in range(len(algo.pop.divide_critical_non_critical()[0])):
-                row = [index]
-                row.extend(["%.6f" % X_i for X_i in algo.pop.get("X")[i]])
-                row.extend(["%.6f" % F_i for F_i in algo.pop.get("F")[i]])
-                write_to.writerow(row)
-                index += 1
-        f.close()
-
-def all_critical_individuals(res, save_folder):
-
     """Output of all critical individuals"""
     problem = res.problem
     hist = res.history    # TODO check why when iterating over the algo in the history set is different
@@ -605,16 +543,154 @@ def all_critical_individuals(res, save_folder):
             index += 1
         f.close()
 
+''' Write down the population for each generation'''
+def write_generations(res, save_folder):
+
+    save_folder_history = save_folder + "generations" + os.sep
+    Path(save_folder_history).mkdir(parents=True, exist_ok=True) 
+
+    problem = res.problem
+    hist = res.history
+    design_names = problem.design_names
+    objective_names = problem.objective_names
+
+    for i, algo in enumerate(hist):
+        with open(save_folder_history + f'gen_{i+1}.csv', 'w', encoding='UTF8', newline='') as f:
+            write_to = csv.writer(f)
+
+            header = ['Index']
+            for i in range(problem.n_var):
+                header.append(design_names[i])
+            for i in range(problem.n_obj):
+                header.append(f"Fitness_{objective_names[i]}")
+            # column to indicate wheter individual is critical or not 
+            header.append(f"Critical")
+
+            write_to.writerow(header)
+            index = 0
+            for i in range(len(algo.pop)):
+                row = [index]
+                row.extend(["%.6f" % X_i for X_i in algo.pop.get("X")[i]])
+                row.extend(["%.6f" % F_i for F_i in algo.pop.get("F")[i]])
+                row.extend(["%i" % algo.pop.get("CB")[i]])
+                write_to.writerow(row)
+                index += 1
+            f.close()
+
 def simulations(res, save_folder):
     '''Visualization of the results of simulations'''
+    ''' Plots scenarios only once when duplicates available'''
+
     problem = res.problem
     is_simulation = problem.is_simulation()
     if is_simulation:
         save_folder_gif = save_folder + "gif" + os.sep
         Path(save_folder_gif).mkdir(parents=True, exist_ok=True)
-        for index, simout in enumerate(res.opt.get("SO")):
+        clean_pop = duplicate_free(res.opt)
+        for index, simout in enumerate(clean_pop.get("SO")):
             file_name = str(index) + str("_trajectory")
-            param_values = res.opt.get("X")[index]
-            scenario_plotter.plot_scenario_gif(param_values, simout, save_folder_gif, file_name)
+            param_values = clean_pop.get("X")[index]
+            scenario_plotter.plot_gif(param_values, simout, save_folder_gif, file_name)
     else:
         log.info("No simulation visualization available. The experiment is not a simulation.")
+        
+''' Write down the population for each generation'''
+def write_generations(res, save_folder):
+
+    save_folder_history = save_folder + "generations" + os.sep
+    Path(save_folder_history).mkdir(parents=True, exist_ok=True) 
+
+    problem = res.problem
+    hist = res.history
+    design_names = problem.design_names
+    objective_names = problem.objective_names
+
+    for i, algo in enumerate(hist):
+        with open(save_folder_history + f'gen_{i+1}.csv', 'w', encoding='UTF8', newline='') as f:
+            write_to = csv.writer(f)
+
+            header = ['Index']
+            for i in range(problem.n_var):
+                header.append(design_names[i])
+            for i in range(problem.n_obj):
+                header.append(f"Fitness_{objective_names[i]}")
+            # column to indicate wheter individual is critical or not 
+            header.append(f"Critical")
+
+            write_to.writerow(header)
+            index = 0
+            for i in range(len(algo.pop)):
+                row = [index]
+                row.extend(["%.6f" % X_i for X_i in algo.pop.get("X")[i]])
+                row.extend(["%.6f" % F_i for F_i in algo.pop.get("F")[i]])
+                row.extend(["%i" % algo.pop.get("CB")[i]])
+                write_to.writerow(row)
+                index += 1
+            f.close()
+
+    
+def write_pf_individuals(save_folder, pf_pop):
+    """Output of pf individuals (duplicate free)"""
+
+    n_var = len(pf_pop.get("X")[0])
+    n_obj= len(pf_pop.get("F")[0])
+   
+    # We dont have the design, objective names
+    design_names = [f"X_{i}" for i in range(n_var)]                    
+    objective_names = [f"Fitness_{i}" for i in range(n_obj)]
+     
+    with open(save_folder + 'estimated_pf.csv', 'w', encoding='UTF8', newline='') as f:
+        write_to = csv.writer(f)
+
+        header = ['Index']
+        for i in range(n_var):
+            header.append(design_names[i])
+        for i in range(n_obj):
+            header.append(f"Fitness_"+ objective_names[i])
+
+        # column to indicate wheter individual is critical or not 
+        header.append(f"Critical")
+
+        write_to.writerow(header)
+
+        for index in range(len(pf_pop)):
+            row = [index]
+            row.extend(["%.6f" % X_i for X_i in pf_pop.get("X")[index]])
+            row.extend(["%.6f" % F_i for F_i in pf_pop.get("F")[index]])
+            row.extend(["%i" % pf_pop.get("CB")[index]])
+            write_to.writerow(row)
+        f.close()
+             
+
+
+def write_pf_individuals(save_folder, pf_pop):
+    """Output of pf individuals (duplicate free)"""
+
+    n_var = len(pf_pop.get("X")[0])
+    n_obj= len(pf_pop.get("F")[0])
+   
+    # We dont have the design, objective names
+    design_names = [f"X_{i}" for i in range(n_var)]                    
+    objective_names = [f"Fitness_{i}" for i in range(n_obj)]
+     
+    with open(save_folder + 'estimated_pf.csv', 'w', encoding='UTF8', newline='') as f:
+        write_to = csv.writer(f)
+
+        header = ['Index']
+        for i in range(n_var):
+            header.append(design_names[i])
+        for i in range(n_obj):
+            header.append(f"Fitness_"+ objective_names[i])
+
+        # column to indicate wheter individual is critical or not 
+        header.append(f"Critical")
+
+        write_to.writerow(header)
+
+        for index in range(len(pf_pop)):
+            row = [index]
+            row.extend(["%.6f" % X_i for X_i in pf_pop.get("X")[index]])
+            row.extend(["%.6f" % F_i for F_i in pf_pop.get("F")[index]])
+            row.extend(["%i" % pf_pop.get("CB")[index]])
+            write_to.writerow(row)
+        f.close()

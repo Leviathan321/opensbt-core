@@ -13,6 +13,12 @@ class SearchConfiguration(object):
     inner_num_gen = None
     n_func_evals_lim = None
 
+    # metrics
+    ref_point_hv = None
+    nadir = None
+    ideal = None
+    
+
 #TODO create a search configuration file specific for each algorithm
 class DefaultSearchConfiguration(SearchConfiguration):
     n_generations = 5 
@@ -28,3 +34,7 @@ class DefaultSearchConfiguration(SearchConfiguration):
     inner_num_gen = 4
     max_tree_iterations = 4
     n_func_evals_lim = 500
+
+    # metrics
+    ref_point_hv = None
+    nadir = ref_point_hv

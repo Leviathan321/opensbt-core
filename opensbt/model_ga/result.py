@@ -9,14 +9,55 @@ from pathlib import Path
 from opensbt.visualization import visualizer
 import logging as log
 
-from opensbt.config import RESULTS_FOLDER, WRITE_ALL_INDIVIDUALS
+from opensbt.config import RESULTS_FOLDER, WRITE_ALL_INDIVIDUALS, EXPERIMENTAL_MODE
+import numpy as np
+from utils.sorting import *
 
 class SimulationResult(Result):
 
     def __init__(self) -> None:
         super().__init__()
-
-    def obtain_history(self):
+        self._additional_data = dict()
+    
+    def obtain_history_design(self):
+        hist = self.history
+        
+        if hist is not None:
+            n_evals = []  # corresponding number of function evaluations
+            hist_X = []  # the objective space values in each 
+            pop = Population()
+            for algo in hist:
+                n_evals.append(algo.evaluator.n_eval)  # store the number of function evaluations                            
+                pop = Population.merge(pop, algo.pop)
+                feas = np.where(pop.get("feasible"))[
+                    0]  # filter out only the feasible and append and objective space values
+                hist_X.append(pop.get("X")[feas])
+        else:
+            n_evals = None
+            hist_X = None
+        return n_evals, hist_X
+    
+    # iteration of first critical solutions found + fitness values
+    def get_first_critical(self):
+        hist = self.history
+        res = Population() 
+        iter = 0
+        if hist is not None:
+            for algo in hist:
+                iter += 1
+                #n_evals.append(algo.evaluator.n_eval)  # store the number of function evaluations
+                opt = algo.opt  # retrieve the optimum from the algorithm
+                crit = np.where((opt.get("CB"))) [0] 
+                feas = np.where((opt.get("feasible"))) [0] 
+                feas = list(set(crit) & set(feas))
+                res = opt[feas]
+                if len(res) == 0:
+                    continue
+                else:
+                    return iter, res
+        return 0, res
+    
+    def obtain_history(self, critical=False):
         hist = self.history
         if hist is not None:
             n_evals = []  # corresponding number of function evaluations
@@ -24,8 +65,12 @@ class SimulationResult(Result):
             for algo in hist:
                 n_evals.append(algo.evaluator.n_eval)  # store the number of function evaluations
                 opt = algo.opt  # retrieve the optimum from the algorithm
-                feas = np.where(opt.get("feasible"))[
-                    0]  # filter out only the feasible and append and objective space values
+                if critical:
+                    crit = np.where((opt.get("CB"))) [0] 
+                    feas = np.where((opt.get("feasible"))) [0] 
+                    feas = list(set(crit) & set(feas))
+                else:
+                    feas = np.where(opt.get("feasible"))[0]  # filter out only the feasible and append and objective space values
                 hist_F.append(opt.get("F")[feas])
         else:
             n_evals = None
@@ -35,23 +80,30 @@ class SimulationResult(Result):
     def obtain_all_population(self):
         all_population = Population()
         hist = self.history
-        for generation in hist:
-            all_population = Population.merge(all_population, generation.pop)
+        if hist is not None:
+            for generation in hist:
+                all_population = Population.merge(all_population, generation.pop)
         return all_population
 
-    def obtain_history_hitherto(self):
+    def obtain_history_hitherto(self,critical=False, optimal=True, var = "F"):
         hist = self.history
         n_evals = []  # corresponding number of function evaluations
         hist_F = []  # the objective space values in each generation
 
-        opt_all = Population()
+        all = Population()
         for algo in hist:
             n_evals.append(algo.evaluator.n_eval)
-            opt_all = Population.merge(opt_all, algo.pop)
-            opt_all_nds = get_nondominated_population(opt_all)
-            feas = np.where(opt_all_nds.get("feasible"))[
-                0]
-            hist_F.append(opt_all_nds.get("F")[feas])
+            all = Population.merge(all, algo.pop)  
+            if optimal:
+                all = get_nondominated_population(all)
+            
+            if critical:
+                crit = np.where((all.get("CB"))) [0] 
+                feas = np.where((all.get("feasible")))[0] 
+                feas = list(set(crit) & set(feas))
+            else:
+                feas = np.where(all.get("feasible"))[0]  # filter out only the feasible and append and objective space values
+            hist_F.append(all.get(var)[feas])
         return n_evals, hist_F
     
     def persist(self, save_folder):
@@ -63,8 +115,12 @@ class SimulationResult(Result):
     def load(save_folder, name="result"):
         with open(save_folder + os.sep + name, "rb") as f:
             return dill.load(f)
-        
-    def write_results(self, results_folder = RESULTS_FOLDER, params=None):
+    
+    @property
+    def additional_data(self):
+        return self._additional_data
+
+    def write_results(self, results_folder = RESULTS_FOLDER, params=None, is_experimental=EXPERIMENTAL_MODE):
         algorithm = self.algorithm
 
         # WHen algorithm is developed without subclassing pymoos Algorithm,
@@ -78,7 +134,7 @@ class SimulationResult(Result):
           
         log.info(f"=====[{algorithm_name}] Writing results to: ")
 
-        save_folder = visualizer.create_save_folder(self.problem, results_folder, algorithm_name)
+        save_folder = visualizer.create_save_folder(self.problem, results_folder, algorithm_name, is_experimental=is_experimental)
         log.info(save_folder)
         
         # Mostly for algorithm evaluation relevant
