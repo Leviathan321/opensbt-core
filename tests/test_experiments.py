@@ -33,11 +33,8 @@ class TestExperiments():
             if not os.path.isdir(results_path + folder):
                 print(f"tocheck: {results_path + folder}")
                 return False
-        
         return True
-            
-
-
+        
     @staticmethod
     def test_dummy_experiment():
         from opensbt.simulation.dummy_simulation import DummySimulator
