@@ -21,7 +21,7 @@ from opensbt.problem.pymoo_test_problem import *
 import matplotlib.pyplot as plt
 import os
 
-from opensbt.visualization import output
+from opensbt.visualization import output_metric
 
 class TestAnalysis():
 
@@ -44,6 +44,10 @@ class TestAnalysis():
         config.prob_mutation = 0.5
         config.n_func_evals_lim = 1000
 
+        config.ideal = np.asarray([0,0])
+        config.ref_point_hv = np.asarray([70,20])
+        config.nadir = config.ref_point_hv
+
         optimizer = NsgaIIDTOptimizer(problem,config)
 
         res = optimizer.run()
@@ -57,6 +61,7 @@ class TestAnalysis():
         eval_result = Quality.calculate_hv_hitherto(res, crit_pop.get("X"))
         n_evals, digd = eval_result.steps, eval_result.values
 
+
         plt.figure(figsize=(7, 5))
         plt.plot(n_evals, digd, color='black', lw=0.7)
         plt.scatter(n_evals, digd, facecolor="none", edgecolor='black', marker='o')
@@ -66,7 +71,8 @@ class TestAnalysis():
         plt.savefig(os.getcwd() + os.sep + "quality_indicators" + os.sep + "test.png")
         plt.close()
 
-        output.hv_analysis(res, 
+        output_metric.hypervolume_analysis(res, 
                 save_folder=TestAnalysis.OUTPUT_FOLDER + os.sep + "quality_indicators" + os.sep, 
-                input_crit=crit_pop.get("X"), 
-                filename='hv')
+                nadir =    config.nadir,
+                ideal = config.ideal
+                )

@@ -590,7 +590,7 @@ def simulations(res, save_folder):
         for index, simout in enumerate(clean_pop.get("SO")):
             file_name = str(index) + str("_trajectory")
             param_values = clean_pop.get("X")[index]
-            scenario_plotter.plot_gif(param_values, simout, save_folder_gif, file_name)
+            scenario_plotter.plot_scenario_gif(param_values, simout, save_folder_gif, file_name)
     else:
         log.info("No simulation visualization available. The experiment is not a simulation.")
         
