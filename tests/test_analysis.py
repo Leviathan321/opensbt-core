@@ -21,19 +21,23 @@ from opensbt.problem.pymoo_test_problem import *
 import matplotlib.pyplot as plt
 import os
 
-from opensbt.visualization import output_metric
+from opensbt.visualization import output_metric, visualizer
+
+WAIT_RESULTS_TIME = 10
+
+OUTPUT_FOLDER  = os.getcwd() + os.sep + "tests" + os.sep + "output" + os.sep
+
 
 class TestAnalysis():
 
-    WAIT_RESULTS_TIME = 10
-    OUTPUT_FOLDER  = os.getcwd() + "tests" + os.sep + "output" + os.sep
-    
+ 
     def test_coverage_analysis(self):
         pass
     def test_convergence_analysis(self):
         pass
 
-    def test_hv_analysis_math(self):
+    def test_analysis_math(self):
+
         problem = PymooTestProblem(
             'BNH', critical_function= CriticalBnhDivided())
 
@@ -45,34 +49,58 @@ class TestAnalysis():
         config.n_func_evals_lim = 1000
 
         config.ideal = np.asarray([0,0])
-        config.ref_point_hv = np.asarray([70,20])
+        config.ref_point_hv = np.asarray([150,50])
         config.nadir = config.ref_point_hv
 
         optimizer = NsgaIIDTOptimizer(problem,config)
 
         res = optimizer.run()
-        res.write_results()
+
+        #########################        
+        save_folder = visualizer.create_save_folder(problem, 
+                                                    results_folder=OUTPUT_FOLDER, 
+                                                    algorithm_name = optimizer.algorithm_name, 
+                                                    is_experimental=False)
+
+        res.write_results(results_folder=save_folder)
 
         ######### Evaluate
 
-        all_pop = res.obtain_all_population()
-        crit_pop = all_pop.divide_critical_non_critical()[0]
-
-        eval_result = Quality.calculate_hv_hitherto(res, crit_pop.get("X"))
-        n_evals, digd = eval_result.steps, eval_result.values
-
-
-        plt.figure(figsize=(7, 5))
-        plt.plot(n_evals, digd, color='black', lw=0.7)
-        plt.scatter(n_evals, digd, facecolor="none", edgecolor='black', marker='o')
-        plt.title("Design Space Convergence")
-        plt.xlabel("Function Evaluations")
-        plt.ylabel("HV")
-        plt.savefig(os.getcwd() + os.sep + "quality_indicators" + os.sep + "test.png")
-        plt.close()
+        bound_min = config.ideal
+        bound_max = config.nadir
+        n_cells = 10
 
         output_metric.hypervolume_analysis(res, 
-                save_folder=TestAnalysis.OUTPUT_FOLDER + os.sep + "quality_indicators" + os.sep, 
-                nadir =    config.nadir,
+                save_folder, 
+                nadir = config.nadir,
                 ideal = config.ideal
                 )
+        
+        output_metric.hypervolume_analysis_local(res, 
+                save_folder
+                )
+        
+        output_metric.calculate_n_crit_distinct(res,
+                                                save_folder=save_folder,
+                                                bound_min = bound_min,
+                                                bound_max=bound_max,
+                                                n_cells=n_cells,
+                                                var="F")
+                
+        output_metric.calculate_n_crit_distinct(res,
+                                                save_folder=save_folder,
+                                                bound_min = bound_min,
+                                                bound_max=bound_max,
+                                                n_cells=n_cells,
+                                                var="X")
+        output_metric.igd_analysis(res, 
+                save_folder, 
+                input_pf= None
+                )
+        
+        output_metric.igd_analysis_hitherto(res, 
+            save_folder, 
+            input_pf= None
+        )
+        
+        
