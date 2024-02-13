@@ -25,19 +25,17 @@ from opensbt.visualization import output_metric, visualizer
 
 WAIT_RESULTS_TIME = 10
 
-OUTPUT_FOLDER  = os.getcwd() + os.sep + "tests" + os.sep + "output" + os.sep
+OUTPUT_FOLDER  = os.sep + "output" + os.sep + "results" + os.sep
 
 
-class TestAnalysis():
+class TestAnalysisSingle():
 
- 
     def test_coverage_analysis(self):
         pass
     def test_convergence_analysis(self):
         pass
 
     def test_analysis_math(self):
-
         problem = PymooTestProblem(
             'BNH', critical_function= CriticalBnhDivided())
 
@@ -62,7 +60,7 @@ class TestAnalysis():
                                                     algorithm_name = optimizer.algorithm_name, 
                                                     is_experimental=False)
 
-        res.write_results(results_folder=save_folder)
+        res.write_results(results_folder=save_folder, params = optimizer.parameters)
 
         ######### Evaluate
 
@@ -102,5 +100,5 @@ class TestAnalysis():
             save_folder, 
             input_pf= None
         )
-        
+
         

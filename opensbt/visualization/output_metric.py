@@ -220,7 +220,7 @@ def igd_analysis_hitherto(res: Result, save_folder: str, input_pf=None, filename
     plt.xlabel("Function Evaluations")
     plt.ylabel("IGD")
     # plt.yscale("log")
-    plt.savefig(save_folder_plot + METRIC_PLOTS_FOLDER + filename + '.png')
+    plt.savefig(save_folder_plot + filename + '.png')
     plt.clf()
     plt.close(f)
 

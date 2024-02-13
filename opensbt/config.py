@@ -24,6 +24,6 @@ LOAD_FROM_GENERATIONS = True
 
 metric_config = {}
 metric_config["DUMMY"] = dict(
-    ref_point_hv = np.asarray([100,0]),
+    ref_point_hv = np.asarray([20,0]),
     ideal = np.asarray([0,-20])
 )
