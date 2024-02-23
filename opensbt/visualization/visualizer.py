@@ -118,14 +118,14 @@ def write_simulation_output(res: Result, save_folder: str, mode = "all", write_m
     problem = res.problem
     if not problem.is_simulation():
         return
-    inds = get_pop_using_mode(res=res, mode=mode)[:write_max]
+    save_folder_simout = save_folder + os.sep + "simout" + os.sep
+    Path(save_folder_simout).mkdir(parents=True, exist_ok=True)
 
+    inds = get_pop_using_mode(res=res, mode=mode)[:write_max]
     if len(inds) == 0:
         log.info("The population is empty.")
         return
-    
-    save_folder_simout = save_folder + os.sep + "simout" + os.sep
-    Path(save_folder_simout).mkdir(parents=True, exist_ok=True)
+
     write_simout(save_folder_simout, 
                 inds)
 
@@ -690,4 +690,72 @@ def write_pf_individuals(save_folder, pf_pop):
             row.extend(["%i" % pf_pop.get("CB")[index]])
             write_to.writerow(row)
         f.close()
+
+def plot_timeseries_basic(res, save_folder, mode="crit", write_max=100):
+    plot_timeseries(res, save_folder, mode, type="X", max=write_max)
+    plot_timeseries(res, save_folder, mode, type="Y",max=write_max)
+    plot_timeseries(res, save_folder, mode, type="V",max=write_max)
+
+
+def plot_timeseries(res, save_folder, mode="crit", type="X", max="100"):
+    problem = res.problem
+    is_simulation = problem.is_simulation()
+    if is_simulation:
+        inds = get_pop_using_mode(res=res, 
+                                  mode=mode)
+        clean_pop = duplicate_free(inds)[:max]
+        if len(clean_pop) == 0:
+            return
+        
+        actors = list((clean_pop.get("SO")[0].location).keys())
+
+        save_folder_gif = save_folder + os.sep + "trace_comparison" 
+        Path(save_folder_gif).mkdir(parents=True, exist_ok=True)
+                                
+        for index in range(len(clean_pop)):
+            param_v_chain = "_".join("%.2f" % a for a in  clean_pop.get("X")[index])
+
+            f = plt.figure()
+            cmap = plt.get_cmap('gnuplot')
+            colors = [cmap(i) for i in np.linspace(0, 1, len(actors))]
+
+            simout = clean_pop.get("SO")[index]
+            times = simout.times
             
+            param_values = clean_pop.get("X")[index]
+            param_v_chain = "_".join("%.2f" % a for a in param_values)
+            
+            for actor_ind, actor in enumerate(actors):
+                if type.lower() == "x":
+                    plt.plot(times,
+                            [v[0] for v in simout.location[actor]],
+                            label=actor,
+                            color=colors[actor_ind])
+                elif type.lower() == "y":
+                    plt.plot(times,
+                        [v[1] for v in simout.location[actor]],
+                        color=colors[actor_ind],
+                        label=actor)
+                elif type.lower() == "v":
+                    plt.plot(times,
+                            [v for v in simout.speed[actor]],
+                            color=colors[actor_ind],
+                            label=actor)
+                elif type.lower() in simout.otherParams:
+                    plt.plot(times,
+                        [v for v in simout.otherParams[type.lower()]],
+                        color=colors[actor_ind],
+                        label=actor)
+                else:
+                    print("Type is unknown")
+                    return
+            plt.xlabel('Timestep')
+            plt.ylabel(f'{type.upper()}')
+            plt.title(f'{type.upper()} Traces')
+            plt.legend()
+            plt.savefig(save_folder_gif + os.sep + f"{type.upper()}_trace_{param_v_chain}.png", format="png")
+            plt.clf()
+            plt.close(f)
+    else:
+        print("No simulation visualization available. The experiment is not a simulation.")
+

@@ -153,11 +153,15 @@ class SimulationResult(Result):
         visualizer.write_simulation_output(self,save_folder,
                                            mode= config.MODE_WRITE_SIMOUT,
                                            write_max=config.NUM_SIMOUT_MAX)
+        visualizer.plot_timeseries_basic(self,
+                               save_folder,
+                               mode= config.MODE_PLOT_TIME_TRACES,
+                                write_max = config.NUM_PLOT_TIME_TRACES)
+        
         visualizer.simulations(self, 
-                                save_folder,
-                                mode = config.MODE_WRITE_GIF,
-                                write_max = config.NUM_GIF_MAX)
-
+                    save_folder,
+                    mode = config.MODE_WRITE_GIF,
+                    write_max = config.NUM_GIF_MAX)
         if WRITE_ALL_INDIVIDUALS:
             visualizer.all_individuals(self, save_folder)
         
