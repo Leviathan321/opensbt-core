@@ -74,6 +74,7 @@ If you use or extend OpenSBT please cite our framework. Here is an example BibTe
       author={Lev Sorokin and Tiziano Munaro and Damir Safin and Brian Hsuan-Cheng Liao and Adam Molin},
       year={2023},
       eprint={2306.10296},
+      howpublished={Accepted at Demonstration Track {ICSE '24}},
       archivePrefix={arXiv},
       primaryClass={cs.SE}
 }
