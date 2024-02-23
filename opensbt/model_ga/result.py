@@ -1,5 +1,6 @@
 import numpy as np
 from pymoo.core.result import Result
+from opensbt import config
 from opensbt.model_ga.population import PopulationExtended as Population
 from opensbt.model_ga.individual import IndividualSimulated as Individual
 from opensbt.utils.sorting import *
@@ -149,8 +150,13 @@ class SimulationResult(Result):
         visualizer.optimal_individuals(self, save_folder)
         visualizer.all_critical_individuals(self,save_folder)
         visualizer.write_summary_results(self, save_folder)
-        visualizer.write_simulation_output(self,save_folder)
-        visualizer.simulations(self, save_folder)
+        visualizer.write_simulation_output(self,save_folder,
+                                           mode= config.MODE_WRITE_SIMOUT,
+                                           write_max=config.NUM_SIMOUT_MAX)
+        visualizer.simulations(self, 
+                                save_folder,
+                                mode = config.MODE_WRITE_GIF,
+                                write_max = config.NUM_GIF_MAX)
 
         if WRITE_ALL_INDIVIDUALS:
             visualizer.all_individuals(self, save_folder)

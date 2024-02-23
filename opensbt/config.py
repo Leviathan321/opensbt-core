@@ -27,3 +27,16 @@ metric_config["DUMMY"] = dict(
     ref_point_hv = np.asarray([20,0]),
     ideal = np.asarray([0,-20])
 )
+
+# output
+MODE_WRITE_SIMOUT = "crit"
+MODE_WRITE_GIF = "crit"
+
+NUM_SIMOUT_MAX = 100
+NUM_GIF_MAX = 10
+
+DEFAULT_CAR_LENGTH = 3.9
+DEFAULT_CAR_WIDTH = 1.8
+DEFAULT_PEDESTRIAN_SIZE = 0.4
+
+DEFAULT_TRACE_INTERVAL = 0.25 # in seconds

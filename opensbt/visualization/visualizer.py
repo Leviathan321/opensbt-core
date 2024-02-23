@@ -99,19 +99,49 @@ def _calc_properties(res, save_folder, algorithm_name, **kwargs):
 def _additional_descritption(res, save_folder, algorithm_name, **kwargs):
     pass
 
-'''Output of the simulation data for all solutions (for the moment only partial data)'''
-def write_simulation_output(res: Result, save_folder: str):
-    problem = res.problem
+def get_pop_using_mode(res: Result, mode: str):
+    inds = Population()
+    # print(f"mode: {mode}")
+    if mode == "all":
+        inds = res.obtain_all_population()
+    elif mode == "opt":
+        inds = res.opt
+    elif mode == "crit":
+        all = res.obtain_all_population()
+        inds, _ = all.divide_critical_non_critical()
+    else:
+        print("Mode is not accepted. Accepted modes are: all, opt, crit.")
+    return inds
 
+'''Output of the simulation data for all solutions (for the moment only partial data)'''
+def write_simulation_output(res: Result, save_folder: str, mode = "all", write_max =  100):
+    problem = res.problem
     if not problem.is_simulation():
         return
+    inds = get_pop_using_mode(res=res, mode=mode)[:write_max]
 
-    all_population = res.obtain_all_population()
+    if len(inds) == 0:
+        log.info("The population is empty.")
+        return
+    
+    save_folder_simout = save_folder + os.sep + "simout" + os.sep
+    Path(save_folder_simout).mkdir(parents=True, exist_ok=True)
+    write_simout(save_folder_simout, 
+                inds)
 
-    with open(save_folder + 'simulation_output.csv', 'w', encoding='UTF8', newline='') as f:
+def write_simout(path, pop):
+    for i, _ in enumerate(pop):
+        param_values = pop.get("X")[i]
+        param_v_chain = "_".join("%.2f" % a for a in param_values)
+        simout_dumped = pop.get("SO")[i].to_json()
+        with open(path + os.sep + f'simout{f"_S{param_v_chain}" if param_v_chain is not None else ""}.json', 'w') as f:
+            f.write(simout_dumped)
+
+    simout_pop = pop.get("SO")
+    with open(path + f'simout_criticality.csv','w', encoding='UTF8', newline='') as f:
         write_to = csv.writer(f)
         header = ['Index']
-        other_params = all_population.get("SO")[0].otherParams
+        other_params = simout_pop[0].otherParams
 
         # write header
         for item, value in other_params.items():
@@ -120,9 +150,9 @@ def write_simulation_output(res: Result, save_folder: str):
         write_to.writerow(header)
 
         # write values
-        for index in range(len(all_population)):
+        for index in range(len(simout_pop)):
             row = [index]
-            other_params = all_population.get("SO")[index].otherParams
+            other_params = simout_pop[index].otherParams
             for item, value in other_params.items():
                 if isinstance(value,float):
                     row.extend(["%.2f" % value])
@@ -577,23 +607,24 @@ def write_generations(res, save_folder):
                 index += 1
             f.close()
 
-def simulations(res, save_folder):
+def simulations(res, save_folder, mode="all", write_max = 100):
     '''Visualization of the results of simulations'''
-    ''' Plots scenarios only once when duplicates available'''
-
     problem = res.problem
     is_simulation = problem.is_simulation()
     if is_simulation:
         save_folder_gif = save_folder + "gif" + os.sep
         Path(save_folder_gif).mkdir(parents=True, exist_ok=True)
-        clean_pop = duplicate_free(res.opt)
-        for index, simout in enumerate(clean_pop.get("SO")):
-            file_name = str(index) + str("_trajectory")
-            param_values = clean_pop.get("X")[index]
+        pop = get_pop_using_mode(res=res, 
+                                  mode=mode)[:write_max]
+        
+        for index, simout in enumerate(pop.get("SO")):
+            param_values = pop.get("X")[index]
+            param_v_chain = "_".join("%.2f" % a for a in param_values)
+            file_name = str(param_v_chain) + str("_trajectory")
             scenario_plotter.plot_scenario_gif(param_values, simout, save_folder_gif, file_name)
     else:
         log.info("No simulation visualization available. The experiment is not a simulation.")
-        
+
 ''' Write down the population for each generation'''
 def write_generations(res, save_folder):
 
@@ -627,8 +658,7 @@ def write_generations(res, save_folder):
                 write_to.writerow(row)
                 index += 1
             f.close()
-
-    
+            
 def write_pf_individuals(save_folder, pf_pop):
     """Output of pf individuals (duplicate free)"""
 
@@ -660,37 +690,4 @@ def write_pf_individuals(save_folder, pf_pop):
             row.extend(["%i" % pf_pop.get("CB")[index]])
             write_to.writerow(row)
         f.close()
-             
-
-
-def write_pf_individuals(save_folder, pf_pop):
-    """Output of pf individuals (duplicate free)"""
-
-    n_var = len(pf_pop.get("X")[0])
-    n_obj= len(pf_pop.get("F")[0])
-   
-    # We dont have the design, objective names
-    design_names = [f"X_{i}" for i in range(n_var)]                    
-    objective_names = [f"Fitness_{i}" for i in range(n_obj)]
-     
-    with open(save_folder + 'estimated_pf.csv', 'w', encoding='UTF8', newline='') as f:
-        write_to = csv.writer(f)
-
-        header = ['Index']
-        for i in range(n_var):
-            header.append(design_names[i])
-        for i in range(n_obj):
-            header.append(f"Fitness_"+ objective_names[i])
-
-        # column to indicate wheter individual is critical or not 
-        header.append(f"Critical")
-
-        write_to.writerow(header)
-
-        for index in range(len(pf_pop)):
-            row = [index]
-            row.extend(["%.6f" % X_i for X_i in pf_pop.get("X")[index]])
-            row.extend(["%.6f" % F_i for F_i in pf_pop.get("F")[index]])
-            row.extend(["%i" % pf_pop.get("CB")[index]])
-            write_to.writerow(row)
-        f.close()
+            

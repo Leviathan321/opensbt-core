@@ -28,7 +28,7 @@ class TestExperiments():
 
     @staticmethod
     def results_correctly_written(results_path):
-        req_folders = ["gif", "design_space", "objective_space", "classification"]
+        req_folders = ["gif", "simout", "design_space", "objective_space", "classification"]
 
         for folder in req_folders:
             if not os.path.isdir(results_path + folder):

@@ -1,34 +1,30 @@
-from math import sqrt
+from math import ceil
+from opensbt import config
 from opensbt.simulation.simulator import SimulationOutput
 from matplotlib import pyplot as plt
-from matplotlib.transforms import Affine2D
 from matplotlib.animation import FuncAnimation, PillowWriter
-import numpy
 from matplotlib.patches import Rectangle
 from matplotlib.patches import Circle
 from matplotlib.colors import colorConverter
-
-from matplotlib.collections import PatchCollection
-import os
 import numpy as np
 from opensbt.visualization.configuration import *
 
 
-def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None, fileName=None):
+def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None, fileName=None, trace_interval=config.DEFAULT_TRACE_INTERVAL):
     if "car_length" in simout.otherParams:
         car_length = float(simout.otherParams["car_length"])
     else:
-        car_length = float(3.9)
+        car_length = float(config.DEFAULT_CAR_LENGTH)
 
     if "car_width" in simout.otherParams:
         car_width = float(simout.otherParams["car_width"])
     else:
-        car_width = float(1.8)
+        car_width = float(config.DEFAULT_CAR_WIDTH)
 
     if "pedestrian_size" in simout.otherParams:
         pedestrian_size = float(simout.otherParams["pedestrian_size"])
     else:
-        pedestrian_size = 0.4
+        pedestrian_size = config.DEFAULT_PEDESTRIAN_SIZE
 
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(1, 1, 1)
@@ -48,7 +44,14 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
             "pedestrians" : <list of actors names that are pedstrians>
         }
      '''
-
+    
+    # determine trace_interval
+    if trace_interval is not None:
+        dif = simout.times[1] - simout.times[0]
+        skip = ceil(trace_interval/dif)
+    else:
+        skip = 1
+ 
     actors = simout.actors
     ego_name = actors["ego"]
     adversary_name = actors["adversary"]
@@ -57,15 +60,15 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
     actors_names = [ego_name] + [adversary_name] + vehicles_names + pedestrians_names
 
     "Traces and yaws for actors"
-    trace_ego = np.array(simout.location[ego_name])  # time series of Ego position
-    yaw_ego = np.array(simout.yaw[ego_name])  # time series of Ego velocity
+    trace_ego = np.array(simout.location[ego_name][0::skip])  # time series of Ego position
+    yaw_ego = np.array(simout.yaw[ego_name][0::skip])  # time series of Ego velocity
 
-    trace_adversary = np.array(simout.location[adversary_name])  # time series of adversary position
+    trace_adversary = np.array(simout.location[adversary_name][0::skip])  # time series of adversary position
+    yaw_adversary = np.array(simout.yaw[adversary_name][0::skip])
+    traces_vehicles = [np.array(simout.location[vehicle_name][0::skip]) for vehicle_name in vehicles_names]
+    yaws_vehicles = [np.array(simout.yaw[vehicle_name][0::skip]) for vehicle_name in vehicles_names]
 
-    traces_vehicles = [np.array(simout.location[vehicle_name]) for vehicle_name in vehicles_names]
-    yaws_vehicles = [np.array(simout.yaw[vehicle_name]) for vehicle_name in vehicles_names]
-
-    traces_pedestrians = [np.array(simout.location[pedestrian_name]) for pedestrian_name in pedestrians_names]
+    traces_pedestrians = [np.array(simout.location[pedestrian_name][0::skip]) for pedestrian_name in pedestrians_names]
 
     "Cartesian coordinates for actors"
     x_ego = trace_ego[:, 0]
@@ -90,7 +93,7 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
     borders_x = []
     borders_y = []
     for actor_name in actors_names:
-        trace_actor = np.array(simout.location[actor_name])
+        trace_actor = np.array(simout.location[actor_name][0::skip])
         x_actor = trace_actor[:,0]
         y_actor = trace_actor[:,1]
         borders_x.extend([min(x_actor), max(x_actor)])
@@ -121,11 +124,15 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
         patch_vehicle.set_height(car_length)
         # TODO: introduce separate dimensions of vehicles
 
-    "Cicle objects for adversary and pedestrians"
+    ''' if adversary car:
+    patch_adversary = Rectangle((0, 0), width=car_width, height=car_length, color=colors["adversary"])
+    patch_adversary.set_width(car_width)
+    patch_adversary.set_height(car_length)
+    '''
+
+    "Circle objects for adversary and pedestrians"
     circle_adversary = Circle((0, 0), radius=pedestrian_size, color=colors["adversary"])
     circles_pedestrians = [Circle((0, 0), radius=pedestrian_size, color=colors["pedestrians"]) for _ in range(len(pedestrians_names))]
-
-    skip = 2
 
     "Plot traces of all objects"
     plt.plot(x_ego, y_ego, color=colors["traces"])
@@ -144,16 +151,24 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
 
     def update(i):
         # updating ego
-        rotation_angle_ego = (yaw_ego[0::skip][i] - 90) % 360
+        rotation_angle_ego = (yaw_ego[i] - 90) % 360
         patch_ego.set_angle(rotation_angle_ego)
         shift_angle_ego = rotation_angle_ego - 180 / np.pi * np.arctan(car_width / car_length)
         shift_x_ego = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.sin(shift_angle_ego * np.pi / 180)
         shift_y_ego = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.cos(shift_angle_ego * np.pi / 180)
-        patch_ego.set_xy([x_ego[0::skip][i] + shift_x_ego, y_ego[0::skip][i] - shift_y_ego])
+        patch_ego.set_xy([x_ego[i] + shift_x_ego, y_ego[i] - shift_y_ego])
         ax.add_patch(patch_ego)
 
+        # update adversary
+        rotation_angle_adversary = (yaw_adversary[i] - 90) % 360
+        '''if car adversary: patch_adversary.set_angle(rotation_angle_adversary) '''
+        shift_angle_adversary = rotation_angle_adversary - 180 / np.pi * np.arctan(car_width / car_length)
+        shift_x_adversary = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.sin(shift_angle_adversary * np.pi / 180)
+        shift_y_adversary = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.cos(shift_angle_adversary * np.pi / 180)
+        '''if car adversary: patch_adversary.set_xy([x_adversary[i] + shift_x_adversary, y_adversary[i] - shift_y_adversary])
+        ax.add_patch(patch_adversary) '''
         # updating adversary
-        circle_adversary.center = x_adversary[0::skip][i], y_adversary[0::skip][i]
+        circle_adversary.center = x_adversary[i], y_adversary[i]
         ax.add_patch(circle_adversary)
 
 
@@ -162,7 +177,7 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
             x_pedestrian = x_pedestrians[key]
             y_pedestrian = y_pedestrians[key]
             circle_pedestrian = circles_pedestrians[key]
-            circle_pedestrian.center = x_pedestrian[0::skip][i], y_pedestrian[0::skip][i]
+            circle_pedestrian.center = x_pedestrian[i], y_pedestrian[i]
             ax.add_patch(circle_pedestrian)
 
         # updating vehicles
@@ -172,16 +187,15 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
             yaw_vehicle = yaws_vehicles[key]
             patch_vehicle = patches_vehicles[key]
 
-            rotation_angle_vehicle = (yaw_vehicle[0::skip][i] - 90) % 360
+            rotation_angle_vehicle = (yaw_vehicle[i] - 90) % 360
             patch_vehicle.set_angle(rotation_angle_vehicle)
             shift_angle_vehicle = rotation_angle_vehicle - 180 / np.pi * np.arctan(car_width / car_length)
             shift_x_vehicle = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.sin(
                 shift_angle_vehicle * np.pi / 180)
             shift_y_vehicle = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.cos(
                 shift_angle_vehicle * np.pi / 180)
-            patch_vehicle.set_xy([x_vehicle[0::skip][i] + shift_x_vehicle, y_vehicle[0::skip][i] - shift_y_vehicle])
+            patch_vehicle.set_xy([x_vehicle[i] + shift_x_vehicle, y_vehicle[i] - shift_y_vehicle])
             ax.add_patch(patch_vehicle)
-
         return
 
     if "sampling_rate" in simout.otherParams:
@@ -195,4 +209,3 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
     plt.clf()
     plt.close(fig)
     
-    return
