@@ -3,6 +3,7 @@ from pathlib import Path
 import pymoo
 
 from opensbt.model_ga.individual import IndividualSimulated
+from tests import test_base
 pymoo.core.individual.Individual = IndividualSimulated
 
 from opensbt.model_ga.population import PopulationExtended
@@ -37,6 +38,8 @@ class TestExperiments():
         
     @staticmethod
     def test_dummy_experiment():
+        test_base.configure_logging_and_env()
+
         from opensbt.simulation.dummy_simulation import DummySimulator
         
         results_folder = '/tests/output/'

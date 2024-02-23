@@ -23,7 +23,8 @@ test_case_generation.egg-info
 carla_simulation/temp
 docs/jupyter/.ipynb_checkpoints/*
 
-results/*
+**/results/*
+
 docs/jupyter/opensbt-core/results/*
 
 # Testing
