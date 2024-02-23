@@ -4,11 +4,11 @@ import logging as log
 import json
 import os
 import xml.etree.ElementTree as ET
-import yaml
-from model_ga.individual import Individual
-from simulation.simulator import Simulator, SimulationOutput
+from opensbt.model_ga.individual import Individual
+from opensbt.simulation.simulator import Simulator, SimulationOutput
 
 try:
+    import yaml
     from carla_simulation.balancer import Balancer
 except Exception:
     log.info("Carla Simulation adapter could not have been imported.")

@@ -17,7 +17,6 @@ from opensbt.algorithm.classification.classifier import ClassificationType
 from opensbt.algorithm.classification.decision_tree.decision_tree import *
 from opensbt.algorithm.optimizer import Optimizer
 from opensbt.experiment.search_configuration import SearchConfiguration
-import opensbt.quality_indicators.metrics.spread as qi
 from opensbt.model_ga.result import *
 import logging as log
 

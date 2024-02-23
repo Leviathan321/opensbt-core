@@ -34,14 +34,8 @@ from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.operators.sampling.lhs import LHS
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
-from opensbt.algorithm.classification.classifier import ClassificationType
 from opensbt.algorithm.classification.decision_tree.decision_tree import *
-from opensbt.evaluation.critical import Critical
 from opensbt.experiment.search_configuration import DefaultSearchConfiguration, SearchConfiguration
-from opensbt.problem.pymoo_test_problem import PymooTestProblem
-from opensbt.simulation.simulator import SimulationOutput
-from opensbt.visualization import visualizer
-import opensbt.quality_indicators.metrics.spread as qi
 import logging as log
 from opensbt.utils.evaluation import evaluate_individuals
 from opensbt.model_ga.result import *
