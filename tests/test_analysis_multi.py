@@ -102,7 +102,7 @@ class TestAnalysisMulit():
 
         path_metrics = None
         analysis_name = None
-        output_folder = os.sep + "output" + os.sep + "analysis"
+        output_folder = os.getcwd() + os.sep + "tests" + os.sep + "output" + os.sep + "analysis"
         folder_runs = None
         crit_function = None
 

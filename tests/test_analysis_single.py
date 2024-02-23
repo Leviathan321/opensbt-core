@@ -25,7 +25,7 @@ from opensbt.visualization import output_metric, visualizer
 
 WAIT_RESULTS_TIME = 10
 
-OUTPUT_FOLDER  = os.sep + "output" + os.sep + "results" + os.sep
+OUTPUT_FOLDER  = os.sep + "tests" + os.sep + "output" + os.sep + "single" + os.sep
 
 
 class TestAnalysisSingle():

@@ -145,11 +145,18 @@ class Analysis(object):
             else:
                 log.info("Executing algorithms for analysis.")
                 if debug:
-                    analysis_folder = str(Path(os.getcwd()).joinpath(
+                    if output_folder is not None:
+                        analysis_folder = str(Path(output_folder).joinpath(analysis_name, f"{n_runs}_runs", "temp")) + os.sep
+                    else:
+                        analysis_folder = str(Path(os.getcwd()).joinpath(
                         "results", "analysis", analysis_name, f"{n_runs}_runs", "temp")) + os.sep
                 else:
-                    analysis_folder = str(Path(os.getcwd()).joinpath(
-                        "results", "analysis", analysis_name, f"{n_runs}_runs", datetime.now().strftime("%d-%m-%Y_%H-%M-%S"))) + os.sep
+                    if output_folder is not None:
+                        analysis_folder = str(Path(output_folder).joinpath(analysis_name, f"{n_runs}_runs", 
+                                                        datetime.now().strftime("%d-%m-%Y_%H-%M-%S"))) + os.sep
+                    else:
+                        analysis_folder = str(Path(os.getcwd()).joinpath(
+                            "results", "analysis", analysis_name, f"{n_runs}_runs", datetime.now().strftime("%d-%m-%Y_%H-%M-%S"))) + os.sep
 
                 Path(analysis_folder).mkdir(parents=True, exist_ok=True)
 
