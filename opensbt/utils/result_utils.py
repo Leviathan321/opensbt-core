@@ -63,7 +63,6 @@ def create_result(problem, hist_holder, inner_algorithm, execution_time):
 def create_result_from_generations(path_generations, problem):
 
     n_generations = len(os.listdir(path_generations))
-    print(f"n_generations: {n_generations}")
 
     # iterate over each generation file, cre
     inner_algorithm = NSGA2(

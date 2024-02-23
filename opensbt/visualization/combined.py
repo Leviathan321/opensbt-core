@@ -1,3 +1,4 @@
+import traceback
 import numpy as np
 import os
 import csv
@@ -646,7 +647,6 @@ def make_comparison_plot(max_evaluations,
                     '#ffbb00',
                     '#a0052d',
                     '#666666']
-
     n_subplots = len(subplot_metrics)
 
     # only one metric to plot
@@ -927,44 +927,52 @@ def statistical_analysis(metric_name_load,
 def statistical_analysis_from_overview(metric_name, 
                         input_folder,
                         save_folder):
+    try:
+        file_name = input_folder + f"overview_{metric_name}.csv"
+        table = pd.read_csv(file_name)
 
-    file_name = input_folder + f"overview_{metric_name}.csv"
-    table = pd.read_csv(file_name)
+        m_test = []
+        m_bases = {}
+        results = {}
 
-    m_test = []
-    m_bases = {}
-    results = {}
+        algos =list(table.columns.values)[1:]
+        log.info(algos)
 
-    algos =list(table.columns.values)[1:]
-    log.info(algos)
-
-    algo = algos[0]
-    m_test = table[algos[0]].to_list() #table.iloc[:, 1].to_numpy()
-    for algo in algos[1:]:
-        m_bases[algo] = table[algo].to_list() #table.iloc[:, i + 1].to_numpy()
-        # assert(len(m_bases[col]) == len(m_test))
-        d1 = m_test
-        d2 = m_bases[algo]
-        log.info(f"test: {d1}")
-        log.info(f"base: {d2}")
-        p_val, effect =  wilcoxon.run_wilcoxon_and_delaney(d1,d2)
-        results[algo] = [p_val, effect] 
-    
-    log.info(m_bases)
-    # write to file
-    Path(save_folder).mkdir(parents=True, exist_ok=True)   
-    
-    with open(save_folder + f'{metric_name}_significance.csv', 'w', encoding='UTF8', newline='') as f:
-        write_to = csv.writer(f)
-        header = [f'algo (subject: {algos[0]})', 'p_value', 'effect']
-        write_to.writerow(header)
+        algo = algos[0]
+        m_test = table[algos[0]].to_list() #table.iloc[:, 1].to_numpy()
         for algo in algos[1:]:
-            write_to.writerow(
-                            [
-                                f'{algo}', 
-                               results[algo][0],   
-                               results[algo][1]
-                               ]
-                            )
-        f.close()
+            m_bases[algo] = table[algo].to_list() #table.iloc[:, i + 1].to_numpy()
+            # assert(len(m_bases[col]) == len(m_test))
+            d1 = m_test
+            d2 = m_bases[algo]
+            log.info(f"test: {d1}")
+            log.info(f"base: {d2}")
+            p_val, effect =  wilcoxon.run_wilcoxon_and_delaney(d1,d2)
+            results[algo] = [p_val, effect] 
+
+        log.info(m_bases)
+        # write to file
+        Path(save_folder).mkdir(parents=True, exist_ok=True)   
+
+        with open(save_folder + f'{metric_name}_significance.csv', 'w', encoding='UTF8', newline='') as f:
+            write_to = csv.writer(f)
+            header = [f'algo (subject: {algos[0]})', 'p_value', 'effect']
+            write_to.writerow(header)
+            for algo in algos[1:]:
+                write_to.writerow(
+                                [
+                                    f'{algo}', 
+                                    results[algo][0],   
+                                    results[algo][1]
+                                    ]
+                                )
+            f.close()
+
+    except ValueError as e:
+        # we do this to catch this exception from wilcoxon: 
+        #  ValueError("zero_method 'wilcox' and 'pratt' do not "
+        #                              "work if x - y is zero for all elements.")
+        traceback.print_exc()
+        print("No statistical analysis is possible. No files generated.")
+
 

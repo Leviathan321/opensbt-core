@@ -2,6 +2,7 @@ import pymoo
 
 from opensbt.model_ga.individual import IndividualSimulated
 from opensbt.analysis.quality_indicators.quality import Quality
+from tests import test_base
 
 pymoo.core.individual.Individual = IndividualSimulated
 
@@ -36,6 +37,8 @@ class TestAnalysisSingle():
         pass
 
     def test_analysis_math(self):
+        test_base.configure_logging_and_env()
+
         problem = PymooTestProblem(
             'BNH', critical_function= CriticalBnhDivided())
 

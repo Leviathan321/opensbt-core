@@ -106,8 +106,8 @@ class Quality(object):
             if bound_max is None:
                 bound_max = hist_F[-1].max(axis=0)
 
-            print(f"bound_max is: {bound_max}")
-            print(f"bound_min is: {bound_min}")
+            log.info(f"bound_max is: {bound_max}")
+            log.info(f"bound_min is: {bound_min}")
 
             n_dist_crit =  [ 
                         get_n_crit_grid(_F, 

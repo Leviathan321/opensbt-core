@@ -17,7 +17,6 @@ from opensbt.algorithm import nsga2dt_optimizer
 
 from default_experiments import *
 from opensbt.experiment.search_configuration import *
-import argparse
 from default_experiments import *
 import logging as log
 from opensbt.analysis.Analysis import Analysis
@@ -26,11 +25,11 @@ from opensbt.config import *
 from opensbt.experiment.experiment_store import experiments_store
 from opensbt.config import metric_config
 from opensbt.simulation.dummy_simulation import DummySimulator
-
+from tests import test_base
 
 class TestAnalysisMulit():
     def test_analysis_objective(self):
-        disable_pymoo_warnings()
+        test_base.configure_logging_and_env()
 
         class CriticalAdasDistanceVelocityTest(Critical):
             def eval(self, vector_fitness, simout: SimulationOutput = None):

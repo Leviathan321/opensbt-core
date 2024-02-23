@@ -381,13 +381,14 @@ class Analysis(object):
 
         # select for now first problem
         problem = problems[0]
-
+            
         if color_map is None:
-            cmap = plt.get_cmap('gnuplot')
-            color_map = {}
-            for i, algo in enumerate(algo_names):
-                color_map[algo] = cmap(i)
-
+            cmap = plt.get_cmap('viridis')
+            color_map = dict(
+                            zip(algo_names,
+                            [cmap(i) for i in np.linspace(0, 1, len(algo_names))]
+                            )
+                        )
         if do_ds_analysis:
             # Analysis
             # Real pareto front is known

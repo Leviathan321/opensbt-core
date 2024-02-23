@@ -24,7 +24,6 @@ def read_testcases(filename):
             break
         var_names.append(col)
         k = k + 1
-    print(f"length of table: {len(table)}")
     for i in range(len(table)):
         X = table.iloc[i, 1:n_var + 1].to_numpy()
         F = table.iloc[i, n_var + 1:-2].to_numpy()

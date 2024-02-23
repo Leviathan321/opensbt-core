@@ -448,7 +448,7 @@ def objective_space(res, save_folder, iteration=None, show=False, last_iteration
             dimension="F",
             angles=[(45,-45),(45,45),(45,135)],
             show=show)
-    print(f"Objective Space: {save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png'}")
+    log.info(f"Objective Space: {save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png'}")
 
 
 def optimal_individuals(res, save_folder):
