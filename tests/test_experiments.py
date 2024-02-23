@@ -27,8 +27,8 @@ class TestExperiments():
     WAIT_RESULTS_TIME = 10
 
     @staticmethod
-    def results_correctly_written(results_path):
-        req_folders = ["gif", "simout", "design_space", "objective_space", "classification"]
+    def results_correctly_written(result, results_path):
+        req_folders = ["simout", "gif", "trace_comparison", "design_space", "objective_space", "classification"]
 
         for folder in req_folders:
             if not os.path.isdir(results_path + folder):
@@ -62,7 +62,7 @@ class TestExperiments():
                           )
         config = DefaultSearchConfiguration()
         config.population_size = 20
-        config.n_generations = 20
+        config.n_generations = 50
 
         print("pymoo NSGA-II algorithm is used.")
         
@@ -84,5 +84,5 @@ class TestExperiments():
 
         time.sleep(TestExperiments.WAIT_RESULTS_TIME)
         
-        assert TestExperiments.results_correctly_written(results_path=results_path)
+        assert TestExperiments.results_correctly_written(result = res, results_path=results_path)
 
