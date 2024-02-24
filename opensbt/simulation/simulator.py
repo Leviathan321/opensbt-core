@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Dict, List
 from pymoo.core.individual import Individual
 from abc import ABC, abstractmethod, abstractstaticmethod
+from opensbt.utils.encoder_utils import NumpyEncoder
 
 import os
 import sys
@@ -54,7 +55,10 @@ class SimulationOutput(object):
             setattr(self, key, value)
 
     def to_json(self):
-        return json.dumps(self.__dict__)
+        return json.dumps(self.__dict__,
+                        allow_nan=True, 
+                        indent=4,
+                        cls=NumpyEncoder)
 
     @classmethod
     def from_json(cls, json_str):
