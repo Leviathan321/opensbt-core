@@ -616,7 +616,7 @@ def simulations(res, save_folder, mode="all", write_max = 100):
         Path(save_folder_gif).mkdir(parents=True, exist_ok=True)
         pop = get_pop_using_mode(res=res, 
                                   mode=mode)[:write_max]
-        
+        log.info("Writing 2D scenario visualization in .gif ...")
         for index, simout in enumerate(pop.get("SO")):
             param_values = pop.get("X")[index]
             param_v_chain = "_".join("%.2f" % a for a in param_values)
