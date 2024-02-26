@@ -18,7 +18,7 @@ setup(
     packages=find_packages(include=['opensbt', 'opensbt.*']),
     include_package_data=True,
     exclude_package_data={
-        '': ['*.pyc', 
+        '': ['*.pyc',
              'opensbt/results/*'
              '*.pyx',
              '*/*log.txt',
@@ -41,7 +41,7 @@ setup(
     ],
     install_requires=[
         'deap==1.4.1',
-        'numpy==1.24.4',
+        'numpy==1.23.5',
         'scipy==1.10.1',
         'matplotlib==3.7.4',
         'pandas==2.0.3',
