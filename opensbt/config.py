@@ -29,9 +29,9 @@ metric_config["DUMMY"] = dict(
 )
 
 # output
-MODE_WRITE_SIMOUT = "crit"
-MODE_WRITE_GIF = "crit"
-MODE_PLOT_TIME_TRACES = "crit"
+MODE_WRITE_SIMOUT = "opt"
+MODE_WRITE_GIF = "opt"
+MODE_PLOT_TIME_TRACES = "opt"
 
 NUM_SIMOUT_MAX = 100
 NUM_GIF_MAX = 3
