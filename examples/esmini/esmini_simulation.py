@@ -8,11 +8,11 @@ import xml.etree.ElementTree as ET
 from examples.esmini.parser import EsminiParser
 from opensbt.model_ga.individual import Individual
 from opensbt.simulation.simulator import Simulator, SimulationOutput
-import examples.esmini
+from examples.esmini.config import ESMINI_PATH
+
 from pathlib import Path
 
 SCENARIO_DIR = os.getcwd() + "tmp" + os.sep
-ESMINI_PATH = "C:\\Program Files\\esmini-bin_Windows\\esmini\\bin\\esmini"
 
 class EsminiSimulator(Simulator):
 
