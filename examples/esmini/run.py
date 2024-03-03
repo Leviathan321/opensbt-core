@@ -20,10 +20,10 @@ import logging as log
 import os
 
 from examples.esmini.esmini_simulation import EsminiSimulator
-from opensbt.algorithm.nsga2_optimizer import NsgaIIOptimizer
+from opensbt.algorithm.ps_grid import PureSamplingGrid
 from opensbt.config import LOG_FILE
 from opensbt.evaluation.critical import CriticalAdasDistanceVelocity
-from opensbt.evaluation.fitness import Fitness, FitnessMinDistanceVelocity
+from opensbt.evaluation.fitness import Fitness
 
 from opensbt.experiment.search_configuration import DefaultSearchConfiguration
 from opensbt.problem.adas_problem import ADASProblem
@@ -67,7 +67,7 @@ problem = ADASProblem(
                         problem_name="EsminiLaneChange",
                         scenario_path=os.getcwd() + "/examples/esmini/scenarios/lanechange_scenario.xosc",
                         xl=[20, 20, 55],
-                        xu=[20, 30, 80],
+                        xu=[25, 30, 80],
                         simulation_variables=[
                             "EgoTargetSpeed",
                             "SpeedLaneChange",
@@ -82,9 +82,8 @@ problem = ADASProblem(
                         )
 
 config = DefaultSearchConfiguration()
-config.population_size = 10
-config.n_generations = 10
-optimizer = NsgaIIOptimizer(
+config.population_size = 5
+optimizer = PureSamplingGrid(
                             problem=problem,
                             config=config)
 

@@ -12,7 +12,7 @@ from examples.esmini.config import ESMINI_PATH
 
 from pathlib import Path
 
-SCENARIO_DIR = os.getcwd() + "tmp" + os.sep
+SCENARIO_DIR = os.path.join(os.getcwd(),"examples", "esmini","scenarios","tmp")
 
 class EsminiSimulator(Simulator):
 
@@ -38,7 +38,7 @@ class EsminiSimulator(Simulator):
                 if len(sim_parameters) != len(set(sim_parameters)):
                     raise Exception("Duplicate simulation varibles names, please name every variable different.")
                 scenario_file = EsminiSimulator.create_scenario_instance_xosc(xosc, dict(instance_values), outfolder=SCENARIO_DIR)
-                log.info("++ running scenarios with carla ++ ")
+                log.info("++ running scenarios with esmini ++ ")
 
                 # run esmini on scenario
                 suffix = os.path.splitext(os.path.basename(scenario_file))[0]                
@@ -54,7 +54,7 @@ class EsminiSimulator(Simulator):
                                 "600"]
                 else:
                     flags_visualize = []
-                subprocess.run([ESMINI_PATH] + 
+                process = subprocess.Popen([ESMINI_PATH] + 
                                flags_visualize + 
                                [
                                 "--osc",
@@ -64,9 +64,16 @@ class EsminiSimulator(Simulator):
                                 "--csv_logger",
                                 output_file,
                                 "--collision"], 
-                                stdout=subprocess.PIPE, 
-                                stderr=subprocess.PIPE, text=True)
+                                stdout=subprocess.PIPE)
+                # Read the output
+                output, _ = process.communicate()
 
+                # Decode the output if it's in bytes
+                output = output.decode("utf-8")
+
+                # Print or manipulate the output as needed
+                print(output)
+                
                 out = EsminiParser.parse_log(output_file)
 
                 # create simout instance
@@ -78,6 +85,9 @@ class EsminiSimulator(Simulator):
         finally:
             log.info("++ removing temporary scenarios ++")
             file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".xosc") ]
+            for f in file_list:
+                os.remove(os.path.join(SCENARIO_DIR, f))
+            file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".csv") ]
             for f in file_list:
                 os.remove(os.path.join(SCENARIO_DIR, f))
         return results

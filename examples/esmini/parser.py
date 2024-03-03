@@ -37,7 +37,7 @@ class EsminiParser(object):
                     },
                     "otherParams": {}
         }
-        n_col_data_actor = 31
+        n_col_data_actor = 23
         n_col_start = 2
         n_actors =  int ((len(df.columns) - n_col_start - 1) / n_col_data_actor)
 
@@ -51,24 +51,24 @@ class EsminiParser(object):
         map = {
             "name": 0,
             "speed": 2,
-            "pos_x" : 11,
-            "pos_y" : 12,
-            "pos_z" : 13,
-            "vel_x" : 14,
-            "vel_y" : 15,
-            "vel_z" : 16,
-            "acc_x" : 17,
-            "acc_y" : 18,
-            "acc_z" : 19,
-            "angle" : 24,
-            "col_ids" : 30
+            "pos_x" : 5,
+            "pos_y" : 6,
+            "pos_z" : 7,
+            "vel_x" : 8,
+            "vel_y" : 9,
+            "vel_z" : 10,
+            "acc_x" : 11,
+            "acc_y" : 12,
+            "acc_z" : 13,
+            "angle" : 16,
+            "col_ids" : 22
             }
 
         for i in range(0,n_actors):
             def get_ind(entry_name):
                 return n_col_start + i * n_col_data_actor +  map[entry_name]
             # actors
-            actor = df.iloc[0, get_ind("name") ]
+            actor = df.iloc[0, get_ind('name') ]
             actor = actor.replace(" ","")
             if actor == "ego" or actor == "hero":
                 out["actors"][actor] = "ego"
