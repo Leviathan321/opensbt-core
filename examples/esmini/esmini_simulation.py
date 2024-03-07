@@ -6,12 +6,14 @@ import json
 import os
 import xml.etree.ElementTree as ET
 from examples.esmini.parser import EsminiParser
+from examples.esmini.utils.osc_utils import update_rel_xodr_path
 from opensbt.model_ga.individual import Individual
 from opensbt.simulation.simulator import Simulator, SimulationOutput
 from examples.esmini.config import ESMINI_PATH
 
 from pathlib import Path
 
+DEBUG = False
 SCENARIO_DIR = os.path.join(os.getcwd(),"examples", "esmini","scenarios","tmp")
 
 class EsminiSimulator(Simulator):
@@ -38,6 +40,10 @@ class EsminiSimulator(Simulator):
                 if len(sim_parameters) != len(set(sim_parameters)):
                     raise Exception("Duplicate simulation varibles names, please name every variable different.")
                 scenario_file = EsminiSimulator.create_scenario_instance_xosc(xosc, dict(instance_values), outfolder=SCENARIO_DIR)
+
+                # update xodr path because esmini needs absolute file path
+
+                # update_rel_xodr_path(scenario_file, xodr_folder = os.path.dirname(scenario_file))
                 log.info("++ running scenarios with esmini ++ ")
 
                 # run esmini on scenario
@@ -83,13 +89,14 @@ class EsminiSimulator(Simulator):
         except Exception as e:
             raise e
         finally:
-            log.info("++ removing temporary scenarios ++")
-            file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".xosc") ]
-            for f in file_list:
-                os.remove(os.path.join(SCENARIO_DIR, f))
-            file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".csv") ]
-            for f in file_list:
-                os.remove(os.path.join(SCENARIO_DIR, f))
+            if not DEBUG:
+                log.info("++ removing temporary scenarios ++")
+                file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".xosc") ]
+                for f in file_list:
+                    os.remove(os.path.join(SCENARIO_DIR, f))
+                file_list = [ f for f in os.listdir(SCENARIO_DIR) if f.endswith(".csv") ]
+                for f in file_list:
+                    os.remove(os.path.join(SCENARIO_DIR, f))
         return results
 
     ''' Replace parameter values in parameter declaration section by provided parameters '''

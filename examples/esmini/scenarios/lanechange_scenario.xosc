@@ -12,11 +12,11 @@
 	</ParameterDeclarations>
 	<CatalogLocations>  
 			<VehicleCatalog>
-         		 <Directory path="C:\esmini-source\resources\xosc\Catalogs\Vehicles"/>
+         		 <Directory path="C:\Program Files\esmini\esmini\Catalogs\Vehicles"/>
       		</VehicleCatalog>
 		</CatalogLocations>
 	<RoadNetwork>
-		<LogicFile filepath="C:\Users\sorokin\Documents\Projects\testing\ast-fortiss-tum\opensbt-core\examples\esmini\scenarios\2lane-motorway.xodr" />
+		<LogicFile filepath="../2lane-motorway.xodr" />
 	</RoadNetwork>
 	<Entities>
 		<ScenarioObject name="ego">
