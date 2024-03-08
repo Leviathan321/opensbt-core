@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Demonstrate and test ALKS controller in a cut-in scenario -->
+<OpenSCENARIO>
+    <FileHeader revMajor="1" revMinor="1" date="2022-11-15T10:00:00" description="Demonstrate ALKS controller" author="esmini-team"/>
+    <ParameterDeclarations>
+        <ParameterDeclaration name="EgoSpeed" parameterType="double" value="25"/>
+        <ParameterDeclaration name="EgoS" parameterType="double" value="35"/>
+        <ParameterDeclaration name="TargetSpeed" parameterType="double" value="23"/>
+        <ParameterDeclaration name="TargetS" parameterType="double" value="70"/>
+        <ParameterDeclaration name="TTC" parameterType="double" value="4"/>
+         <ParameterDeclaration name="MaxSimTime" parameterType="double" value="18"/>
+    </ParameterDeclarations>
+    <CatalogLocations>
+        <VehicleCatalog>
+            <Directory path="C:\Program Files\esmini\esmini\resources\xosc\Catalogs\Vehicles"/>
+        </VehicleCatalog>
+        <PedestrianCatalog>
+            <Directory path="C:\Program Files\esmini\esmini\resources\xosc\Catalogs\Pedestrians"/>
+        </PedestrianCatalog>
+        <ControllerCatalog>
+            <Directory path="C:\Program Files\esmini\esmini\resources\xosc\Catalogs\Controllers"/>
+        </ControllerCatalog>
+    </CatalogLocations>
+    <RoadNetwork>
+        <LogicFile filepath="../cutin/straight_500m.xodr"/>
+    </RoadNetwork>
+    <Entities>
+        <ScenarioObject name="Ego">
+            <CatalogReference catalogName="VehicleCatalog" entryName="car_white"/>
+            <ObjectController>
+                <Controller name="ALKS_R157SM_Controller">
+                    <Properties>
+                        <Property name="mode" value="override"/>
+                        <Property name="model" value="Regulation"/>
+                        <Property name="logLevel" value="2"/>
+                        <Property name="cruise" value="true"/>
+                        <Property name="cutInPerceptionDelayMode" value="Time"/>
+                        <Property name="fullStop" value="true"/>
+                        <Property name="lateralTrigDistance" value="0.5"/>
+                        <Property name="aebTTC" value="3"/>
+                    </Properties>
+                </Controller>
+            </ObjectController>
+        </ScenarioObject>
+        <ScenarioObject name="TargetCutIn">
+            <CatalogReference catalogName="VehicleCatalog" entryName="car_red"/>
+        </ScenarioObject>
+    </Entities>
+    <Storyboard>
+        <Init>
+            <Actions>
+                <Private entityRef="Ego">
+                    <PrivateAction>
+                        <TeleportAction>
+                            <Position>
+                                <LanePosition roadId="1" laneId="-1" offset="0.0" s="$EgoS"/>
+                            </Position>
+                        </TeleportAction>
+                    </PrivateAction>
+                    <PrivateAction>
+                        <LongitudinalAction>
+                            <SpeedAction>
+                                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0.0"/>
+                                <SpeedActionTarget>
+                                    <AbsoluteTargetSpeed value="$EgoSpeed"/>
+                                </SpeedActionTarget>
+                            </SpeedAction>
+                        </LongitudinalAction>
+                    </PrivateAction>
+                    <PrivateAction>
+                        <ControllerAction>
+                            <ActivateControllerAction longitudinal="true" lateral="false"/>
+                        </ControllerAction>
+                    </PrivateAction>
+                </Private>
+                <Private entityRef="TargetCutIn">
+                    <PrivateAction>
+                        <TeleportAction>
+                            <Position>
+                                <LanePosition roadId="1" laneId="1" offset="0.0" s="$TargetS">
+                                    <Orientation type="relative" h="3.141593"/>
+                                </LanePosition>
+                            </Position>
+                        </TeleportAction>
+                    </PrivateAction>
+                    <PrivateAction>
+                        <LongitudinalAction>
+                            <SpeedAction>
+                                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0.0"/>
+                                <SpeedActionTarget>
+                                    <AbsoluteTargetSpeed value="$TargetSpeed"/>
+                                </SpeedActionTarget>
+                            </SpeedAction>
+                        </LongitudinalAction>
+                    </PrivateAction>
+                </Private>
+            </Actions>
+        </Init>
+        <Story name="MyStory">
+            <ParameterDeclarations/>
+            <Act name="CutInAndBrakeAct">
+                <ManeuverGroup maximumExecutionCount="1" name="MyManeuverGroup">
+                    <Actors selectTriggeringEntities="false">
+                        <EntityRef entityRef="TargetCutIn"/>
+                    </Actors>
+                    <Maneuver>
+                        <Event name="CutInEvent" priority="overwrite">
+                            <Action name="CutInAction">
+                                <PrivateAction>
+                                    <LateralAction>
+                                        <LaneChangeAction>
+                                            <LaneChangeActionDynamics dynamicsShape="cubic" value="4" dynamicsDimension="time"/>
+                                            <LaneChangeTarget>
+                                                <RelativeTargetLane entityRef="Ego" value="0"/>
+                                            </LaneChangeTarget>
+                                        </LaneChangeAction>
+                                    </LateralAction>
+                                </PrivateAction>
+                            </Action>
+                            <StartTrigger>
+                                <ConditionGroup>
+                                    <Condition name="CutInStartCondition" delay="0" conditionEdge="rising">
+                                        <ByEntityCondition>
+                                            <TriggeringEntities triggeringEntitiesRule="any">
+                                                <EntityRef entityRef="Ego"/>
+                                            </TriggeringEntities>
+                                            <EntityCondition>
+                                                <TimeToCollisionCondition entityRef="$owner" value="$TTC" freespace="true" coordinateSystem="road" relativeDistanceType="longitudinal" rule="lessThan">
+                                                    <TimeToCollisionConditionTarget>
+                                                        <EntityRef entityRef="TargetCutIn"/>
+                                                    </TimeToCollisionConditionTarget>
+                                                </TimeToCollisionCondition>
+                                            </EntityCondition>
+                                        </ByEntityCondition>
+                                    </Condition>
+                                </ConditionGroup>
+                            </StartTrigger>
+                        </Event>
+                    </Maneuver>
+                </ManeuverGroup>
+                <StartTrigger/>
+                <StopTrigger/>
+            </Act>
+        </Story>
+        <StopTrigger>
+            <ConditionGroup>
+                <Condition name="stop_trigger " delay="0" conditionEdge="none">
+                    <ByValueCondition>
+                        <SimulationTimeCondition value="$MaxSimTime" rule="greaterThan"/>
+                    </ByValueCondition>
+                </Condition>
+            </ConditionGroup>
+        </StopTrigger>
+    </Storyboard>
+</OpenSCENARIO>

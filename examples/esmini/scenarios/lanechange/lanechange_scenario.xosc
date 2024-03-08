@@ -16,7 +16,7 @@
       		</VehicleCatalog>
 		</CatalogLocations>
 	<RoadNetwork>
-		<LogicFile filepath="../2lane-motorway.xodr" />
+		<LogicFile filepath="../lanechange/2lane-motorway.xodr" />
 	</RoadNetwork>
 	<Entities>
 		<ScenarioObject name="ego">

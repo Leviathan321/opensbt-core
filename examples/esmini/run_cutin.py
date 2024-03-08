@@ -1,6 +1,7 @@
 from typing import Tuple
 import numpy as np
 import pymoo
+from opensbt.algorithm.nsga2_optimizer import NsgaIIOptimizer
 
 from opensbt.model_ga.individual import IndividualSimulated
 from opensbt.simulation.simulator import SimulationOutput
@@ -64,26 +65,28 @@ class FitnessMinDistanceVelocityExtended(Fitness):
         return (distance, speed)
 
 problem = ADASProblem(
-                        problem_name="EsminiLaneChange",
-                        scenario_path=os.getcwd() + "/examples/esmini/scenarios/lanechange_scenario.xosc",
-                        xl=[20, 20, 55],
-                        xu=[25, 30, 80],
+                        problem_name="EsminiCutInALKS",
+                        scenario_path=os.getcwd() + "/examples/esmini/scenarios/cutin/alks_cut-in.xosc",
+                        xl=[25, 30, 55, 1],
+                        xu=[35, 45, 80, 10],
                         simulation_variables=[
-                            "EgoTargetSpeed",
-                            "SpeedLaneChange",
-                            "RPrecederStartS"],
+                            "EgoSpeed",
+                            "EgoS",
+                            "TargetS",
+                            "TTC"],
                         fitness_function=FitnessMinDistanceVelocityExtended(),  
                         critical_function=CriticalAdasDistanceVelocity(),
                         simulate_function=EsminiSimulator.simulate,
                         simulation_time=10,
                         sampling_time=100,
                         approx_eval_time=10,
-                        do_visualize=False
+                        do_visualize=True
                         )
 
 config = DefaultSearchConfiguration()
 config.population_size = 5
-optimizer = PureSamplingGrid(
+config.n_generations = 5
+optimizer = NsgaIIOptimizer(
                             problem=problem,
                             config=config)
 
