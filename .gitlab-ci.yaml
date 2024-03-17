@@ -11,7 +11,7 @@ job_test:
   script:
     - echo "Running tests"
 job_test_exp:
-  state: test
+  stage: test
   script:
     - pip install -r requirements.txt
     - python run.py -e 5
