@@ -14,7 +14,7 @@ from examples.esmini.config import ESMINI_PATH
 from pathlib import Path
 
 DEBUG = False
-SCENARIO_DIR = os.path.join(os.getcwd(),"examples", "esmini","scenarios","tmp")
+# SCENARIO_DIR = os.path.join(os.getcwd(),"examples", "esmini","scenarios","tmp")
 
 class EsminiSimulator(Simulator):
 
@@ -39,6 +39,8 @@ class EsminiSimulator(Simulator):
                 sim_parameters = [i[0] for i in instance_values]
                 if len(sim_parameters) != len(set(sim_parameters)):
                     raise Exception("Duplicate simulation varibles names, please name every variable different.")
+                
+                SCENARIO_DIR = os.path.abspath(os.path.join(scenario_path, os.pardir, os.pardir)) + os.sep + "tmp"  + os.sep       
                 scenario_file = EsminiSimulator.create_scenario_instance_xosc(xosc, dict(instance_values), outfolder=SCENARIO_DIR)
 
                 # update xodr path because esmini needs absolute file path
@@ -47,7 +49,7 @@ class EsminiSimulator(Simulator):
                 log.info("++ running scenarios with esmini ++ ")
 
                 # run esmini on scenario
-                suffix = os.path.splitext(os.path.basename(scenario_file))[0]                
+                suffix = os.path.splitext(os.path.basename(scenario_file))[0]    
                 output_file = f"{SCENARIO_DIR}\log_{suffix}.csv"
 
                 Path(SCENARIO_DIR).mkdir(exist_ok=True,mode=0o777)
@@ -60,13 +62,13 @@ class EsminiSimulator(Simulator):
                                 "600"]
                 else:
                     flags_visualize = []
+                print(ESMINI_PATH)
+
                 process = subprocess.Popen([ESMINI_PATH] + 
                                flags_visualize + 
                                [
                                 "--osc",
                                 scenario_file,
-                                "--fixed_timestep",
-                                "0.05",
                                 "--csv_logger",
                                 output_file,
                                 "--collision"], 
