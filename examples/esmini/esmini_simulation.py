@@ -10,11 +10,9 @@ from examples.esmini.utils.osc_utils import update_rel_xodr_path
 from opensbt.model_ga.individual import Individual
 from opensbt.simulation.simulator import Simulator, SimulationOutput
 from examples.esmini.config import ESMINI_PATH
-
 from pathlib import Path
 
 DEBUG = False
-# SCENARIO_DIR = os.path.join(os.getcwd(),"examples", "esmini","scenarios","tmp")
 
 class EsminiSimulator(Simulator):
 
