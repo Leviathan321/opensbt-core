@@ -3,53 +3,54 @@
 <OpenSCENARIO>
     <FileHeader revMajor="1" revMinor="1" date="2022-11-15T10:00:00" description="Demonstrate ALKS controller" author="esmini-team"/>
     <ParameterDeclarations>
-        <ParameterDeclaration name="EgoSpeed" parameterType="double" value="25"/>
-        <ParameterDeclaration name="EgoS" parameterType="double" value="35"/>
-        <ParameterDeclaration name="TargetSpeed" parameterType="double" value="23"/>
+        <ParameterDeclaration name="EgoSpeed" parameterType="double" value="47"/>
+        <ParameterDeclaration name="EgoS" parameterType="double" value="45"/>
+        <ParameterDeclaration name="TargetSpeed" parameterType="double" value="43"/>
         <ParameterDeclaration name="TargetS" parameterType="double" value="70"/>
-        <ParameterDeclaration name="TTC" parameterType="double" value="4"/>
-         <ParameterDeclaration name="MaxSimTime" parameterType="double" value="18"/>
+        <ParameterDeclaration name="TTC" parameterType="double" value="2"/>
+         <ParameterDeclaration name="MaxSimTime" parameterType="double" value="7"/>
+         <ParameterDeclaration name="TimeLanechange" parameterType="double" value="2"/>
     </ParameterDeclarations>
     <CatalogLocations>
         <VehicleCatalog>
-            <Directory path="C:\Program Files\esmini\esmini\resources\xosc\Catalogs\Vehicles"/>
+            <Directory path="../../esmini/resources/xosc/Catalogs/Vehicles"/>
         </VehicleCatalog>
         <PedestrianCatalog>
-            <Directory path="C:\Program Files\esmini\esmini\resources\xosc\Catalogs\Pedestrians"/>
+            <Directory path="../../esmini/resources/xosc/Catalogs/Pedestrians"/>
         </PedestrianCatalog>
         <ControllerCatalog>
-            <Directory path="C:\Program Files\esmini\esmini\resources\xosc\Catalogs\Controllers"/>
+            <Directory path="../../esmini/resources/xosc/Catalogs/Vehicles/Controllers"/>
         </ControllerCatalog>
     </CatalogLocations>
     <RoadNetwork>
-        <LogicFile filepath="../cutin/straight_500m.xodr"/>
+        <LogicFile filepath="./examples/esmini/scenarios/cutin/straight_500m.xodr"/>
     </RoadNetwork>
     <Entities>
-        <ScenarioObject name="Ego">
+        <ScenarioObject name="ego">
             <CatalogReference catalogName="VehicleCatalog" entryName="car_white"/>
             <ObjectController>
                 <Controller name="ALKS_R157SM_Controller">
                     <Properties>
                         <Property name="mode" value="override"/>
-                        <Property name="model" value="Regulation"/>
+                        <Property name="model" value="RSS"/>
                         <Property name="logLevel" value="2"/>
                         <Property name="cruise" value="true"/>
                         <Property name="cutInPerceptionDelayMode" value="Time"/>
                         <Property name="fullStop" value="true"/>
                         <Property name="lateralTrigDistance" value="0.5"/>
-                        <Property name="aebTTC" value="3"/>
+                        <Property name="aebTTC" value="2"/>
                     </Properties>
                 </Controller>
             </ObjectController>
         </ScenarioObject>
-        <ScenarioObject name="TargetCutIn">
+        <ScenarioObject name="adversary">
             <CatalogReference catalogName="VehicleCatalog" entryName="car_red"/>
         </ScenarioObject>
     </Entities>
     <Storyboard>
         <Init>
             <Actions>
-                <Private entityRef="Ego">
+                <Private entityRef="ego">
                     <PrivateAction>
                         <TeleportAction>
                             <Position>
@@ -73,7 +74,7 @@
                         </ControllerAction>
                     </PrivateAction>
                 </Private>
-                <Private entityRef="TargetCutIn">
+                <Private entityRef="adversary">
                     <PrivateAction>
                         <TeleportAction>
                             <Position>
@@ -101,7 +102,7 @@
             <Act name="CutInAndBrakeAct">
                 <ManeuverGroup maximumExecutionCount="1" name="MyManeuverGroup">
                     <Actors selectTriggeringEntities="false">
-                        <EntityRef entityRef="TargetCutIn"/>
+                        <EntityRef entityRef="adversary"/>
                     </Actors>
                     <Maneuver>
                         <Event name="CutInEvent" priority="overwrite">
@@ -109,9 +110,9 @@
                                 <PrivateAction>
                                     <LateralAction>
                                         <LaneChangeAction>
-                                            <LaneChangeActionDynamics dynamicsShape="cubic" value="4" dynamicsDimension="time"/>
+                                            <LaneChangeActionDynamics dynamicsShape="cubic" value="$TimeLanechange" dynamicsDimension="time"/>
                                             <LaneChangeTarget>
-                                                <RelativeTargetLane entityRef="Ego" value="0"/>
+                                                <RelativeTargetLane entityRef="ego" value="0"/>
                                             </LaneChangeTarget>
                                         </LaneChangeAction>
                                     </LateralAction>
@@ -122,12 +123,12 @@
                                     <Condition name="CutInStartCondition" delay="0" conditionEdge="rising">
                                         <ByEntityCondition>
                                             <TriggeringEntities triggeringEntitiesRule="any">
-                                                <EntityRef entityRef="Ego"/>
+                                                <EntityRef entityRef="ego"/>
                                             </TriggeringEntities>
                                             <EntityCondition>
                                                 <TimeToCollisionCondition entityRef="$owner" value="$TTC" freespace="true" coordinateSystem="road" relativeDistanceType="longitudinal" rule="lessThan">
                                                     <TimeToCollisionConditionTarget>
-                                                        <EntityRef entityRef="TargetCutIn"/>
+                                                        <EntityRef entityRef="adversary"/>
                                                     </TimeToCollisionConditionTarget>
                                                 </TimeToCollisionCondition>
                                             </EntityCondition>
@@ -153,3 +154,4 @@
         </StopTrigger>
     </Storyboard>
 </OpenSCENARIO>
+

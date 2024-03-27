@@ -12,7 +12,7 @@ from opensbt.simulation.simulator import Simulator, SimulationOutput
 from examples.esmini.config import ESMINI_PATH
 from pathlib import Path
 
-DEBUG = False
+DEBUG = True
 
 class EsminiSimulator(Simulator):
 

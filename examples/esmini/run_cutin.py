@@ -1,11 +1,6 @@
-from typing import Tuple
-import numpy as np
 import pymoo
-from opensbt.algorithm.nsga2_optimizer import NsgaIIOptimizer
 
 from opensbt.model_ga.individual import IndividualSimulated
-from opensbt.simulation.simulator import SimulationOutput
-from opensbt.utils import geometric
 pymoo.core.individual.Individual = IndividualSimulated
 
 from opensbt.model_ga.population import PopulationExtended
@@ -16,6 +11,14 @@ pymoo.core.result.Result = SimulationResult
 
 from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
+
+from opensbt.simulation.simulator import SimulationOutput
+from opensbt.utils import geometric
+
+from typing import Tuple
+import numpy as np
+import pymoo
+from opensbt.algorithm.nsga2_optimizer import NsgaIIOptimizer
 
 import logging as log
 import os
@@ -65,27 +68,23 @@ class FitnessMinDistanceVelocityExtended(Fitness):
         return (distance, speed)
 
 problem = ADASProblem(
-                        problem_name="EsminiCutInALKS",
-                        scenario_path=os.getcwd() + "/examples/esmini/scenarios/cutin/alks_cut-in.xosc",
-                        xl=[25, 30, 55, 1],
-                        xu=[35, 45, 80, 10],
-                        simulation_variables=[
-                            "EgoSpeed",
-                            "EgoS",
-                            "TargetS",
-                            "TTC"],
-                        fitness_function=FitnessMinDistanceVelocityExtended(),  
-                        critical_function=CriticalAdasDistanceVelocity(),
-                        simulate_function=EsminiSimulator.simulate,
-                        simulation_time=10,
-                        sampling_time=100,
-                        approx_eval_time=10,
-                        do_visualize=True
-                        )
-
+                      problem_name="My_Cut_In_Problem",
+                      scenario_path=os.path.join(os.getcwd(), "examples", "esmini", "scenarios", "cutin", "alks_cut-in.xosc"),
+                      simulation_variables=[                    # provide here the search variables
+                          "EgoSpeed",
+                          "TargetSpeed",
+                          "LaneChangetime"
+                      ],
+                      xl=[30,20,1], # provide here the lower ranges for the search variables
+                      xu=[40,30,10], # provide here the upper ranges for the search variables
+                      fitness_function=FitnessMinDistanceVelocityExtended(), # we select an appropriate fitness function later
+                      critical_function=CriticalAdasDistanceVelocity(), # we select an appropriate criticality function later
+                      simulate_function=EsminiSimulator.simulate,
+                      do_visualize=False
+                      )
 config = DefaultSearchConfiguration()
-config.population_size = 5
-config.n_generations = 5
+config.population_size = 2
+config.n_generations = 2
 optimizer = NsgaIIOptimizer(
                             problem=problem,
                             config=config)

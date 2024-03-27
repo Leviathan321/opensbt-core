@@ -111,8 +111,9 @@ class EsminiParser(object):
             # collision
             collisions = df.iloc[:, get_ind("col_ids") ].to_list()
             for c in collisions:
-                sclean = c.replace(" ","")
-                if len(sclean) > 0:
+                if isinstance(c,str):
+                    sclean = c.replace(" ","")
+                if (isinstance(c,str) and len(sclean) > 0) or isinstance(c,int):
                     id = int(sclean)
                     col_tuple = (i,id)
                     if col_tuple not in out["collisions"] and \
