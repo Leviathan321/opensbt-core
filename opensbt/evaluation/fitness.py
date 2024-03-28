@@ -18,6 +18,18 @@ class Fitness():
     def eval(self, simout: SimulationOutput) -> Tuple[float]:
         pass
 
+class MockFitness():
+    @property
+    def min_or_max(self):
+        return "min","min"
+
+    @property
+    def name(self):
+        return "dimension_1","dimension_2"
+
+    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+        return (0,0)
+        
 class FitnessMinDistance(Fitness):
     @property
     def min_or_max(self):

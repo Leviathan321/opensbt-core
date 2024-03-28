@@ -12,6 +12,13 @@ class Critical():
     def eval(self, vector_fitness: np.ndarray, simout: SimulationOutput) -> bool:
         pass
 
+class MockCritical():
+    @property
+    def name(self):
+        return self.__class__.__name__
+
+    def eval(self, vector_fitness: np.ndarray, simout: SimulationOutput) -> bool:
+        return True
 
 class CriticalAdasExplicitRearCollision(Critical):
 
