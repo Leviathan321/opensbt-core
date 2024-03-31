@@ -1,0 +1,21 @@
+image: python:3.8-slim
+
+stages:
+  - test
+  - deploy
+
+before_script:
+  - echo "Running before script"
+  - echo "Installing requirements..."
+  - pip install -r $CI_PROJECT_DIR/requirements.txt
+  
+test:
+  stage: test
+  script:
+    - echo "Executing tests..."
+    - pytest ./tests/test_experiments.py
+
+deploy:
+  stage: deploy
+  script:
+    - echo "No deployment commands for now."
