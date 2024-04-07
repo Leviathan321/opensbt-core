@@ -47,8 +47,9 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
     
     # determine trace_interval
     if trace_interval is not None:
-        dif = simout.times[1] - simout.times[0]
-        skip = ceil(trace_interval/dif)
+        dif = np.asarray([(simout.times[i+1] - simout.times[i]) for i in range(0,len(simout.times)- 1)])
+        avg_dif = np.average(dif)
+        skip = ceil(trace_interval/avg_dif)
     else:
         skip = 1
  
