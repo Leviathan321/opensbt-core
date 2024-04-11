@@ -7,7 +7,7 @@ To run the case study you have to Download the Donkey simulator from this [link]
 Install then the requirements by:
 
 ```bash
-pip install -r exmaples/lanekeeping/requirements.txt
+pip install -r examples/lanekeeping/requirements.txt
 ```
 
 You can execute the test case generation with:
