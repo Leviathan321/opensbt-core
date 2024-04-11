@@ -55,34 +55,52 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
  
     actors = simout.actors
     ego_name = actors["ego"]
-    adversary_name = actors["adversary"]
+    
+    if "adversary" in actors:
+        adversary_name = actors["adversary"]
+    else:
+        adversary_name = None
+
     vehicles_names = actors["vehicles"]
-    pedestrians_names = actors["pedestrians"]
-    actors_names = [ego_name] + [adversary_name] + vehicles_names + pedestrians_names
+    
+    if "pedestrians" in actors:    
+        pedestrians_names = actors["pedestrians"]
+    else:
+        pedestrians_names = None
+
+    actors_names = [ego_name]  + \
+                    [adversary_name] if adversary_name is not None else [] + \
+                    vehicles_names if vehicles_names is not None else [] + \
+                    pedestrians_names if pedestrians_names is not None else []
 
     "Traces and yaws for actors"
     trace_ego = np.array(simout.location[ego_name][0::skip])  # time series of Ego position
     yaw_ego = np.array(simout.yaw[ego_name][0::skip])  # time series of Ego velocity
 
-    trace_adversary = np.array(simout.location[adversary_name][0::skip])  # time series of adversary position
-    yaw_adversary = np.array(simout.yaw[adversary_name][0::skip])
+    if adversary_name is not None:
+        trace_adversary = np.array(simout.location[adversary_name][0::skip])  # time series of adversary position
+        yaw_adversary = np.array(simout.yaw[adversary_name][0::skip])
+    
     traces_vehicles = [np.array(simout.location[vehicle_name][0::skip]) for vehicle_name in vehicles_names]
     yaws_vehicles = [np.array(simout.yaw[vehicle_name][0::skip]) for vehicle_name in vehicles_names]
 
-    traces_pedestrians = [np.array(simout.location[pedestrian_name][0::skip]) for pedestrian_name in pedestrians_names]
+    if "pedestrians" in actors:
+        traces_pedestrians = [np.array(simout.location[pedestrian_name][0::skip]) for pedestrian_name in pedestrians_names]
 
     "Cartesian coordinates for actors"
     x_ego = trace_ego[:, 0]
     y_ego = trace_ego[:, 1]
-
-    x_adversary = trace_adversary[:, 0]
-    y_adversary = trace_adversary[:, 1]
+   
+    if adversary_name is not None:
+        x_adversary = trace_adversary[:, 0]
+        y_adversary = trace_adversary[:, 1]
 
     x_vehicles = [traces_vehicles[i][:, 0] for i in range(len(vehicles_names))]
     y_vehicles = [traces_vehicles[i][:, 1] for i in range(len(vehicles_names))]
-
-    x_pedestrians = [traces_pedestrians[i][:, 0] for i in range(len(pedestrians_names))]
-    y_pedestrians = [traces_pedestrians[i][:, 1] for i in range(len(pedestrians_names))]
+   
+    if "pedestrians" in actors:
+        x_pedestrians = [traces_pedestrians[i][:, 0] for i in range(len(pedestrians_names))]
+        y_pedestrians = [traces_pedestrians[i][:, 1] for i in range(len(pedestrians_names))]
 
     "Lables and titles"
     label_parameters = str(["{:.3f}".format(v) for v in parameter_values])
@@ -132,12 +150,15 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
     '''
 
     "Circle objects for adversary and pedestrians"
-    circle_adversary = Circle((0, 0), radius=pedestrian_size, color=colors["adversary"])
-    circles_pedestrians = [Circle((0, 0), radius=pedestrian_size, color=colors["pedestrians"]) for _ in range(len(pedestrians_names))]
+    if adversary_name is not None:
+        circle_adversary = Circle((0, 0), radius=pedestrian_size, color=colors["adversary"])
+        plt.plot(x_adversary, y_adversary, color=colors["traces"])
+
+    if pedestrians_names is not None:
+        circles_pedestrians = [Circle((0, 0), radius=pedestrian_size, color=colors["pedestrians"]) for _ in range(len(pedestrians_names))]
 
     "Plot traces of all objects"
     plt.plot(x_ego, y_ego, color=colors["traces"])
-    plt.plot(x_adversary, y_adversary, color=colors["traces"])
 
     for key, pedestrian in enumerate(pedestrians_names):
         x_pedestrian = x_pedestrians[key]
@@ -160,17 +181,18 @@ def plot_scenario_gif(parameter_values, simout: SimulationOutput, savePath=None,
         patch_ego.set_xy([x_ego[i] + shift_x_ego, y_ego[i] - shift_y_ego])
         ax.add_patch(patch_ego)
 
-        # update adversary
-        rotation_angle_adversary = (yaw_adversary[i] - 90) % 360
-        '''if car adversary: patch_adversary.set_angle(rotation_angle_adversary) '''
-        shift_angle_adversary = rotation_angle_adversary - 180 / np.pi * np.arctan(car_width / car_length)
-        shift_x_adversary = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.sin(shift_angle_adversary * np.pi / 180)
-        shift_y_adversary = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.cos(shift_angle_adversary * np.pi / 180)
-        '''if car adversary: patch_adversary.set_xy([x_adversary[i] + shift_x_adversary, y_adversary[i] - shift_y_adversary])
-        ax.add_patch(patch_adversary) '''
-        # updating adversary
-        circle_adversary.center = x_adversary[i], y_adversary[i]
-        ax.add_patch(circle_adversary)
+        if adversary_name is not None:
+            # update adversary
+            rotation_angle_adversary = (yaw_adversary[i] - 90) % 360
+            '''if car adversary: patch_adversary.set_angle(rotation_angle_adversary) '''
+            shift_angle_adversary = rotation_angle_adversary - 180 / np.pi * np.arctan(car_width / car_length)
+            shift_x_adversary = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.sin(shift_angle_adversary * np.pi / 180)
+            shift_y_adversary = 0.5 * np.sqrt(car_width ** 2 + car_length ** 2) * np.cos(shift_angle_adversary * np.pi / 180)
+            '''if car adversary: patch_adversary.set_xy([x_adversary[i] + shift_x_adversary, y_adversary[i] - shift_y_adversary])
+            ax.add_patch(patch_adversary) '''
+            # updating adversary
+            circle_adversary.center = x_adversary[i], y_adversary[i]
+            ax.add_patch(circle_adversary)
 
 
         # updating pedestrians

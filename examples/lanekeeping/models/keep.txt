@@ -1,0 +1,3 @@
+# put here a dnn model downloaded from here:
+
+https://drive.switch.ch/index.php/s/fMkAVQSCO5plOBZ?path=%2Flogs%2Fmodels
