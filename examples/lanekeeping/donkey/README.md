@@ -1,8 +1,8 @@
 # DNN Lane Keeping Testing with Donkey
 
-This example integrates the case study into OpenSBT presented in the paper X.
+This example integrates the case study into OpenSBT presented here: https://github.com/testingautomated-usi/maxitwo.
 
-To run the case study you have to Download the Donkey simulator from this link, and a dnn model of your choice from here.
+To run the case study you have to Download the Donkey simulator from this [link](https://drive.switch.ch/index.php/s/fMkAVQSCO5plOBZ?path=%2Fsimulators), and a dnn model of your choice from [here](https://drive.switch.ch/index.php/s/fMkAVQSCO5plOBZ?path=%2Flogs%2Fmodels).
 
 Install then the requirements by:
 
