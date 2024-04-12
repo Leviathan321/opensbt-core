@@ -715,7 +715,7 @@ def plot_timeseries(res, save_folder, mode="crit", type="X", max="100"):
         for index in range(len(clean_pop)):
             param_v_chain = "_".join("%.2f" % a for a in  clean_pop.get("X")[index])
 
-            f = plt.figure()
+            f = plt.figure(figsize=(12,10))
             cmap = plt.get_cmap('gnuplot')
             colors = [cmap(i) for i in np.linspace(0, 1, len(actors))]
 
