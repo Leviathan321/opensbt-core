@@ -3,12 +3,13 @@ import os
 ########## DNN Model
 
 # DNN_MODEL_PATH = "./dnn_models/maxibon/mixed-chauffeur.h5
-DNN_MODEL_PATH = r"C:\Users\Lev\Documents\fortiss\projects\testing\Multi-Simulation\opensbt-multisim\dnn_models\maxibon\mixed-epoch.h5"
+DNN_MODEL_PATH=r"/home/sorokin/Projects/testing/Multi-Simulation/opensbt-multisim/dnn_models/maxibon/mixed-epoch.h5"
+# DNN_MODEL_PATH = r"C:\Users\Lev\Documents\fortiss\projects\testing\Multi-Simulation\opensbt-multisim\dnn_models\maxibon\mixed-epoch.h5"
 # DNN_MODEL_PATH = "./dnn_models/maxibon/mixed-dave2.h5
 
 ######## Simulators
 
-DONKEY_EXE_PATH = "C:\\Users\\Lev\\Downloads\\donkeysim-maxibon-win64\\donkeysim-maxibon-win64\\donkey_sim.exe"
+DONKEY_EXE_PATH = "/home/sorokin/Downloads/donkeysim-maxibon-linux/donkeysim-maxibon-linux.x86_64"
 # UDACITY_EXE_PATH = "C:\\Users\\Lev\\Downloads\\udacitysim-maxibon-win64\\self_driving_car_nanodegree_program.exe"
 
 # DONKEY_EXE_PATH = "C:\\DonkeySimWindows\\donkey_sim.exe"

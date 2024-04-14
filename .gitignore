@@ -3,7 +3,6 @@
 *.code-workspace
 
 # Python
-env/
 venv/
 **/__pycache__/
 build/
