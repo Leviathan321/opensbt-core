@@ -1,4 +1,10 @@
-<div align="center" style="background: rgb(44,46,57);"><img src="./docs/figures/fortiss-openSBT-Logo-RGB-neg-back.png" height="150"/></div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td bgcolor="#2c2e39" align="center">
+      <img src="./docs/figures/fortiss-openSBT-Logo-RGB-neg-back.png" height="150">
+    </td>
+  </tr>
+</table>
 
 # OpenSBT - A Modular Framework for Search-based Testing of Automated Driving Systems
 
