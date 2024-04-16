@@ -12,7 +12,7 @@ from matplotlib.collections import PatchCollection
 import os
 import numpy as np
 from opensbt.visualization.configuration import *
-import config
+import examples.lanekeeping.config as config
 import logging as log
 
 def plot_gif(parameter_values, 

@@ -32,7 +32,7 @@ from examples.lanekeeping.evaluation import critical
 
 import opensbt
 from examples.lanekeeping.plotter.scenario_plotter_roads import plot_gif
-opensbt.visualization.scenario_plotter.plot_gif = plot_gif
+opensbt.visualization.scenario_plotter.plot_scenario_gif = plot_gif
 
 os.chmod(os.getcwd(), 0o777)
 logger = log.getLogger(__name__)
