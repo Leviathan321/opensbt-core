@@ -5,8 +5,8 @@ import gym
 import numpy as np
 from tensorflow.keras.models import load_model
 
-from agent.agent import Agent
-from examples.lanekeeping.config import DEFAULT_THROTTLE, HEATMAP_OUTPUT_UDACITY, HEATMAP_OUTPUT_DONKEY, \
+from examples.lanekeeping.agent.agent import Agent
+from examples.lanekeeping.config import DEFAULT_THROTTLE,\
                 MAX_SPEED, MIN_SPEED, IN_HEIGHT, IN_WIDTH, \
                 DONKEY_SIM_NAME, UDACITY_SIM_NAME 
         
