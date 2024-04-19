@@ -58,6 +58,7 @@ OpenSBT has been already applied:
 
 - For a replication experiment to replicate the results of a surrogate assisted testing technique, s. [here](https://github.com/Leviathan321/reflection_study).
 - In an industrial case study to validate a systems behaviour for different operating scenarios, s. [here](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing) and here: [https://doi.org/10.1007/978-3-031-46002-9_15](https://doi.org/10.1007/978-3-031-46002-9_15)
+- For the development and benchmarking an ML-based search algorithm, [s. here](https://github.com/ast-fortiss-tum/svm-paper-deeptest-24).
 
 ## Contribution
 
