@@ -22,6 +22,10 @@ from examples.lanekeeping.agent.agent_utils import calc_yaw_ego
 from examples.lanekeeping.donkey.utils.os_utils import kill_donkey_simulator
 import logging as log
 
+import opensbt
+from examples.lanekeeping.plotter.scenario_plotter_roads import plot_gif
+opensbt.visualization.scenario_plotter.plot_scenario_gif = plot_gif
+
 @dataclass
 class Scenario:
     """
@@ -130,7 +134,7 @@ class DonkeySimulator(Simulator):
                         if env is not None:
                             env.close()
                             env = None
-                        kill_donkey_simulator()
+                        # kill_donkey_simulator()
                     except Exception as e:
                         print(e)
 
