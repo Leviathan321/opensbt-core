@@ -370,7 +370,33 @@ def objective_space(res, save_folder, iteration=None, show=False, last_iteration
     pf = problem.pareto_front()
     n_obj = problem.n_obj
     objective_names = problem.objective_names
+    
+    if n_obj == 1:
+       plot_single_objective_space(result=res,
+                                   save_folder_plot=save_folder_plot,
+                                   objective_names=objective_names,
+                                   show=show,
+                                   pf=pf)
+    else:
+        plot_multi_objective_space(res, n_obj, save_folder_objective, objective_names, show, pf, last_iteration)
 
+        # output 3d plots
+        if n_obj == 3:
+            all_population = Population()
+            for i, generation in enumerate(res.history):
+                all_population = Population.merge(all_population, generation.pop)
+            visualize_3d(all_population, 
+                save_folder_objective, 
+                objective_names, 
+                mode="critical", 
+                markersize=20, 
+                do_save=True,
+                dimension="F",
+                angles=[(45,-45),(45,45),(45,135)],
+                show=show)
+    log.info(f"Objective Space: {save_folder_plot}")
+
+def plot_multi_objective_space(res, n_obj, save_folder_objective, objective_names, show, pf, last_iteration):
     all_population = Population()
     for i, generation in enumerate(res.history):
         all_population = Population.merge(all_population, generation.pop)
@@ -467,19 +493,78 @@ def objective_space(res, save_folder, iteration=None, show=False, last_iteration
                 plt.clf()
         plt.close(f)
 
-    # output 3d plots
-    if n_obj == 3:
-        visualize_3d(all_population, 
-            save_folder_objective, 
-            objective_names, 
-            mode="critical", 
-            markersize=20, 
-            do_save=True,
-            dimension="F",
-            angles=[(45,-45),(45,45),(45,135)],
-            show=show)
-    log.info(f"Objective Space: {save_folder_plot + objective_names[axis_x] + '_' + objective_names[axis_y] + '.png'}")
+def plot_single_objective_space(result, save_folder_plot, objective_names, show, pf):
+    res = result
+    problem = res.problem
 
+    x_axis_width = 10
+    plt.figure(figsize=(x_axis_width,6))
+    plt.axis('auto')
+
+    # ax = plt.subplot(111)
+    # ax.axis('auto')
+    fig = plt.gcf()
+
+    # Set the figure size to stretch the x-axis physically
+    fig.set_size_inches(x_axis_width, fig.get_figheight(), forward=True)
+
+    all_population = res.obtain_all_population()
+    critical, _ = all_population.divide_critical_non_critical()
+
+    plt.title(f"{res.algorithm.__class__.__name__}\nObjective Space | {problem.problem_name}" + \
+                    " (" + str(len(all_population)) + " testcases, " + \
+                        str(len(critical)) + " of which are critical)")
+    
+    # we plot the fitness over time as it is only one value for each iteration
+    for i, generation in enumerate(res.history):
+        all_population = generation.pop
+        axis_y = 0
+        critical, not_critical = all_population.divide_critical_non_critical()
+        critical_clean = duplicate_free(critical)
+        not_critical_clean = duplicate_free(not_critical)
+        
+        if len(not_critical_clean) != 0:
+            plt.scatter([i]*len(not_critical_clean), not_critical_clean.get("F")[:, axis_y], s=40,
+                        facecolors=color_not_optimal,
+                        edgecolors=color_not_critical, marker='o')
+        if len(critical_clean) != 0:
+            plt.scatter([i]*len(critical_clean), critical_clean.get("F")[:, axis_y], s=40,
+                        facecolors=color_not_optimal, edgecolors=color_critical, marker='o')
+
+        optimal_pop = get_nondominated_population(all_population)
+        critical, not_critical = optimal_pop.divide_critical_non_critical()
+        critical_clean = duplicate_free(critical)
+        not_critical_clean = duplicate_free(not_critical)
+        
+        if len(not_critical_clean) != 0:
+            plt.scatter([i]*len(not_critical_clean), not_critical_clean.get("F")[:, axis_y], s=40,
+                    facecolors=color_optimal, edgecolors=color_not_critical, marker='o')
+        if len(critical_clean) != 0:
+            plt.scatter([i]*len(critical_clean), critical_clean.get("F")[:, axis_y], s=40,
+                    facecolors=color_optimal, edgecolors=color_critical, marker='o')
+
+    
+        # box = fig.get_position()
+        # fig.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+        marker_list = create_markers()
+        if pf is not None:
+            markers = marker_list[2:]
+        else:
+            markers = marker_list[2:-1]
+    plt.xlabel("Iteration")
+    plt.ylabel(problem.objective_names[0])
+    plt.legend(handles=markers,
+            #loc='center left',
+            loc='best',
+            bbox_to_anchor=(1, 0.5), handler_map={mpatches.Circle: HandlerCircle()})
+
+    if show:
+        plt.show()
+    plt.savefig(save_folder_plot + objective_names[0] + '_iterations.png')
+    plt.clf()
+
+    pass
 
 def optimal_individuals(res, save_folder):
     """Output of optimal individuals (duplicate free)"""
