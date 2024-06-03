@@ -40,7 +40,7 @@ setup_logging(LOG_FILE)
 disable_pymoo_warnings()
 
 problem = ADASProblem(
-    problem_name="Donkey_5A_0-85_XTE_AVG",
+    problem_name="Udacity_5A_0-85_XTE_AVG",
     scenario_path="",
     xl=[0, 0, 0, 0, 0],
     xu=[85, 85, 85,85, 85],
