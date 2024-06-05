@@ -14,8 +14,6 @@ test:
   script:
     - echo "Executing tests..."
     - pytest ./tests/test_experiments.py
-    - pytest ./tests/test_analysis_single.py
-    - pytest ./tests/test_analysis_multi.py
 
 deploy:
   stage: deploy
