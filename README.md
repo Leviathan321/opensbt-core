@@ -74,14 +74,21 @@ OpenSBT has been developed by [Lev Sorokin](mailto:sorokin@fortiss.org), [Tizian
 If you use or extend OpenSBT please cite our framework. Here is an example BibTeX entry:
 
 ```bibtex
-@misc{sorokin2023opensbt,
-      title={OpenSBT: A Modular Framework for Search-based Testing of Automated Driving Systems}, 
-      author={Lev Sorokin and Tiziano Munaro and Damir Safin and Brian Hsuan-Cheng Liao and Adam Molin},
-      year={2023},
-      eprint={2306.10296},
-      howpublished={Accepted at Demonstration Track {ICSE '24}},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE}
+@inproceedings{10.1145/3639478.3640027,
+author = {Sorokin, Lev and Munaro, Tiziano and Safin, Damir and Liao, Brian Hsuan-Cheng and Molin, Adam},
+title = {OpenSBT: A Modular Framework for Search-based Testing of Automated Driving Systems},
+year = {2024},
+isbn = {9798400705021},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3639478.3640027},
+doi = {10.1145/3639478.3640027},
+booktitle = {Proceedings of the 2024 IEEE/ACM 46th International Conference on Software Engineering: Companion Proceedings},
+pages = {94–98},
+numpages = {5},
+keywords = {search-based software testing, metaheuristics, scenario-based testing, autonomous driving, automated driving},
+location = {, Lisbon, Portugal, },
+series = {ICSE-Companion '24}
 }
 ```
 ## License
