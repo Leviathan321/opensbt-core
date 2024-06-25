@@ -100,7 +100,7 @@ class ADASProblem(Problem):
             vector_fitness = np.asarray(
                 self.signs) * np.array(self.fitness_function.eval(simout))
             vector_list.append(np.array(vector_fitness))
-            label_list.append(self.critical_function.eval(vector_fitness))
+            label_list.append(self.critical_function.eval(vector_fitness, simout = simout))
 
         out["F"] = np.vstack(vector_list)
         out["CB"] = label_list

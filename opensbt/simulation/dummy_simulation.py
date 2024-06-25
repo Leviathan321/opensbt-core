@@ -143,34 +143,10 @@ class DummySimulator(Simulator):
                 "vehicles" : [],
                 "pedestrians" : []
             },
-            "otherParams": {}
+            "otherParams": {
+            }
         }
 
-        otherParams = {}
-
-        # Collision calculation (Only for fixed trajectories)
-        if colpoint != []:
-            dist_ego_colpoint = geometric.dist(colpoint, list(real_ego_traj[1:3, 0]))
-            dist_ped_colpoint = geometric.dist(colpoint, list(plan_adv_traj[1:3, 0]))
-
-            t_col_ego = dist_ego_colpoint / egoInitialVelocity
-            t_col_ped = dist_ped_colpoint / pedInitialVelocity
-
-            # collision occurs when both objects reach line crossing at
-            # the same time (with some tolerance)
-
-            t_tolerance = 1;  # time tolerance for missed collision
-            if (t_col_ego - t_col_ped) < t_tolerance:
-                otherParams['isCollision'] = True
-            else:
-                otherParams['isCollision'] = False
-            result["collisions"] = [[2]]
-            result["otherParams"] = otherParams
-
-        else:
-            otherParams['isCollision'] = False
-        result["otherParams"] = otherParams
-      
         return SimulationOutput.from_json(json.dumps(result))
     
 def are_actors_nearby(pos_ego, pos_others, detection_dist=3):
