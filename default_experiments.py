@@ -177,7 +177,7 @@ def getExp5() -> Experiment:
                               "velocity_ego",
                               "orientation_ped",
                               "velocity_ped"],
-                          fitness_function=FitnessMinDistanceVelocityFrontOnly(),
+                          fitness_function=FitnessMinDistanceVelocity(),
                           critical_function=CriticalAdasDistanceVelocity(),
                           simulate_function=DummySimulator.simulate,
                           simulation_time=10,

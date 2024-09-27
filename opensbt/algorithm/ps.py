@@ -22,6 +22,8 @@ import sys
 from pathlib import Path
 from typing import List
 
+import random
+
 from pymoo.optimize import minimize
 from pymoo.visualization.scatter import Scatter
 from pymoo.core.problem import Problem
@@ -63,7 +65,9 @@ class PureSampling(Optimizer):
         log.info(f"Initialized algorithm with config: {config.__dict__}")
 
     def run(self) -> SimulationResult:
-
+        
+        random.seed(config.seed)
+        
         problem = self.problem
         sample_size = self.sample_size
         sampled = self.sampling_type()(problem,sample_size)

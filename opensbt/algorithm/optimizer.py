@@ -10,6 +10,8 @@ class Optimizer(ABC):
     algorithm_name: str
     
     parameters: str
+    
+    config: SearchConfiguration
 
     @abstractmethod
     def __init__(self, problem: SimulationProblem, config: SearchConfiguration):
@@ -21,4 +23,5 @@ class Optimizer(ABC):
                 self.algorithm,
                 self.termination,
                 save_history=self.save_history,
-                verbose=True)
+                verbose=True,
+                seed = self.config.seed)

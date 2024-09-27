@@ -28,6 +28,7 @@ class PureSamplingRand(PureSampling):
                 problem: Problem,
                 config: SearchConfiguration,
                 sampling_type = FloatRandomSampling):
+        
         super().__init__(
             problem = problem,
             config = config,

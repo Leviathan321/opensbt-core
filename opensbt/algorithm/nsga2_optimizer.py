@@ -42,7 +42,8 @@ class NsgaIIOptimizer(Optimizer):
             "Crossover probability" : str(config.prob_crossover),
             "Crossover eta" : str(config.eta_crossover),
             "Mutation probability" : str(config.prob_mutation),
-            "Mutation eta" : str(config.eta_mutation)
+            "Mutation eta" : str(config.eta_mutation),
+            "Seed" : str(config.seed)
         }
 
         self.algorithm = NSGA2(

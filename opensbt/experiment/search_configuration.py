@@ -18,6 +18,8 @@ class SearchConfiguration(object):
     nadir = None
     ideal = None
     
+    seed = None
+    
 
 #TODO create a search configuration file specific for each algorithm
 class DefaultSearchConfiguration(SearchConfiguration):
@@ -38,3 +40,5 @@ class DefaultSearchConfiguration(SearchConfiguration):
     # metrics
     ref_point_hv = None
     nadir = ref_point_hv
+
+    seed = None
