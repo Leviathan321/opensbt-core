@@ -71,6 +71,8 @@ parser.add_argument('-v', dest='do_visualize', action='store_true',
                     help='Whether to use the simuator\'s visualization. This feature is useful for debugging and demonstrations, however it reduces the search performance.')
 parser.add_argument('-info', dest='show_info', action='store_true',
                     help='Names of all defined experiments.')
+parser.add_argument('-s', dest='seed', action='store', default=None, type=int,
+                    help='Seed for randomized operations.')
 
 args = parser.parse_args()
 
@@ -149,6 +151,8 @@ if not args.design_names is None:
     problem.design_names = args.design_names
 if not args.do_visualize is None:
     problem.do_visualize = args.do_visualize
+if not args.seed is None:
+    config.seed = args.seed
 
 ####### Run algorithm
 

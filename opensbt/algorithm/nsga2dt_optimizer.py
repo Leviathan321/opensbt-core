@@ -1,3 +1,4 @@
+import random
 from opensbt.model_ga.result  import SimulationResult
 from opensbt.evaluation.critical import *
 from pymoo.termination import get_termination
@@ -64,6 +65,8 @@ class NsgaIIDTOptimizer(Optimizer):
         '''Initial conditions (initial region)'''
         xl = problem.xl
         xu = problem.xu
+        
+        random.seed(config.seed)
 
         # sampling = FloatRandomSampling()
         sampling = LHS()  # Latin Hypercube Sampling
@@ -137,7 +140,7 @@ class NsgaIIDTOptimizer(Optimizer):
                 res = minimize(sub_problem,
                                algorithm,
                                termination,
-                               seed=1,
+                               seed=config.seed,
                                save_history=True,
                                verbose=True)
 
@@ -178,7 +181,9 @@ class NsgaIIDTOptimizer(Optimizer):
             "Crossover probability": str(config.prob_crossover),
             "Crossover eta": str(config.eta_crossover),
             "Mutation probability": str(config.prob_mutation),
-            "Mutation eta": str(config.eta_mutation)}
+            "Mutation eta": str(config.eta_mutation),
+            "Seed" : str(config.seed)
+        }
         
         result = self._create_result(problem, hist_holder, inner_algorithm, execution_time)
         self.res = result
