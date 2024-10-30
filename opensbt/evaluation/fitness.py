@@ -6,6 +6,7 @@ import math
 from scipy.spatial.distance import cdist
 from opensbt.utils import geometric
 
+
 class Fitness():
     @property
     def min_or_max(self):
@@ -14,8 +15,8 @@ class Fitness():
     @property
     def name(self):
         pass
-
-    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+ 
+    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
         pass
 
 class MockFitness():
@@ -27,7 +28,7 @@ class MockFitness():
     def name(self):
         return "dimension_1","dimension_2"
 
-    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
         return (0,0)
         
 class FitnessMinDistance(Fitness):
@@ -39,7 +40,7 @@ class FitnessMinDistance(Fitness):
     def name(self):
         return "Min distance"
 
-    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
         if "distance" in simout.otherParams:
             dist = simout.otherParams["distance"]
             result = min(dist)
@@ -58,7 +59,7 @@ class FitnessMinDistanceVelocity(Fitness):
     def name(self):
         return "Min distance", "Velocity at min distance"
 
-    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
         if "adversary" in simout.location:
             name_adversary = "adversary"
         else:
@@ -86,7 +87,7 @@ class FitnessMinDistanceVelocityFrontOnly(Fitness):
     def name(self):
         return "Min distance", "Velocity at min distance"
 
-    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
         if "adversary" in simout.location:
             name_adversary = "adversary"
         else:
@@ -116,7 +117,7 @@ class FitnessMinTTC(Fitness):
     def name(self):
         return "Min TTC"
 
-    def eval(self, simout: SimulationOutput) -> Tuple[float]:
+    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
         all_ttc = []
         if "adversary" in simout.location:
             name_adversary = "adversary"
@@ -166,7 +167,7 @@ class FitnessMinTTCVelocity(Fitness):
     def name(self):
         return "Min TTC", "Critical Velocity"
 
-    def eval(self, simout: SimulationOutput) -> float:
+    def eval(self, simout: SimulationOutput, **kwargs) -> float:
         if "adversary" in simout.location:
             name_adversary = "adversary"
         else:
@@ -282,7 +283,7 @@ class FitnessAdaptedDistSpeedRelVelocity(Fitness):
                                    (abs(z_perpendicular[i]) - car_width / 2) ** 2)
         return result
 
-    def eval(self, simout: SimulationOutput) -> float:
+    def eval(self, simout: SimulationOutput, **kwargs) -> float:
         if "car_length" in simout.otherParams:
             car_length = float(simout.otherParams["car_length"])
         else:
@@ -354,7 +355,7 @@ class FitnessAdaptedDistanceSpeed(Fitness):
     def name(self):
         return "Critical adapted distance", "Velocity at critical distance"
 
-    def eval(self, simout: SimulationOutput) -> float:
+    def eval(self, simout: SimulationOutput, **kwargs) -> float:
         # use only adapted distance and velocity of the fitness comupation of existing function
         vector_fitness_all = FitnessAdaptedDistSpeedRelVelocity().eval(simout)
         adapted_distance = vector_fitness_all[0]
@@ -371,7 +372,7 @@ class FitnessAdaptedDistanceSpeedTTC(Fitness):
     def name(self):
         return "Critical adapted distance", "Velocity at critical distance", "Min TTC"
 
-    def eval(self, simout: SimulationOutput) -> float:
+    def eval(self, simout: SimulationOutput, **kwargs) -> float:
         min_ttc = FitnessMinTTC().eval(simout)
         pos_crit = FitnessAdaptedDistanceSpeed().eval(simout)
         return pos_crit[0], pos_crit[1], min_ttc

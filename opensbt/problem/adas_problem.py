@@ -85,8 +85,12 @@ class ADASProblem(Problem):
         self.counter = self.counter + 1
         log.info(f"Running evaluation number {self.counter}")
         try:
-            simout_list = self.simulate_function(x, self.simulation_variables, self.scenario_path, sim_time=self.simulation_time,
-                                                 time_step=self.sampling_time, do_visualize=self.do_visualize)
+            simout_list = self.simulate_function(x, 
+                                                 self.simulation_variables, 
+                                                 self.scenario_path, 
+                                                 sim_time=self.simulation_time,
+                                                 time_step=self.sampling_time, 
+                                                 do_visualize=self.do_visualize)
         except Exception as e:
             log.info("Exception during simulation ocurred: ")
             # TODO handle exception, terminate, so that results are stored
@@ -98,7 +102,7 @@ class ADASProblem(Problem):
         for simout in simout_list:
             out["SO"].append(simout)
             vector_fitness = np.asarray(
-                self.signs) * np.array(self.fitness_function.eval(simout))
+                self.signs) * np.array(self.fitness_function.eval(simout, **kwargs))
             vector_list.append(np.array(vector_fitness))
             label_list.append(self.critical_function.eval(vector_fitness, simout = simout))
 

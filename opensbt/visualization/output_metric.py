@@ -1,32 +1,16 @@
 import csv
 import os
-import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from datetime import datetime
-import opensbt.algorithm.classification.decision_tree.decision_tree as decision_tree
-import matplotlib.patches as mpatches
-from matplotlib.patches import Rectangle
-from matplotlib.lines import Line2D
-from matplotlib.legend_handler import HandlerPatch
-from opensbt.visualization import scenario_plotter
-from pymoo.indicators.igd import IGD
-from pymoo.indicators.hv import Hypervolume
-from pymoo.core.population import Population
 from opensbt.visualization.configuration import *
 from opensbt.utils.sorting import *
-from opensbt.algorithm.classification.classifier import ClassificationType
 from opensbt.analysis.quality_indicators.quality import Quality
 from opensbt.model_ga.problem import *
 from opensbt.model_ga.result import *
-from typing import Dict
-from opensbt.utils.duplicates import duplicate_free
 import logging as log
 
-from opensbt.config import BACKUP_FOLDER, CONSIDER_HIGH_VAL_OS_PLOT,  \
-                            PENALTY_MAX, PENALTY_MIN, WRITE_ALL_INDIVIDUALS, \
-                                METRIC_PLOTS_FOLDER, LAST_ITERATION_ONLY_DEFAULT, COVERAGE_METRIC_NAME, \
-                                N_CELLS
+from opensbt.config import BACKUP_FOLDER, METRIC_PLOTS_FOLDER,  \
+                            COVERAGE_METRIC_NAME, N_CELLS
 
 def cid_analysis_hitherto(res: Result, save_folder: str, reference_set=None, n_evals_by_axis=None):
     log.info("------ Performing CID analysis ------")
