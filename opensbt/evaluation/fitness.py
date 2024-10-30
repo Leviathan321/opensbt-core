@@ -6,6 +6,7 @@ import math
 from scipy.spatial.distance import cdist
 from opensbt.utils import geometric
 
+
 class Fitness():
     @property
     def min_or_max(self):
@@ -14,7 +15,7 @@ class Fitness():
     @property
     def name(self):
         pass
-
+ 
     def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
         pass
 
