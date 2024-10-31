@@ -108,7 +108,6 @@ def generate_critical_regions(population,
                 # print("leaf node {} reached, no decision here".format(leave_id[sample_id]))  # <--
             else:  # < -- added else to iterate through decision nodes
                 if (X[sample_id][feature[node_id]] <= threshold[node_id]):
-                    threshold_sign = "<="
                     j = node_id
                     # set upper bound
                     # in a DT nodes might have same threshold features
@@ -116,7 +115,6 @@ def generate_critical_regions(population,
                         upperReg[feature[j]] = threshold[j]
 
                 else:
-                    threshold_sign = ">"
                     j = node_id
                     # set lower bound
                     if threshold[j] > lowerReg[feature[j]]:

@@ -353,7 +353,6 @@ def backup_problem(res,save_folder):
     with open(save_folder_problem + os.sep + "problem", "wb") as f:
         dill.dump(res.problem, f)
 
-
 def objective_space(res, save_folder, iteration=None, show=False, last_iteration=LAST_ITERATION_ONLY_DEFAULT):
     save_folder_objective = save_folder + "objective_space" + os.sep
     Path(save_folder_objective).mkdir(parents=True, exist_ok=True)   
