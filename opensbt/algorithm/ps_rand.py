@@ -16,14 +16,12 @@ from opensbt.algorithm.ps import PureSampling
 from opensbt.experiment.search_configuration import SearchConfiguration
 from opensbt.model_ga.problem import SimulationProblem
 from opensbt.model_ga.result import SimulationResult
-from opensbt.utils.sorting import get_nondominated_population
 
 from pymoo.core.problem import Problem
 from pymoo.operators.sampling.rnd import FloatRandomSampling
 
 class PureSamplingRand(PureSampling):
   
-    
     def __init__(self,
                 problem: Problem,
                 config: SearchConfiguration,

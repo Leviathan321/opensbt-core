@@ -1,9 +1,8 @@
 
 from dataclasses import dataclass
-from enum import Enum
 from typing import Dict, List
 from pymoo.core.individual import Individual
-from abc import ABC, abstractmethod, abstractstaticmethod
+from abc import ABC, abstractstaticmethod
 from opensbt.utils.encoder_utils import NumpyEncoder
 
 import os
@@ -13,10 +12,8 @@ import json
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-'''
-    Represent data output by a simulator
-
-    Example json representation of a SimulationOutput instance:
+"""
+    Represents data output by a simulator. Example json representation of a SimulationOutput instance:
 
     {
         "simTime" : 3,
@@ -36,7 +33,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
         }
     }
         
-'''
+"""
 @dataclass
 class SimulationOutput(object):
     simTime: float

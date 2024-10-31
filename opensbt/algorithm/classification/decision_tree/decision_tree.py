@@ -61,8 +61,6 @@ def generate_critical_regions(population,
     feature = clf.tree_.feature
     threshold = clf.tree_.threshold
 
-    values = clf.tree_.value
-
     node_depth = np.zeros(shape=n_nodes, dtype=np.int64)
     is_leaves = np.zeros(shape=n_nodes, dtype=bool)
     stack = [(0, 0)]  # start with the root node id (0) and its depth (0)

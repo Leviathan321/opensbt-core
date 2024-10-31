@@ -1,9 +1,7 @@
 import pymoo
+import numpy as np
 
 from opensbt.model_ga.individual import IndividualSimulated
-from opensbt.analysis.quality_indicators.quality import Quality
-from tests import test_base
-
 pymoo.core.individual.Individual = IndividualSimulated
 
 from opensbt.model_ga.population import PopulationExtended
@@ -15,11 +13,12 @@ pymoo.core.result.Result = SimulationResult
 from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
+from tests import test_base
+
 from opensbt.algorithm.nsga2dt_optimizer import NsgaIIDTOptimizer
 from opensbt.evaluation.critical import CriticalBnhDivided
 from opensbt.experiment.search_configuration import DefaultSearchConfiguration
-from opensbt.problem.pymoo_test_problem import *
-import matplotlib.pyplot as plt
+from opensbt.problem.pymoo_test_problem import PymooTestProblem
 import os
 
 from opensbt.visualization import output_metric, visualizer
@@ -27,7 +26,6 @@ from opensbt.visualization import output_metric, visualizer
 WAIT_RESULTS_TIME = 10
 
 OUTPUT_FOLDER  = os.sep + "tests" + os.sep + "output" + os.sep + "single" + os.sep
-
 
 class TestAnalysisSingle():
 
@@ -60,9 +58,9 @@ class TestAnalysisSingle():
 
         #########################        
         save_folder = visualizer.create_save_folder(problem, 
-                                                    results_folder=OUTPUT_FOLDER, 
+                                                    results_folder = OUTPUT_FOLDER, 
                                                     algorithm_name = optimizer.algorithm_name, 
-                                                    is_experimental=False)
+                                                    is_experimental = False)
 
         res.write_results(results_folder=save_folder, params = optimizer.parameters)
 
@@ -83,17 +81,17 @@ class TestAnalysisSingle():
                 )
         
         output_metric.calculate_n_crit_distinct(res,
-                                                save_folder=save_folder,
+                                                save_folder = save_folder,
                                                 bound_min = bound_min,
-                                                bound_max=bound_max,
-                                                n_cells=n_cells,
+                                                bound_max = bound_max,
+                                                n_cells = n_cells,
                                                 var="F")
                 
         output_metric.calculate_n_crit_distinct(res,
-                                                save_folder=save_folder,
+                                                save_folder = save_folder,
                                                 bound_min = bound_min,
-                                                bound_max=bound_max,
-                                                n_cells=n_cells,
+                                                bound_max = bound_max,
+                                                n_cells = n_cells,
                                                 var="X")
         output_metric.igd_analysis(res, 
                 save_folder, 

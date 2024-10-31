@@ -6,7 +6,6 @@ from pymoo.core.sampling import Sampling
 from pymoo.util.normalization import denormalize
 from pymoo.util.misc import cdist
 
-
 def fps_by_bounds(n_var, xl, xu, n_samples=1, verbose=False):
     # corners are added to the initial set
     corners = np.array(list(itertools.product(*np.array((xl, xu)).T.tolist())))
@@ -50,10 +49,8 @@ def fps_by_bounds(n_var, xl, xu, n_samples=1, verbose=False):
 
     return val
 
-
 def fps(problem, n_samples=1, verbose=False):
     return fps_by_bounds(problem.n_var, problem.xl, problem.xu, n_samples=n_samples, verbose=verbose)
-
 
 class FPS(Sampling):
 

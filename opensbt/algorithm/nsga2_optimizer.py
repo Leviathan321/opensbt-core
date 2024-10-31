@@ -1,23 +1,12 @@
-import os
-import sys
-from pathlib import Path
-
-from pymoo.optimize import minimize
-from pymoo.visualization.scatter import Scatter
 from pymoo.core.problem import Problem
 from pymoo.termination import get_termination
 from pymoo.algorithms.moo.nsga2 import NSGA2
-from pymoo.core.population import Population
 from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
 from pymoo.operators.sampling.rnd import FloatRandomSampling
-from pymoo.optimize import minimize
 from pymoo.termination import get_termination
-from opensbt.algorithm.classification.classifier import ClassificationType
-from opensbt.algorithm.classification.decision_tree.decision_tree import *
 from opensbt.algorithm.optimizer import Optimizer
 from opensbt.experiment.search_configuration import SearchConfiguration
-import opensbt.analysis.quality_indicators.metrics.spread as qi
 from opensbt.model_ga.result import *
 
 class NsgaIIOptimizer(Optimizer):

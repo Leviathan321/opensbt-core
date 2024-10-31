@@ -1,7 +1,6 @@
 from __future__ import division 
 from math import pow, sqrt
 
-
 def line(p1, p2):
     A = (p1[1] - p2[1])
     B = (p2[0] - p1[0])

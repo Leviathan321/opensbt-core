@@ -1,29 +1,52 @@
+from opensbt.model_ga.individual import Individual
 from typing import List
 from opensbt.simulation.simulator import Simulator, SimulationOutput
 from math import sin, cos, pi, ceil
 import numpy as np
 from random import random
-from opensbt.utils.geometric import *
-import logging as log
 from opensbt.utils import geometric
 import json
 
-''' Simulation based on linear motion of two actors. 
+""" 
+    Simulation based on linear motion of two actors. 
     Ego contains an AEB which scans for nearby vehicles below some distance threshold.
-'''
+"""
 class DummySimulator(Simulator):
     time_step = 1
     DETECTION_THRESH = 2     # threshold in meters where other actors can be detected
     RANDOMNESS_BIAS = 0.1    # noise to be added to positions
-    ## Simulates a set of scenarios and returns the output
+    
     @staticmethod
-    def simulate(list_individuals, 
-                 variable_names, 
+    def simulate(list_individuals: List[Individual], 
+                 variable_names: List[str], 
                  scenario_path: str, 
                  sim_time: float, 
                  time_step: float = time_step,
                  do_visualize: bool = False
         ) -> List[SimulationOutput]:
+        """
+        Simulates a set of scenarios based on a list of individuals and returns the simulation outputs.
+
+        Parameters
+        ----------
+        list_individuals : List[Individual]
+            A list of individuals representing different scenarios to be simulated.
+        variable_names : List[str]
+            A list of variable names used in the simulation.
+        scenario_path : str
+            The file path to the scenario configuration.
+        sim_time : float
+            Total simulation time.
+        time_step : float, optional
+            Time step for the simulation, by default DummySimulator.time_step.
+        do_visualize : bool, optional
+            Whether to visualize the simulation, by default False.
+
+        Returns
+        -------
+        List[SimulationOutput]
+            A list of simulation outputs for each individual in the input list.
+        """
         results = []
         for ind in list_individuals:
             simout = DummySimulator.simulate_single(ind, 
@@ -35,9 +58,9 @@ class DummySimulator(Simulator):
         return results
 
     @staticmethod
-    def simulate_single(vars, 
-                        variable_names, 
-                        filepath, 
+    def simulate_single(vars: List[Individual], 
+                        variable_names: List[str], 
+                        filepath: str, 
                         sim_time: float, 
                         time_step: float, 
                         detection_dist = DETECTION_THRESH, 
@@ -53,14 +76,9 @@ class DummySimulator(Simulator):
 
         # first plan the motion of ego, get for each time step predicted position/velocity
 
-        plan_ego_traj= planMotion(start_pos_ego, egoOrientation, egoInitialVelocity, sim_time, time_step)
-        plan_adv_traj = planMotion(start_pos_ped, pedOrientation, pedInitialVelocity, sim_time, time_step)
-
-        line_ego_points = (plan_ego_traj[1:3, 0], plan_ego_traj[1:3, 1])
-        line_ped_points = (plan_adv_traj[1:3, 0], plan_adv_traj[1:3, 1])
-
-        colpoint = geometric.intersection(list(line_ego_points), list(line_ped_points))
-
+        plan_ego_traj= plan_motion(start_pos_ego, egoOrientation, egoInitialVelocity, sim_time, time_step)
+        plan_adv_traj = plan_motion(start_pos_ped, pedOrientation, pedInitialVelocity, sim_time, time_step)
+        
         n_steps = plan_ego_traj.shape[1]
         
         # iterate through each time step checking other actors nearby to avoid collision
@@ -75,7 +93,6 @@ class DummySimulator(Simulator):
         # first position is real
         k = 1
         for i in range(1,n_steps):
-            #log.info(f"current index: {i}")
             current_size = real_ego_traj[1,:]
             if len(current_size) < n_steps:
                 pos_ego = [real_ego_traj[1,-1],real_ego_traj[2,-1]]
@@ -93,7 +110,6 @@ class DummySimulator(Simulator):
                     new_state =  np.asarray([[new_t],[new_x],[new_y], [new_v], [new_yaw]])
                     real_ego_traj = np.append(real_ego_traj, new_state, axis = 1)
                     # waiting_steps += t_stop - 1
-                    # log.info(f"waiting_steps: {waiting_steps}")
                 else:     
                     new_t =  plan_ego_traj[0, k] 
                     new_x =  plan_ego_traj[1, k] 
@@ -106,7 +122,6 @@ class DummySimulator(Simulator):
                     new_state =  np.asarray([[new_t],[new_x],[new_y], [new_v], [new_yaw]])
                     real_ego_traj = np.append(real_ego_traj, new_state, axis = 1)
                     k += 1
-                #log.info(f"len(real_ego_traj[3, :]): {len(real_ego_traj[3, :])}")
 
         # add some noise to location vector
         ego_location = [pos for pos in zip(list(real_ego_traj[1, :]), list(real_ego_traj[2, :]))]
@@ -150,36 +165,65 @@ class DummySimulator(Simulator):
         return SimulationOutput.from_json(json.dumps(result))
     
 def are_actors_nearby(pos_ego, pos_others, detection_dist=3):
+    """
+    Checks if the ego actor is within a certain distance of any actor in a list of positions
+    
+    Parameters
+    ----------
+    pos_ego : tuple or list
+        The position of the ego actor
+    pos_others : list
+        A list of positions of other actors
+    detection_dist : float
+        The distance within which actors are considered nearby
+    
+    Returns
+    -------
+    bool
+        True if the ego actor is within the specified distance of any other actor, False otherwise
+    """
     for i in range(0, len(pos_others)):
         if geometric.dist(pos_ego,pos_others[i]) < detection_dist:
             return True
     return False   
 
-'''
-    Linear motion planner
-    
-    Output: 
-        Ego vehicle trajectory in the form (Time, X, Y, V, Yaw)
-'''
-def planMotion(startingPosition, orientation, velocity, simTime, samplingTime):
+def plan_motion(starting_position, orientation, velocity, sim_time, sampling_time):
+    """
+    Plans the motion of an ego vehicle in a linear trajectory based on initial conditions.
+
+    Parameters
+    ----------
+    starting_position : tuple
+        The initial (x, y) position of the ego vehicle.
+    orientation : float
+        The initial orientation (yaw) of the ego vehicle in degrees.
+    velocity : float
+        The constant velocity of the ego vehicle.
+    sim_time : float
+        The total simulation time.
+    sampling_time : float
+        The time interval between each simulation step.
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array representing the trajectory with rows as [Time, X, Y, V, Yaw].
+    """
     theta = orientation
-    T = simTime
+    T = sim_time
     v = velocity
-    t = samplingTime
+    t = sampling_time
 
     S = v * T
-    distX = cos(theta * pi / 180) * S
-    distY = sin(theta * pi / 180) * S
-    nSteps = ceil(T / t)
+    dist_x = cos(theta * pi / 180) * S
+    dist_y = sin(theta * pi / 180) * S
+    n_steps = ceil(T / t)
 
-    asize = nSteps + 1
-    arrayTime = np.linspace(0, T, asize)
-    arrayX = np.linspace(startingPosition[0], startingPosition[0] + distX, asize)
-    arrayY = np.linspace(startingPosition[1], startingPosition[1] + distY, asize)
-    arrayV = v * np.ones(asize, dtype=np.int64)
-    # arrayV_x = arrayV * sin(theta * pi / 180)
-    # arrayV_y = arrayV * cos(theta * pi / 180)
-    arrayYaw = theta * np.ones(arrayTime.size)
+    asize = n_steps + 1
+    array_time = np.linspace(0, T, asize)
+    array_x = np.linspace(starting_position[0], starting_position[0] + dist_x, asize)
+    array_y = np.linspace(starting_position[1], starting_position[1] + dist_y, asize)
+    array_v = v * np.ones(asize, dtype=np.int64)
+    array_yaw = theta * np.ones(array_time.size)
 
-    # log.info('theta = ', theta, 'v_x = ', arrayV_x, 'v_y = ', arrayV_y)
-    return np.concatenate((arrayTime, arrayX, arrayY, arrayV, arrayYaw)).reshape(5, asize)
+    return np.concatenate((array_time, array_x, array_y, array_v, array_yaw)).reshape(5, asize)

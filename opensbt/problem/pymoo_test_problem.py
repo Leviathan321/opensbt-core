@@ -1,9 +1,7 @@
 from dataclasses import dataclass
-from pymoo.core.problem import ElementwiseProblem, Problem
+from pymoo.core.problem import Problem
 from pymoo.problems import get_problem
 from opensbt.evaluation.critical import Critical
-from opensbt.simulation.simulator import SimulationOutput
-import numpy as np
 
 @dataclass
 class PymooTestProblem(Problem):
