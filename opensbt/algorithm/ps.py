@@ -25,7 +25,6 @@ from pymoo.operators.sampling.rnd import FloatRandomSampling
 
 from opensbt.experiment.search_configuration import SearchConfiguration
 from opensbt.utils.evaluation import evaluate_individuals
-from opensbt.model_ga.result import Result
 
 from opensbt.utils.sorting import get_nondominated_population
 

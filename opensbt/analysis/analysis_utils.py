@@ -1,8 +1,7 @@
 
 import pandas as pd
-from model_ga.individual import IndividualSimulated
-from model_ga.population import PopulationExtended
-
+from opensbt.model_ga.individual import IndividualSimulated
+from opensbt.model_ga.population import PopulationExtended
 
 def read_critical_set(filename_critical_inds):
     individuals = []
