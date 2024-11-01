@@ -41,8 +41,7 @@ if __name__ == "__main__":
     
     ############# Set default experiment
 
-    # we need to pass several exps, to be able to compare searches with different fitnessfnc 
-    # (TODO check if fitness func should be part of a problem)
+    # We need to pass several exps, to be able to compare searches with different fitnessfnc 
     # If the problem is the same, just pass the experiment number twice
         
     ##### Dummy

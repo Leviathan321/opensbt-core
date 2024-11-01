@@ -1,7 +1,5 @@
 from opensbt.simulation.simulator import SimulationOutput
-from typing import Tuple
 import numpy as np
-import math
 from typing import List
 
 class Critical():

@@ -1,5 +1,4 @@
 import os
-from logging import log
 from opensbt.config import LOG_FILE
 from opensbt.utils.log_utils import setup_logging
 

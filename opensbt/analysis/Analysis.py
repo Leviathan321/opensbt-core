@@ -13,7 +13,7 @@ from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
 import dill
-from visualization.combined import write_last_metric_values
+from opensbt.visualization.combined import write_last_metric_values
 import traceback
 from opensbt.utils.sampling import cartesian_reference_set
 import signal
@@ -304,7 +304,7 @@ class Analysis(object):
                                    distance_tick):
         # temporary some params hard coded
         subplot_names = ["CID"]
-        metric_data_loaded = retrieve_metric_data_from_csv([paths_results_csv])
+        metric_data_loaded = retrieve_metric_data_from_csv([paths_results_csv], len(algo_names))
         make_comparison_plot(n_func_evals_lim,
                              output_folder,
                              metric_data_loaded,
@@ -312,7 +312,7 @@ class Analysis(object):
                              algo_names,
                              distance_tick=distance_tick,
                              suffix="_ds")
-        
+    @staticmethod
     def generate_modified_results(algo_paths,
                                 crit_fnc,
                                 suffix):

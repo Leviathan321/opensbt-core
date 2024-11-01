@@ -1,9 +1,6 @@
-from abc import abstractmethod
 
 import numpy as np
-
 import pymoo.gradient.toolbox as anp
-from pymoo.util.cache import Cache
 from pymoo.util.misc import at_least_2d_array
 from opensbt.simulation.simulator import SimulationOutput
 

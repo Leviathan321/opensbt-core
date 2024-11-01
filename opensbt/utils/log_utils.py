@@ -2,7 +2,6 @@ import logging as log
 import logging.config
 from importlib import reload
 
-
 def setup_logging(log_to):
     # Disable messages from matplot lib.
     log.getLogger('matplotlib.font_manager').disabled = True

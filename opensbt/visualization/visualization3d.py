@@ -6,7 +6,6 @@ import pandas as pd
 from opensbt.model_ga.individual import Individual
 from opensbt.model_ga.population import Population
 from opensbt.utils.sorting import get_nondominated_population
-from opensbt.visualization.configuration import *
 from opensbt.utils.duplicates import duplicate_free
 
 from opensbt.visualization.visualizer import color_critical, color_optimal, color_not_critical, color_not_optimal

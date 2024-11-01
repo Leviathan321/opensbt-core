@@ -41,24 +41,24 @@ def remove_duplicates(M,precision=6):
             return res    
     return res
 
+if __name__ == "__main__":
+    M0 = np.asarray([[1.00001,2],[1.00,2],[1.00081,2],[1.2,3]])
+    assert ( remove_duplicates(M0) == [1,0,2,3] )
 
-# M0 = np.asarray([[1.00001,2],[1.00,2],[1.00081,2],[1.2,3]])
-# assert ( remove_duplicates(M0) == [1,0,2,3] )
+    M1 = np.asarray([[1],[2],[2],[4]])
+    assert ( remove_duplicates(M1) == [0,1,3] )
 
-# M1 = np.asarray([[1],[2],[2],[4]])
-# assert ( remove_duplicates(M1) == [0,1,3] )
+    M2 = np.asarray([[1],[2],[3],[4]])
+    assert ( remove_duplicates(M2) == [0,1,2,3] )
 
-# M2 = np.asarray([[1],[2],[3],[4]])
-# assert ( remove_duplicates(M2) == [0,1,2,3] )
+    M3 = np.asarray([[1],[2],[3],[3]])
+    assert ( remove_duplicates(M3) == [0,1,2] )
 
-# M3 = np.asarray([[1],[2],[3],[3]])
-# assert ( remove_duplicates(M3) == [0,1,2] )
+    M4 = np.asarray([[1.2,3]])
+    assert ( remove_duplicates(M4) == [0] )
 
-# M4 = np.asarray([[1.2,3]])
-# assert ( remove_duplicates(M4) == [0] )
+    M5 = np.asarray([[1.2,3], [1.2, 3]])
+    assert ( remove_duplicates(M5) == [0] or remove_duplicates(M5) == [1] )
 
-# M5 = np.asarray([[1.2,3], [1.2, 3]])
-# assert ( remove_duplicates(M5) == [0] or remove_duplicates(M5) == [1] )
-
-# M6 = np.asarray([])
-# assert ( remove_duplicates(M6) == [] )
+    M6 = np.asarray([])
+    assert ( remove_duplicates(M6) == [] )

@@ -2,8 +2,7 @@ import numpy as np
 from pymoo.core.result import Result
 from opensbt import config
 from opensbt.model_ga.population import PopulationExtended as Population
-from opensbt.model_ga.individual import IndividualSimulated as Individual
-from opensbt.utils.sorting import *
+from opensbt.utils.sorting import get_nondominated_population
 import dill
 import os
 from pathlib import Path
@@ -11,8 +10,6 @@ from opensbt.visualization import visualizer
 import logging as log
 
 from opensbt.config import RESULTS_FOLDER, WRITE_ALL_INDIVIDUALS, EXPERIMENTAL_MODE
-import numpy as np
-from utils.sorting import *
 
 class SimulationResult(Result):
 

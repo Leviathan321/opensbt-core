@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import pymoo
+import time
 
 from opensbt.model_ga.individual import IndividualSimulated
 from tests import test_base
@@ -18,10 +19,8 @@ pymoo.core.problem.Problem = SimulationProblem
 from opensbt.algorithm.nsga2_optimizer import NsgaIIOptimizer
 from opensbt.evaluation.critical import CriticalAdasDistanceVelocity
 from opensbt.experiment.search_configuration import DefaultSearchConfiguration
-from opensbt.evaluation.fitness import *
+from opensbt.evaluation.fitness import FitnessMinDistanceVelocityFrontOnly
 from opensbt.problem.adas_problem import ADASProblem
-
-import time
 
 class TestExperiments():
     WAIT_RESULTS_TIME = 10

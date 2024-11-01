@@ -2,27 +2,23 @@ import traceback
 import numpy as np
 import os
 import csv
-from matplotlib import legend, pyplot as plt
+from matplotlib import pyplot as plt
 import pandas as pd
-from opensbt.model_ga.individual import *
-from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
-from opensbt.model_ga.population import *
+from opensbt.model_ga.individual import Individual
+from matplotlib.ticker import (AutoMinorLocator)
+from opensbt.model_ga.population import Population
 from opensbt.utils.sorting import get_nondominated_population
 from opensbt.visualization.visualizer import *
 from opensbt.analysis.quality_indicators.quality import EvaluationResult
 from matplotlib import pyplot as plt
 import scipy
-from scipy.interpolate import interp1d
 import matplotlib
 from opensbt.utils.duplicates import duplicate_free
 import logging as log
 from opensbt.analysis.statistics import wilcoxon
 from opensbt.analysis.quality_indicators.metrics import ncrit
 
-from opensbt.config import BACKUP_FOLDER, CONSIDER_HIGH_VAL_OS_PLOT,  \
-                            PENALTY_MAX, PENALTY_MIN, WRITE_ALL_INDIVIDUALS, \
-                                METRIC_PLOTS_FOLDER, LAST_ITERATION_ONLY_DEFAULT, COVERAGE_METRIC_NAME, \
-                                N_CELLS
+from opensbt.config import BACKUP_FOLDER, N_CELLS
 
 # union critical solutions from all runs to approximate "real" critical design space
 def calculate_combined_crit_pop(run_paths):
@@ -70,10 +66,6 @@ def plot_combined_analysis_last_min_max(metric_name, run_paths_array, save_folde
                 run_path + os.sep + BACKUP_FOLDER, metric_name)
             n_evals, hv = eval_res.steps, eval_res.values
             values_all.append(hv[-1])
-
-            # log.info(f"n_eval: {n_evals}")
-            # log.info(f"n_eval: {hv}")
-
             plt.plot(n_evals, hv, marker='.', linestyle='--',
                      label='run ' + str(key_run + 1))
 
@@ -82,8 +74,6 @@ def plot_combined_analysis_last_min_max(metric_name, run_paths_array, save_folde
 
         max_value_runs = [max_value]
         min_value_runs = [min_value]
-
-        # TODO log.info min max
 
         def std_dev(y_values):
             y_mean = np.sum(y_values, axis=0) / \
@@ -160,8 +150,6 @@ def write_last_metric_values(metric_name_load, run_paths_array, save_folder, met
 def plot_combined_analysis(metric_name_load, run_paths_array, save_folder, n_func_evals_lim, n_fitting_points, metric_name_label=None, step_chkp=None, error_mean=False):
     plot_array = []
 
-    # log.info(f"len(run_paths_array) = {len(run_paths_array)}")
-
     for key, (algo, run_paths) in enumerate(run_paths_array.items()):
         num_evals_limit = []
 
@@ -189,9 +177,7 @@ def plot_combined_analysis(metric_name_load, run_paths_array, save_folder, n_fun
             x_run = np.arange(step, min_num_evals, step)
             y = spl(x_run)
             y_stacked[key_run, 0:len(y)] = y
-            # log.info(f"y: {y}")
-            # log.info(f"y_stacked: {y_stacked}")
-
+ 
             plt.plot(n_evals, hv, marker='.', linestyle='--',
                      label='run ' + str(key_run + 1))
 
@@ -268,8 +254,6 @@ def plot_combined_hypervolume_lin_analysis(run_paths_array, save_folder):
             evals_run.append(n_evals)
 
         def get_interpol_value(pos, n_evals, hv):
-            # log.info(hv)
-            # log.info(n_evals)
             for ind, eval in enumerate(n_evals):
                 if n_evals[ind] > pos:
                     if ind == 0:
@@ -292,7 +276,6 @@ def plot_combined_hypervolume_lin_analysis(run_paths_array, save_folder):
             hv = hv_run[ind]
             hv_run[ind] = [get_interpol_value(
                 val, n_evals, hv) for val in n_evals_comb]
-            # log.info(hv_comb_all)
 
         hv_comb_all = np.sum(hv_run, axis=0)
         hv_comb = np.asarray(hv_comb_all) / n_runs
@@ -882,7 +865,7 @@ def statistical_analysis(metric_name_load,
                         metric_name_label=None):
     def get_last_metric_value(path,name):
         eval_res = EvaluationResult.load(path + os.sep + BACKUP_FOLDER, name)
-        n_evals, hv = eval_res.steps, eval_res.values
+        _, hv = eval_res.steps, eval_res.values
         return hv[-1]
 
     m_test = []

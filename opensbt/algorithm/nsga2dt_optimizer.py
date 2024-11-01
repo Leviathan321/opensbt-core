@@ -1,6 +1,6 @@
 import random
 from opensbt.model_ga.result  import SimulationResult
-from opensbt.evaluation.critical import *
+from opensbt.evaluation.critical import Critical
 from pymoo.termination import get_termination
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.population import Population

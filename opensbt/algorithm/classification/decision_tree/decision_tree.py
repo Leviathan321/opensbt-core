@@ -61,8 +61,6 @@ def generate_critical_regions(population,
     feature = clf.tree_.feature
     threshold = clf.tree_.threshold
 
-    values = clf.tree_.value
-
     node_depth = np.zeros(shape=n_nodes, dtype=np.int64)
     is_leaves = np.zeros(shape=n_nodes, dtype=bool)
     stack = [(0, 0)]  # start with the root node id (0) and its depth (0)
@@ -110,7 +108,6 @@ def generate_critical_regions(population,
                 # print("leaf node {} reached, no decision here".format(leave_id[sample_id]))  # <--
             else:  # < -- added else to iterate through decision nodes
                 if (X[sample_id][feature[node_id]] <= threshold[node_id]):
-                    threshold_sign = "<="
                     j = node_id
                     # set upper bound
                     # in a DT nodes might have same threshold features
@@ -118,7 +115,6 @@ def generate_critical_regions(population,
                         upperReg[feature[j]] = threshold[j]
 
                 else:
-                    threshold_sign = ">"
                     j = node_id
                     # set lower bound
                     if threshold[j] > lowerReg[feature[j]]:

@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, List
 from pymoo.core.problem import Problem
 import numpy as np
 from opensbt.evaluation.critical import Critical
-from opensbt.evaluation.fitness import *
+from opensbt.evaluation.fitness import Fitness
 import logging as log
 
 @dataclass
@@ -108,8 +108,6 @@ class ADASProblem(Problem):
 
         out["F"] = np.vstack(vector_list)
         out["CB"] = label_list
-    # self.counter = self.counter + 1
-    # log.info(f"++ Evaluations executed {self.counter*100/(population_size*num_gen)}% ++")
 
     def is_simulation(self):
         return True
