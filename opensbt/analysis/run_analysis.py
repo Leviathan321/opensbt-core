@@ -12,13 +12,11 @@ pymoo.core.result.Result = SimulationResult
 from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
-from opensbt.algorithm import nsga2_optimizer
-from opensbt.algorithm import nsga2dt_optimizer
+from opensbt.algorithm import nsga2_optimizer, nsga2dt_optimizer
 
 from default_experiments import *
 from opensbt.experiment.search_configuration import *
 import argparse
-from default_experiments import *
 import logging as log
 from opensbt.analysis.Analysis import Analysis
 from opensbt.utils.log_utils import *

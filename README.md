@@ -52,38 +52,49 @@ As another example we have integrated Simulink-based systems simulated in Presca
 
 ## Output
 
-OpenSBT generated following outputs (excerpt):
+OpenSBT generates a variety of outputs to support the analysis of the system:
 
-| Type | Description | Example | 
-|:--------------|:-------------|:--------------|
-| Design Space Plot | Visualization of all evaluated test cases in the input space + of predicted critical regions using the decision tree algorithm, pairwise. Constraints of derived regions are stored in CSV file [bounds_regions.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/bounds_regions.csv) and the learned tree in [tree.pdf](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/tree.pdf) | <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/design_space/orientation_ego_orientation_ped.png?raw=True" alt="Design Space Plot" width="400"/>  |
-| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/gif/0_trajectory.gif?raw=True" alt="Scenario Visualization" width="300"/> |
-Objective Space Plot | Visualization of fitness values of evaluated test cases, pairwise.   | <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/objective_space/Min Adapted Distance_Velocity At Min Adapted Distance.png?raw=True" alt="Objective Space Plot" width="400"/> |
-| All Testcases |  CSV file of all test inputs of all evaluated testcases | [all_testcases.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_testcases.csv) |
-| All Critical Testcases |  CSV file of all critical test inputs of all evaluated testcases | [all_critical_testcases.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_critical_testcases.csv)|
-| Calculation Properties |  CSV file of all experiment configuration parameters (e.g. algorithm parameters, such as population size, number iterations; search space, fitness function etc..).  | [calculation_properties.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/calculation_properties.csv) |
-| Evaluation Results |  CSV file containing performance values of the algorithm, e.g., number critical test cases found in relation to all evaluations, execution time.| [summary_results.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/summary_results.csv)|
+### Visualization Outputs
+These outputs provide graphical representations of the generated test cases, allowing for intuitive analysis of design and objective spaces.
+
+- **Design Space Plot:** Visualizes all evaluated test cases within the input space, highlighting critical regions predicted by the decision tree algorithm. This plot helps identify input conditions that lead to critical situations. For example, constraints of these regions are saved in [bounds_regions.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/bounds_regions.csv), and the decision tree can be reviewed in [tree.pdf](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/tree.pdf).  
+  <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/design_space/orientation_ego_orientation_ped.png?raw=True" alt="Design Space Plot" width="400"/> 
+
+- **Scenario 2D Visualization:** Displays the movement of the ego vehicle and adversaries in a 2D space using a GIF animation. This visualization provides insights into the interaction dynamics and can help identify unexpected or unsafe behaviors.
+  <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/gif/0_trajectory.gif?raw=True" alt="Scenario Visualization" width="300"/>
+
+- **Objective Space Plot:** Illustrates fitness values of evaluated test cases, allowing a pairwise view of objectives. This plot is useful for understanding how different objectives, such as distance and velocity, interact in the optimization process.
+  <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/objective_space/Min%20Adapted%20Distance_Velocity%20At%20Min%20Adapted%20Distance.png?raw=True" alt="Objective Space Plot" width="400"/>
 
 
-## Webinar 
+### Data Outputs
+These outputs provide structured data for post-processing or detailed analysis.
 
-Checkout the following webinar to understand the concepts of the search-based testing method behind OpenSBT.
+- **All Test Cases** (`all_testcases.csv`): Lists all input parameters for each evaluated test case. Useful for tracking each scenario generated during testing. [View example](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_testcases.csv).
+
+- **All Critical Test Cases** (`all_critical_testcases.csv`): Stores only critical test cases, focusing on scenarios where the system under test displayed critical behavior. [View example](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_critical_testcases.csv).
+
+### Configuration and Summary Files
+These files contain metadata about the test runs and can assist in reproducing or analyzing tests.
+
+- **Calculation Properties** (`calculation_properties.csv`): Provides details on the configuration of each experiment, such as algorithm parameters (population size, iterations), search space, and fitness function. This file is essential for replicating test conditions. [View example](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/calculation_properties.csv).
+
+- **Evaluation Results** (`summary_results.csv`): Summarizes algorithm performance, including the number of critical cases identified and overall execution time. This file can aid in comparing algorithm efficiency across different configurations. [View example](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/summary_results.csv).
 
 ## Application
 
 Following Simulators have been integrated already into OpenSBT:
 
-- [Prescan]()
-- [CARLA](https://carla.org/)
-- [Donkey]()
-- [Udacity]()
-- [BeamNG](https://www.beamng.com/game/)
+- [Prescan]() - [Example]()
+- [CARLA](https://carla.org/) - [Example]()
+- [Donkey]() - [Example]()
+- [Udacity]() - [Example]()
+- [BeamNG](https://www.beamng.com/game/) - [Example]()
 
 OpenSBT has been applied in research:
 
 - Replication Study: [Paper](https://dl.acm.org/doi/10.1016/j.infsof.2023.107286), [Code](https://github.com/Leviathan321/reflection_study) 
 - Autonomous Driving Testing: [Paper](https://doi.org/10.1007/978-3-031-46002-9_15), [Video](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing) 
-
 - Algorithm Benchmarking: [Paper](https://dl.acm.org/doi/10.1145/3643786.3648023), [Code](https://github.com/ast-fortiss-tum/svm-paper-deeptest-24) 
 - Failure Coverage Study: [Paper](https://arxiv.org/html/2410.11769v1), [Code](https://github.com/ast-fortiss-tum/coverage-emse-24) 
 
