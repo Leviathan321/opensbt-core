@@ -22,7 +22,7 @@ OpenSBT is a modular and extensible codebase designed to facilitate search-based
 
 ## Overview
 
-<div align="center"><img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/figures/OpenSBT_architecture.png?raw=True" width=500 ></div>
+<div align="center"><img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/figures/OpenSBT_architecture_120124.png?raw=True" width=500 ></div>
 
 OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0.1 and extends internal optimization related models to tailor heuristic search algorithms for testing automated driving systems. An introductory video of OpenSBT can be found here: https://www.youtube.com/watch?v=qi_CTTzrk5s. 
 
