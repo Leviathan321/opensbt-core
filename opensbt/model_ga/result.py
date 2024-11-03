@@ -12,7 +12,10 @@ import logging as log
 from opensbt.config import RESULTS_FOLDER, WRITE_ALL_INDIVIDUALS, EXPERIMENTAL_MODE
 
 class SimulationResult(Result):
-
+    """
+    This class extends pymoo's Result class to output simulation results 
+    and extract information from the test data.
+    """
     def __init__(self) -> None:
         super().__init__()
         self._additional_data = dict()
@@ -35,7 +38,7 @@ class SimulationResult(Result):
             hist_X = None
         return n_evals, hist_X
     
-    # iteration of first critical solutions found + fitness values
+    """" Identifies the iteration number when the first critical solutions was found """
     def get_first_critical(self):
         hist = self.history
         res = Population() 
@@ -55,6 +58,8 @@ class SimulationResult(Result):
                     return iter, res
         return 0, res
     
+    """" Returns the set of test inputs over all genreation based on feasibility and criticality 
+    according to number of function evaluations"""
     def obtain_history(self, critical=False):
         hist = self.history
         if hist is not None:
@@ -74,7 +79,8 @@ class SimulationResult(Result):
             n_evals = None
             hist_F = None
         return n_evals, hist_F
-
+    
+    """" Returns all test inputs over all generations """
     def obtain_all_population(self):
         all_population = Population()
         hist = self.history
@@ -82,7 +88,9 @@ class SimulationResult(Result):
             for generation in hist:
                 all_population = Population.merge(all_population, generation.pop)
         return all_population
-
+    
+    """" Returns the set of test inputs over all generations based on feasibility and criticality 
+    according to number of function evaluations (aggregated)"""
     def obtain_history_hitherto(self,critical=False, optimal=True, var = "F"):
         hist = self.history
         n_evals = []  # corresponding number of function evaluations
@@ -104,11 +112,13 @@ class SimulationResult(Result):
             hist_F.append(all.get(var)[feas])
         return n_evals, hist_F
     
+    """ Write down the result object by pickling """
     def persist(self, save_folder):
         Path(save_folder).mkdir(parents=True, exist_ok=True)
         with open(save_folder + os.sep + "result", "wb") as f:
             dill.dump(self, f)
-
+            
+    """ Load the result object which was pickled before """
     @staticmethod
     def load(save_folder, name="result"):
         with open(save_folder + os.sep + name, "rb") as f:
@@ -117,7 +127,8 @@ class SimulationResult(Result):
     @property
     def additional_data(self):
         return self._additional_data
-
+    
+    """ Write the results artefacts for the current experiment"""
     def write_results(self, results_folder = RESULTS_FOLDER, params=None, is_experimental=EXPERIMENTAL_MODE):
         algorithm = self.algorithm
 

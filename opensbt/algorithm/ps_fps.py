@@ -7,8 +7,15 @@ from opensbt.utils.fps import FPS
 pymoo.core.problem.Problem = SimulationProblem
 from pymoo.core.problem import Problem
 
-
 class PureSamplingFPS(PureSampling):
+    """
+    This class provides the Farthest Point Sampling algorithm (FPS) [1].
+    FPS generate new inputs with the largest distance from the existing inputs to achieve 
+    a uniform distribution of test inputs in the search space.
+
+    [1] Eldar Y, Lindenbaum M, Porat M, Zeevi Y (1997) The farthest point strategy for 
+    progressive image sampling. IEEE Trans Image Process 6:1305–15, DOI 10.1109/83.623193
+    """
     
     algorithm_name = "FPS"
 

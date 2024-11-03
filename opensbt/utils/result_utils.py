@@ -11,6 +11,7 @@ from pymoo.operators.mutation.pm import PM
 import copy
 
 def create_result(problem, hist_holder, inner_algorithm, execution_time):
+    """ Generates a result object from generation data to adhere to pymoos result model. Consider the implementation of NSGA-II-DT optimizer for reference. """
     # TODO calculate res.opt
     I = 0
     for algo in hist_holder:
@@ -39,7 +40,9 @@ def create_result(problem, hist_holder, inner_algorithm, execution_time):
     return res_holder
 
 def create_result_from_generations(path_generations, problem):
-
+    """Generates a result object from recorded generation files which contain test inputs from the specific generations in human readable format.
+    """
+    
     n_generations = len(os.listdir(path_generations))
 
     inner_algorithm = NSGA2(

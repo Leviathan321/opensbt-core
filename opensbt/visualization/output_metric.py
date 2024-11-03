@@ -10,7 +10,10 @@ from opensbt.model_ga.result import *
 import logging as log
 
 from opensbt.config import BACKUP_FOLDER, METRIC_PLOTS_FOLDER,  \
-                            COVERAGE_METRIC_NAME, N_CELLS
+                           COVERAGE_METRIC_NAME, N_CELLS
+                           
+"""This module holds functions which visualize and output analysis results.
+"""
 
 def cid_analysis_hitherto(res: Result, save_folder: str, reference_set=None, n_evals_by_axis=None):
     log.info("------ Performing CID analysis ------")

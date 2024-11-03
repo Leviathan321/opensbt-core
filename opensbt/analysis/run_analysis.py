@@ -24,6 +24,9 @@ from opensbt.config import *
 from opensbt.experiment.experiment_store import experiments_store
 from opensbt.config import metric_config
 
+"""
+    This script defines a concrete analysis problem to be executed.
+"""
 disable_pymoo_warnings()
 
 if __name__ == "__main__":        

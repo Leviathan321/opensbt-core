@@ -16,7 +16,10 @@ from opensbt.utils.sampling import CartesianSampling
 from opensbt.analysis.quality_indicators.metrics.ncrit import get_n_crit_grid
 from opensbt.config import N_CELLS
 
+
 class Quality(object):
+    """ This class holds functions to perform an analysis on testing results with defined quality indicators.
+    """
     @staticmethod
     def calculate_cid(result, reference_set,  n_evals_by_axis): 
         hist = result.history

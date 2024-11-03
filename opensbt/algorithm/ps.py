@@ -29,6 +29,9 @@ from opensbt.utils.evaluation import evaluate_individuals
 from opensbt.utils.sorting import get_nondominated_population
 
 class PureSampling(Optimizer):
+    """
+    This class provides the parent class for all sampling based search algorithms.
+    """
     
     algorithm_name = "RS"
 

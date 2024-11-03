@@ -12,8 +12,11 @@ class Singleton(object):
 
     def init(self, *args, **kwds):
         pass
-
+    
 class DefaultExperiments(Singleton):
+    """ This class allows to store and load experiments globally in OpenSBT. 
+    """
+
     def init(self):
         self.store = {}
 

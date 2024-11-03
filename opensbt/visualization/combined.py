@@ -20,8 +20,11 @@ from opensbt.analysis.quality_indicators.metrics import ncrit
 
 from opensbt.config import BACKUP_FOLDER, N_CELLS
 
-# union critical solutions from all runs to approximate "real" critical design space
+"""This module provides functions for the analysis of completed runs with different search approaches.
+"""
 def calculate_combined_crit_pop(run_paths):
+    """Unions critical solutions from all runs to approximate "real" critical design space.
+    """
     len(f"run_paths: {run_paths}")
     crit_pop = Population()
     for run_path in run_paths:
@@ -33,8 +36,9 @@ def calculate_combined_crit_pop(run_paths):
         crit_pop[i].set("CB", True)
     return crit_pop
 
-# TODO add information on the deviation of the values wrt. to differen runs in the plots
 def calculate_combined_pf(run_paths, critical_only=False):
+    # TODO add information on the deviation of the values wrt. to differen runs in the plots
+
     pf_pop = Population()
     for run_path in run_paths:
         pf_run = read_pf_single(run_path + os.sep + "optimal_testcases.csv")
@@ -49,10 +53,11 @@ def calculate_combined_pf(run_paths, critical_only=False):
     # log.info(f"pf: {pf}")
     return pf, pf_pop
 
-''' 
-    output mean/std/min/max for final metric value instead for several number of evaluations as in plot_combined_analysis
-'''
+
 def plot_combined_analysis_last_min_max(metric_name, run_paths_array, save_folder):
+    """
+        Outputs mean/std/min/max for final metric value instead for several number of evaluations as in plot_combined_analysis
+    """
     plot_array = []
 
     for key, (algo, run_paths) in enumerate(run_paths_array.items()):

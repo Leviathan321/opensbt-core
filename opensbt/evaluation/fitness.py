@@ -7,15 +7,26 @@ from opensbt.utils import geometric
 
 
 class Fitness():
+    """This class defines an interface for concrete fitness functions. 
+    """
+    
+    
     @property
     def min_or_max(self):
+        """Defines for each objective if it is minimized or maximized. Returns a tuple, where each element holds 
+           the value "min" or "max".
+        """
         pass
 
     @property
-    def name(self):
+    def name(self):     
+        """Defines the name of the fitness funtion as a tuple, where each element corresponds to the name of the objective
+        """
         pass
  
-    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:
+    def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:    
+        """Returns the fitness value of a given SimulationOutput instance.
+        """
         pass
 
 class MockFitness():

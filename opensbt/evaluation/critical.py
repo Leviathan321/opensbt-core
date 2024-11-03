@@ -3,6 +3,9 @@ import numpy as np
 from typing import List
 
 class Critical():
+    """This class defines an interface for concrete oracle functions. 
+       The functions name and eval have to be implemented.
+    """
     @property
     def name(self):
         return self.__class__.__name__

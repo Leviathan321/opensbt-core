@@ -1,7 +1,8 @@
 from pymoo.core.individual import Individual
 
 class IndividualSimulated(Individual):
-    
+    """This class extends pymoos' Individual class to integrate simulation output data.
+    """
     def __init__(self, config=None, **kwargs) -> None:
         super().__init__(config,**kwargs)
         self._SO = None

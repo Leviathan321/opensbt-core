@@ -8,7 +8,8 @@ import logging as log
 
 @dataclass
 class ADASProblem(Problem):
-
+    """ Basic problem class for ADAS problems """
+    
     def __init__(self,
                  xl: List[float],
                  xu: List[float],
@@ -17,7 +18,7 @@ class ADASProblem(Problem):
                  simulate_function,
                  critical_function: Critical,
                  simulation_variables: List[float],
-                  simulation_time: float = 10,
+                 simulation_time: float = 10,
                  sampling_time: float = 100,
                  design_names: List[str] = None,
                  objective_names: List[str] = None,

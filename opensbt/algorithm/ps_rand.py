@@ -21,7 +21,9 @@ from pymoo.core.problem import Problem
 from pymoo.operators.sampling.rnd import FloatRandomSampling
 
 class PureSamplingRand(PureSampling):
-  
+    """ 
+    This class provides the random sampling algorithm which generates random test inputs in the search space.
+    """
     def __init__(self,
                 problem: Problem,
                 config: SearchConfiguration,

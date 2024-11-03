@@ -13,7 +13,10 @@ DELTA = 0.0  # delta can be set negative to make regions overlap
 MAX_TREE_DEPTH = 100
 MIN_IMPURITY_DECREASE = 0.05
 
+
 class Region:
+    """ Represent a subspace of the design space and its criticality based on the tests in the region. 
+    """
     def __init__(self, xl, xu, population):
         self.xl = xl
         self.xu = xu
@@ -22,6 +25,15 @@ class Region:
         self.is_critical = None
 
     def define_critical(self, threshold_min, threshold_max):
+        """
+        Evaluate the criticality of the region based on the given population and
+        the given thresholds.
+
+        Parameters
+        ----------
+        threshold_min : float
+        threshold_max : float
+        """
         self.critical_share = sum(self.population.get("CB")) / len(self.population)
         self.is_critical = (self.critical_share > threshold_min) and (self.critical_share < threshold_max)
         return
@@ -37,6 +49,32 @@ def generate_critical_regions(population,
                              criticality_threshold_max=CRITICALITY_THRESHOLD_MAX,
                              save_folder=None):
 
+    """
+    Derive critical regions from a population of individuals.
+
+    Parameters
+    ----------
+    population : Population
+        Population of individuals.
+    problem : Problem
+        Problem instance.
+    min_samples_split : float, optional
+        The minimum number of samples required to split an internal node.
+    min_samples_leaf : int, optional
+        The minimum number of samples required to be at a leaf node.
+    max_depth : int, optional
+        Maximum depth of the tree.
+    min_impurity_decrease : float, optional
+        A node will be split if this split induces a decrease of the impurity
+        greater than or equal to this value.
+    criticality_threshold_min : float, optional
+        Minimum criticality threshold.
+    criticality_threshold_max : float, optional
+        Maximum criticality threshold.
+    save_folder : str, optional
+        Folder to save the tree and bounds of critical regions.
+    """
+    
     feature_names = problem.design_names
 
     xl = problem.xl

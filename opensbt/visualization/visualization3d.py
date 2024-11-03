@@ -36,7 +36,6 @@ def read_testcases(filename):
     print("Csv file successfully read")
     return Population(individuals=individuals), var_names
 
-# make 3d design space plot
 def visualize_3d(population, 
                 save_folder, 
                 labels, 
@@ -53,6 +52,7 @@ def visualize_3d(population,
                         (0,180),
                         (0,270)],
                 show=False):
+    """This function generated 3D plots of executed test inputs."""
 
     save_folder_design = save_folder + "3d" + os.sep
 

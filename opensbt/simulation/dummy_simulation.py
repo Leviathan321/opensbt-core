@@ -7,11 +7,14 @@ from random import random
 from opensbt.utils import geometric
 import json
 
-""" 
-    Simulation based on linear motion of two actors. 
-    Ego contains an AEB which scans for nearby vehicles below some distance threshold.
-"""
 class DummySimulator(Simulator):
+    """ 
+        This class implements a simplified driving simulator for two actors, where the ego and adversary move with linear velocity.
+        The ego scans for nearby vehicles. If the distance is below some threshold the ego reduces its speed until it is 0.
+        The ego continues driving when no adversary is visible within the threshold distance.
+        The position of ego deviates based on some random noise.
+    """
+    
     time_step = 1
     DETECTION_THRESH = 2     # threshold in meters where other actors can be detected
     RANDOMNESS_BIAS = 0.1    # noise to be added to positions

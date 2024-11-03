@@ -30,7 +30,17 @@ import time
 import os
 
 class NsgaIIDTOptimizer(Optimizer):
+    """ 
+        This optimizer implements the NSGA-II-DT algorithm from [1] which is based on the NSGA-II algorithm 
+        but is employing ML models, i.e. decision trees to guide the search for failures. 
 
+        [1] Raja Ben Abdessalem, Shiva Nejati, Lionel C. Briand, and Thomas Stifter. 2018. 
+        Testing vision-based control systems using learnable evolutionary algorithms. 
+        In Proceedings of the 40th International Conference on Software Engineering (ICSE '18). 
+        Association for Computing Machinery, New York, NY, USA, 1016–1026. 
+        https://doi.org/10.1145/3180155.3180160
+    """
+    
     algorithm_name = "NSGA-II-DT" 
 
     def __init__(self,
