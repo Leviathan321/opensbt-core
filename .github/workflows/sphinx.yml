@@ -10,9 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install dependencies
-        run: |
-          pip install --upgrade pip  # Upgrade pip to the latest version
-          pip install opensbt  # Install the opensbt framework
+      run: |
+        pip install --upgrade pip
+        pip install opensbt
     - name: Build HTML
       uses: ammaraskar/sphinx-action@master
     - name: Upload artifacts
