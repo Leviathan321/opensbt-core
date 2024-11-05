@@ -53,7 +53,7 @@ You can find also several other tutorials as jupyter notebooks which explain ste
 
 The tutorials include as an example the integration of a real-world FMI-based AEB agent developed in the fortiss Mobility lab simulated in CARLA using the simulator adapter CARLA Runner Extension.
 
-As another example we have integrated Simulink-based systems simulated in Prescan simulator adapter into OpenSBT.
+As another `example <https://git.fortiss.org/opensbt/prescan_runner>`_ we have integrated Simulink-based systems simulated in the Prescan simulator into OpenSBT.
 
 
 Tutorials
