@@ -1,1 +1,5 @@
-furo==2021.11.16
+sphinx>=6.0
+furo
+opensbt
+sphinx_rtd_theme  # Read the Docs theme for Sphinx
+nbsphinx  # For Jupyter Notebook support

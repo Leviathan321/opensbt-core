@@ -9,10 +9,12 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
+    - name: Set PYTHONPATH
+      run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
     - name: Install dependencies
-        run: |
-          pip install --upgrade pip  # Upgrade pip to the latest version
-          pip install opensbt  # Install the opensbt framework
+      run: |
+        pip install --upgrade pip
+        pip install -r docs/requirements.txt
     - name: Build HTML
       uses: ammaraskar/sphinx-action@master
     - name: Upload artifacts
@@ -22,7 +24,8 @@ jobs:
         path: docs/build/html/
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/34-docs'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/build/html
+        publish_branch: gh-pages
