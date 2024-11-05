@@ -9,6 +9,8 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
+    - name: Set PYTHONPATH
+      run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
     - name: Install dependencies
       run: |
         pip install --upgrade pip
