@@ -20,7 +20,7 @@ An introductory video of OpenSBT can be found here: https://www.youtube.com/watc
 Getting Started
 ===============
 
-This section will help you get started with installing, configuring, and running **OpenSBT**.
+This section will help you get started with installing and running **OpenSBT**.
 OpenSBT requires Python to be installed and its compatibility has been tested with Python 3.8. OpenSBT can be run as a standalone application or can be imported as a library.
 
 A. Install the project as a dependency via pip:
@@ -30,22 +30,82 @@ A. Install the project as a dependency via pip:
     $ pip install opensbt
 
     
-B. Install the project as a standalone application after download:
+B. Install the project as a standalone application:
+
+First clone the project:
+
+.. code:: console
+
+    $ git clone https://github.com/opensbt/opensbt-core.git
+
+Than install the dependencies:
 
 .. code:: console
 
     $ pip install -r requirements.txt
 
-A complete installation example is available as a jupyter notebook.  
+A complete installation example is available as a `jupyter notebook <https://github.com/Leviathan321/leviathan321.github.io/blob/34-docs/docs/jupyter/01_Installation.ipynb>`_.  
 
 Example
-===============
++++++++++++++++
 
-In the core implementation of OpenSBT a simplified dummy simulator is integrated (linear motion planning, no GPU required). To run an example test generation for this example run (flag -e holds the experiment number):
+In the core implementation of OpenSBT a simplified dummy simulator is integrated (linear motion planning, no GPU required). 
+
+A testing problem for the dummy simulator can be e.g., defined and executed as follows:
+
+.. code:: python
+
+   # imports not shown
+   problem = ADASProblem(
+                        problem_name="DummySimulatorProblem",
+                        scenario_path="scenarios/dummy_scenario.xosc",
+                        simulation_variables=[
+                           "orientation_ego",
+                           "velocity_ego",
+                           "orientation_ped",
+                           "velocity_ped"],
+                        xl=[0, 1, 0, 0.2],
+                        xu=[180, 10,180, 3],
+                        fitness_function=FitnessMinDistanceVelocity(),
+                        critical_function=CriticalAdasDistanceVelocity(),
+                        simulate_function=DummySimulator.simulate,
+                        simulation_time=10,
+                        sampling_time=0.25
+                        )
+
+   # Set search configuration
+   config = DefaultSearchConfiguration()
+   config.n_generations = 50
+   config.population_size = 20
+
+   # Instantiate search algorithm
+   optimizer = NsgaIIOptimizer(
+                              problem=problem,
+                              config= config)
+
+   # Run search
+   res = optimizer.run()
+
+   # Write results
+   res.write_results(params = optimizer.parameters)
+
+The experiment can be registed in OpenSBT via:
+
+.. code:: python
+
+   # imports not shown
+   experiment = Experiment(name="5",
+                           problem=problem,
+                           algorithm=AlgorithmType.NSGAII,
+                           search_configuration=DefaultSearchConfiguration())
+
+   experiments_store.register(experiment)
+
+To run an example test generation for this example run (flag -e holds the experiment number):
 
 .. code:: console
 
-      $ python run.py -e 5
+   $ python run.py -e 5
 
 Several result artefacts are generated after the generation has finished. All artefacts are written into the results folder in a folder named DummySimulator (problem name).
 

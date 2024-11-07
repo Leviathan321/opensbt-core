@@ -11,7 +11,7 @@ sys.path.insert(0, r"C:\Users\Lev\Documents\testing\opensbt-core")
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'OpenSBT'
-copyright = '2024, Lev Sorokin, Tiziano Munaro, Damir Safin'
+copyright = '2024, Lev Sorokin'
 author = 'Lev Sorokin, Tiziano Munaro, Damir Safin'
 
 # -- General configuration ---------------------------------------------------
