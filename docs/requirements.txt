@@ -1,5 +1,5 @@
 sphinx>=6.0
 furo
-opensbt
+sphinx-autobuild
 sphinx_rtd_theme  # Read the Docs theme for Sphinx
 nbsphinx  # For Jupyter Notebook support
