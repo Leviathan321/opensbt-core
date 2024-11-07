@@ -21,6 +21,11 @@ Getting Started
 ===============
 
 This section will help you get started with installing and running **OpenSBT**.
+
+
+Installation
++++++++++++++++
+
 OpenSBT requires Python to be installed and its compatibility has been tested with Python 3.8. OpenSBT can be run as a standalone application or can be imported as a library.
 
 A. Install the project as a dependency via pip:
