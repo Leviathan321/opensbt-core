@@ -24,9 +24,12 @@ extensions = ['sphinx.ext.autodoc',
               'nbsphinx',
               'sphinx.ext.mathjax' # For math support
 ]
-
-# autosummary_generate = True
-
+autodoc_default_options = {
+    'members': True,
+    'undoc-members': True,
+    'private-members': True,  # if you want private members
+    'special-members': '__init__',  # if you want constructors and dunder methods
+}
 templates_path = ['_templates']
 exclude_patterns = []
 
