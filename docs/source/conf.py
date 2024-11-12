@@ -19,6 +19,7 @@ author = 'Lev Sorokin, Tiziano Munaro, Damir Safin'
 
 extensions = ['sphinx.ext.autodoc',
             #   'sphinx.ext.autosummary',
+              'sphinx.ext.autodoc.typehints',  # To parse type hints
               'sphinx_rtd_theme',
               'sphinx.ext.napoleon',
               'nbsphinx',
@@ -27,9 +28,9 @@ extensions = ['sphinx.ext.autodoc',
 autodoc_default_options = {
     'members': True,
     'undoc-members': True,
-    'private-members': True,  # if you want private members
-    'special-members': '__init__',  # if you want constructors and dunder methods
-}
+    'private-members': True, 
+    'special-members': '__init__'
+  }
 templates_path = ['_templates']
 exclude_patterns = []
 
