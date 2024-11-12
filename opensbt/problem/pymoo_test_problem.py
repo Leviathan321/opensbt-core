@@ -8,7 +8,7 @@ class PymooTestProblem(Problem):
     """ Problem class to test testing algorithms on mathematical problems implemented in pymoo. """
     
     def __init__(self, problem_name: str, critical_function: Critical, approx_eval_time: float =0.01):
-        """ Models a pymoo based problem with name "problem_name" as testing problem. """
+        """ Instantiates a pymoo based problem with name "problem_name" as testing problem. """
 
         self.critical_function = critical_function
         self.problem_name = problem_name

@@ -69,7 +69,8 @@ class DummySimulator(Simulator):
                         detection_dist = DETECTION_THRESH, 
                         randomness_bias = RANDOMNESS_BIAS
     ) -> SimulationOutput:
-
+        """Executes single scenario in DummySimulator
+        """
         egoInitialVelocity = vars[1]
         pedInitialVelocity = vars[3]
         egoOrientation = vars[0]

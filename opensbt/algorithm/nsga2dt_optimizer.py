@@ -46,6 +46,13 @@ class NsgaIIDTOptimizer(Optimizer):
     def __init__(self,
                  problem: Problem,
                  config: SearchConfiguration):
+        """Initializes the NSGA-II-DT Optimizer
+
+        :param problem: The testing problem.
+        :type problem: Problem
+        :param config: The configuraiton for the search.
+        :type config: SearchConfiguration
+        """
 
         self.problem = problem
         self.config = config
@@ -54,6 +61,11 @@ class NsgaIIDTOptimizer(Optimizer):
         log.info(f"Initialized algorithm with config: {config.__dict__}")
         
     def run(self) -> SimulationResult:
+        """_summary_
+
+        :return: Return a SimulationResults object which holds all information from the simulation.
+        :rtype: SimulationResult
+        """
         problem = self.problem
         config = self.config
 

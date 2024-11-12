@@ -17,7 +17,13 @@ class PSOOptimizer(Optimizer):
     def __init__(self,
                 problem: Problem,
                 config: SearchConfiguration):
+        """Initializes the particle swarm opimization approach for testing.
 
+        :param problem: The testing problem to be solved.
+        :type problem: SimulationProblem
+        :param config: The configuration for the search.
+        :type config: SearchConfiguration
+        """
         log.info("Initialized PSO Optimizer")
         
         self.config = config

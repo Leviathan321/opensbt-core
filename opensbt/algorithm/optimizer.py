@@ -24,7 +24,13 @@ class Optimizer(ABC):
     
     @abstractmethod
     def __init__(self, problem: SimulationProblem, config: SearchConfiguration):
-        ''' Create here the algorithm instance to be used in run '''
+        """Initialize here the Optimization algorithm to be used for search-based testing.
+
+        :param problem: The testing problem to be solved.
+        :type problem: SimulationProblem
+        :param config: The configuration for the search.
+        :type config: SearchConfiguration
+        """
         pass
 
     def run(self) -> SimulationResult:

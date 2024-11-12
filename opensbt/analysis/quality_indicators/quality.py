@@ -21,7 +21,18 @@ class Quality(object):
     """ This class holds functions to perform an analysis on testing results with defined quality indicators.
     """
     @staticmethod
-    def calculate_cid(result, reference_set,  n_evals_by_axis): 
+    def calculate_cid(result, reference_set,  n_evals_by_axis):
+        """Calculates the CID metric values over the time.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :param reference_set: A reference set which approximates the set of all failures.
+        :type reference_set: Population
+        :param n_evals_by_axis: If no reference set is provided, a reference set will be generated with n_evals_by_axis tests per axis.
+        :type n_evals_by_axis: int
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult
+        """
         hist = result.history
         problem = result.problem
         n_evals = []  # corresponding number of function evaluations
@@ -71,6 +82,15 @@ class Quality(object):
     
     @staticmethod
     def calculate_hv(result, ref_point = None):
+        """Calculates the Hypervolume metric values over the time.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :param ref_point: The reference point to use for calculation, defaults to None
+        :type ref_point: np.ndarray, optional
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult
+        """
         res = result
         problem = res.problem
         hist = res.history
@@ -100,6 +120,24 @@ class Quality(object):
                                   n_cells=N_CELLS, 
                                   optimal=False,
                                   var = "F"):
+        """Calculate the number of diverse critical tests over time. Diversity is assessed by diving space into aquidistance cells and assigning tests to cells.
+           Output is number of cells covered.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :param bound_min: Smallest value for each dimension.
+        :type bound_min: np.ndarray
+        :param bound_max: Highest value for each dimension.
+        :type bound_max: np.ndarray
+        :param n_cells: Number of cells per dimension. Defines granularity. Defaults to N_CELLS
+        :type n_cells: int, optional
+        :param optimal: Use only Pareto-optimal tests, defaults to False
+        :type optimal: bool, optional
+        :param var: Use Fitness Space ("F"), or Search Space ("X"), defaults to "F"
+        :type var: str, optional
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult
+        """
         res = result
         hist = res.history
         if hist is not None:
@@ -125,6 +163,21 @@ class Quality(object):
 
     @staticmethod
     def calculate_hv_hitherto(result, critical_only =False, ref_point = None, ideal = None, nadir = None):
+        """_summary_
+
+        :param result: _description_
+        :type result: _type_
+        :param critical_only: _description_, defaults to False
+        :type critical_only: bool, optional
+        :param ref_point: _description_, defaults to None
+        :type ref_point: _type_, optional
+        :param ideal: _description_, defaults to None
+        :type ideal: _type_, optional
+        :param nadir: _description_, defaults to None
+        :type nadir: _type_, optional
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult
+        """
         res = result
         problem = res.problem
         hist = res.history
@@ -155,6 +208,19 @@ class Quality(object):
 
     @staticmethod
     def calculate_gd(result, input_pf=None, critical_only = False, mode='default'):
+        """Calculates the Generational Distance metric values over the time.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :param input_pf: Reference pareto front.
+        :type input_pf: Population
+        :param critical_only: Use only critical tests.
+        :type critical_only: Bool
+        :param mode: Use GD PLUS ("plus") or the default GD metric.
+        :type mode: str
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult
+        """
         res = result
         hist = res.history
         problem = res.problem        
@@ -188,6 +254,19 @@ class Quality(object):
 
     @staticmethod
     def calculate_gd_hitherto(result, input_pf=None, mode='default'):
+        """Calculates the Generational Distance metric values over the time but aggregates solutions after every iteration.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :param input_pf: Reference pareto front.
+        :type input_pf: Population
+        :param critical_only: Use only critical tests.
+        :type critical_only: Bool
+        :param mode: Use GD PLUS ("plus") or the default GD metric.
+        :type mode: str
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult
+        """
         res = result
         hist = res.history
         problem = res.problem
@@ -218,6 +297,17 @@ class Quality(object):
         
     @staticmethod
     def calculate_igd(result, critical_only = False, input_pf=None):
+        """Calculates the Inverted Generational Distance metric values over the time.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :param input_pf: Reference pareto front. If none is given, a pf is loaded from the problem instance.
+        :type input_pf: Population
+        :param critical_only: Use only critical tests.
+        :type critical_only: Bool 
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult       
+        """
         res = result
         hist = res.history
         problem = res.problem
@@ -242,6 +332,15 @@ class Quality(object):
 
     @staticmethod
     def calculate_igd_hitherto(result, input_pf=None):
+        """Calculates the Inverted Generational Distance metric values over the time but aggregates tests after every generation.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :param input_pf: Reference pareto front. If none is given, a pf is loaded from the problem instance.
+        :type input_pf: Population
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult       
+        """
         res = result
         hist = res.history
         problem = res.problem
@@ -270,6 +369,22 @@ class Quality(object):
                     critical_only=False,
                     ideal=None,
                     nadir=None):
+        
+        """Calculates the spacing metric values over time and aggregates tests over generations.
+        :param result: Result object.
+        :type result: SimulationResult
+        :param input_pf: Reference pareto front.
+        :type input_pf: np.ndarray
+        :param critical_only: Critical only tests.
+        :type critical_only: bool
+        :param ideal: The optimal test input that can be achieved.
+        :type ideal: np.ndarray
+        :param nadir: The worst test input that can be achieved.
+        :type nadir: np.ndarray 
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult   
+         """
+  
         res = result
         hist = res.history
 
@@ -289,6 +404,13 @@ class Quality(object):
 
     @staticmethod
     def calculate_sp(result, critical_only=False):
+        """Calculates the Spread metric values over time.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult       
+        """
         res = result
         hist = res.history
         problem = res.problem
@@ -306,6 +428,13 @@ class Quality(object):
 
     @staticmethod
     def calculate_sp_hitherto(result):
+        """Calculates the Spread metric values over time and aggregates tests over generations.
+
+        :param result: Result object.
+        :type result: SimulationResult
+        :return: Returns an EvaluationResult instance.
+        :rtype: EvaluationResult       
+        """
         res = result
         hist = res.history
         problem = res.problem
@@ -324,6 +453,9 @@ class Quality(object):
 
 @dataclass
 class EvaluationResult(object):
+    """This class stores the evaluation results after each generation.
+
+    """
     name: str
     steps: List[float]
     values: List[float]

@@ -23,6 +23,15 @@ class PureSamplingFPS(PureSampling):
                     problem: Problem,
                     config: SearchConfiguration,
                     sampling_type = FPS):
+        """Initializes the furthes point sampling optimizer.
+
+        :param problem: The testing problem to be solved.
+        :type problem: Problem
+        :param config: The configuration for the search.
+        :type config: SearchConfiguration
+        :param sampling_type: Sets by default sampling type to FPS.
+        :type sampling_type: _type_, optional
+        """
         super().__init__(
             problem = problem,
             config = config,

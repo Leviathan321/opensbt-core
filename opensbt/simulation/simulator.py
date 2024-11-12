@@ -77,4 +77,23 @@ class Simulator(ABC):
                 sim_time: float = 10, 
                 time_step: float = 0.01, 
                 do_visualize: bool = True) -> List[SimulationOutput]:
+        """
+         Instantiates a list of scenarios using the scenario_path, the variable_names and variable values in list_individuals, and
+         simulates scenarios in defined simulator.
+         
+        :param list_individuals: List of individuals. On individual corresponds to one scenario.
+        :type list_individuals: List[Individual]
+        :param variable_names: The scenario variables.
+        :type variable_names: List[str]
+        :param scenario_path: The path to the abstract/logical scenario.
+        :type scenario_path: str
+        :param sim_time: The simulation time, defaults to 10
+        :type sim_time: float, optional
+        :param time_step: The time step, defaults to 0.01
+        :type time_step: float, optional
+        :param do_visualize: Visualize or not simulation, defaults to True
+        :type do_visualize: bool, optional
+        :return: Returns a list of Simulation output instances.
+        :rtype: List[SimulationOutput]
+        """
         pass

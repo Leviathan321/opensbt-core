@@ -28,7 +28,15 @@ class PureSamplingRand(PureSampling):
                 problem: Problem,
                 config: SearchConfiguration,
                 sampling_type = FloatRandomSampling):
+        """Initializes the random sampling optimizer.
         
+        :param problem: The testing problem to be solved.
+        :type problem: Problem
+        :param config: The configuration for the search.
+        :type config: SearchConfiguration
+        :param sampling_type: Sets by default sampling type to RS.
+        :type sampling_type: _type_, optional
+        """
         super().__init__(
             problem = problem,
             config = config,

@@ -22,8 +22,8 @@ METRIC_PLOTS_FOLDER = "metrics" + os.sep
 COVERAGE_METRIC_NAME = "CID"
 LOAD_FROM_GENERATIONS = True
 
-metric_config = {}
-metric_config["DUMMY"] = dict(
+METRIC_CONFIG = {}
+METRIC_CONFIG["DUMMY"] = dict(
     ref_point_hv = np.asarray([20,0]),
     ideal = np.asarray([0,-20])
 )

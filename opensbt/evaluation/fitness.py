@@ -26,6 +26,13 @@ class Fitness():
  
     def eval(self, simout: SimulationOutput, **kwargs) -> Tuple[float]:    
         """Returns the fitness value of a given SimulationOutput instance.
+    
+        :param simout: SimulationOutput instance.
+        :type simout: SimulationOutput 
+        :param kwargs: Further optional variables needed for fitness evaluation. 
+        :type kwargs: **Dict 
+        :return:: Return the fitness value for the given simulation results. Each tuple element corresponds to value for the specific fitness dimension.
+        :rtype Tuple[float]
         """
         pass
 

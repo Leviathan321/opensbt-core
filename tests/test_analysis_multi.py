@@ -23,7 +23,7 @@ from opensbt.analysis.Analysis import Analysis
 from opensbt.utils.log_utils import *
 from opensbt.config import *
 from opensbt.experiment.experiment_store import experiments_store
-from opensbt.config import metric_config
+from opensbt.config import METRIC_CONFIG
 from opensbt.simulation.dummy_simulation import DummySimulator
 from tests import test_base
 
@@ -95,8 +95,8 @@ class TestAnalysisMulit():
         
         configs = [config_1,config_2]
 
-        ideal = metric_config["DUMMY"]["ideal"]
-        ref_point_hv =  metric_config["DUMMY"]["ref_point_hv"]
+        ideal = METRIC_CONFIG["DUMMY"]["ideal"]
+        ref_point_hv =  METRIC_CONFIG["DUMMY"]["ref_point_hv"]
         nadir =  ref_point_hv
 
         path_metrics = None

@@ -8,9 +8,23 @@ class Critical():
     """
     @property
     def name(self):
+        """The name of the criticality function. To be overriden for specific name. Otherwise class name is used.
+
+        :return: Name of the criticality function.
+        :rtype: str
+        """
         return self.__class__.__name__
 
     def eval(self, vector_fitness: np.ndarray, simout: SimulationOutput) -> bool:
+        """Evaluate whether a test has failed or passed. To be implemented based on specific conditions.
+        
+        :param vector_fitness: List of fitness values.
+        :type vector_fitness: np.ndarray
+        :param simout: SimulationOutput instance
+        :type simout: SimulationOutput
+        :return: Returns True if simulation is critical/failed or otherwise False.
+        :rtype: bool
+        """
         pass
 
 class MockCritical():

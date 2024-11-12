@@ -39,7 +39,15 @@ class PureSampling(Optimizer):
                 problem: Problem,
                 config: SearchConfiguration,
                 sampling_type = FloatRandomSampling):
-
+        """Initializes pure sampling approaches.
+        
+        :param problem: The testing problem to be solved.
+        :type problem: Problem
+        :param config: The configuration for the search.
+        :type config: SearchConfiguration
+        :param sampling_type: Sets by default sampling type to RS.
+        :type sampling_type: _type_, optional
+        """
         self.config = config
         self.problem = problem
         self.res = None
@@ -53,7 +61,11 @@ class PureSampling(Optimizer):
         log.info(f"Initialized algorithm with config: {config.__dict__}")
 
     def run(self) -> SimulationResult:
-        
+        """Overrides the run method of Optimizer by providing custom evaluation of samples and division in "buckets" for further analysis with pymoo.
+           (s. n_splits variable)
+        :return: Return a SimulationResults object which holds all information from the simulation.
+        :rtype: SimulationResult
+        """
         config = self.config
         random.seed(config.seed)
         
