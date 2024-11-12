@@ -1,8 +1,0 @@
-opensbt
-=======
-
-.. autosummary::
-   :toctree: generated/
-   :recursive:
-
-   your_project.module1
