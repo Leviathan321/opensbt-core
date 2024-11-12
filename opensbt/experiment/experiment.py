@@ -8,8 +8,7 @@ class Experiment(object):
         allows to maintain internally different experiment configurations to seperate experiments 
         from each other
     """
-    
-    def __init__(self, name: str, problem: Problem, algorithm: str, search_configuration: SearchConfiguration):
+    def __init__(self, name: str, problem: Problem, algorithm: str, search_configuration: SearchConfiguration):        
         self.name = name
         self.problem = problem
         self.algorithm = algorithm
