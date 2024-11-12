@@ -12,20 +12,21 @@ pymoo.core.result.Result = SimulationResult
 from opensbt.model_ga.problem import SimulationProblem
 pymoo.core.problem.Problem = SimulationProblem
 
-from opensbt.algorithm import nsga2_optimizer
-from opensbt.algorithm import nsga2dt_optimizer
+from opensbt.algorithm import nsga2_optimizer, nsga2dt_optimizer
 
 from default_experiments import *
 from opensbt.experiment.search_configuration import *
 import argparse
-from default_experiments import *
 import logging as log
 from opensbt.analysis.Analysis import Analysis
 from opensbt.utils.log_utils import *
 from opensbt.config import *
 from opensbt.experiment.experiment_store import experiments_store
-from opensbt.config import metric_config
+from opensbt.config import METRIC_CONFIG
 
+"""
+    This script defines a concrete analysis problem to be executed.
+"""
 disable_pymoo_warnings()
 
 if __name__ == "__main__":        
@@ -115,8 +116,8 @@ if __name__ == "__main__":
     # ref_point_hv = np.asarray([-10,0]) 
     # nadir = ref_point_hv
         
-    ideal = metric_config["DUMMY"]["ideal"]
-    ref_point_hv =  metric_config["DUMMY"]["ref_point_hv"]
+    ideal = METRIC_CONFIG["DUMMY"]["ideal"]
+    ref_point_hv =  METRIC_CONFIG["DUMMY"]["ref_point_hv"]
     nadir =  ref_point_hv
 
     ################ Naming

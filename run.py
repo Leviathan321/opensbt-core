@@ -46,6 +46,8 @@ experiment = None
 
 ########
 
+"""  This module is the entry point when running OpenSBT in the standalone mode. """
+
 parser = argparse.ArgumentParser(description="Pass parameters for search. Pass -h for a list of all options.")
 parser.add_argument('-e', dest='exp_number', type=str, action='store',
                     help='Name of default experiment to be used. (show all experiments via -info)].')
@@ -78,9 +80,6 @@ args = parser.parse_args()
 
 #######
 
-# list all experiments
-
-
 if args.show_info:
     log.info("Experiments with the following names are defined:")
     store = experiments_store.get_store()
@@ -99,8 +98,6 @@ elif not (args.exp_number or args.scenario_path):
     log.info("Flags set not correctly: No file is provided or no example experiment selected.")
     sys.exit()
 
-###### set experiment
-####### have indiviualized imports
 if args.exp_number:
     log.info(f"Selected experiment: {args.exp_number}")
     experiment = experiments_store.load(experiment_name=args.exp_number)

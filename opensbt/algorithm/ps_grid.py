@@ -20,11 +20,22 @@ from pymoo.core.problem import Problem
 from opensbt.utils.sampling import CartesianSampling
 
 class PureSamplingGrid(PureSampling):
-
+    """ 
+    This class provides the Grid Sampling algorithm which generate aquidistant test inputs placed on a grid in the search space.
+    """
     def __init__(self,
                     problem: Problem,
                     config: SearchConfiguration,
                     sampling_type = CartesianSampling):
+        """Initializes the grid search sampling optimizer.
+
+        :param problem: The testing problem to be solved.
+        :type problem: Problem
+        :param config: The configuration for the search. The number of samples is equaly for each axis. The axis based sampling number is defined via the population size.
+        :type config: SearchConfiguration
+        :param sampling_type: Sets by default sampling type to Cartesian Sampling.
+        :type sampling_type: _type_, optional
+        """
         super().__init__(
             problem = problem,
             config = config,

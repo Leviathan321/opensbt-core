@@ -10,13 +10,15 @@ from opensbt.experiment.search_configuration import SearchConfiguration
 from opensbt.model_ga.result import *
 
 class NsgaIIOptimizer(Optimizer):
-
+    """ This optimizer class provides the NSGA-II algorithm which is already implemented in pymoo.
+    """
+    
     algorithm_name = "NSGA-II"
 
     def __init__(self,
                 problem: Problem,
+        
                 config: SearchConfiguration):
-
         self.config = config
         self.problem = problem
         self.res = None

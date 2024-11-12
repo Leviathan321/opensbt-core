@@ -5,8 +5,14 @@ from numpy import var
 from scipy.stats import wilcoxon
 
 def cohend(d1, d2):
-    """
-    function to calculate Cohen's d for independent samples
+    """"Function to calculate Cohen's d for independent samples
+
+    :param d1: First dataset.
+    :type d1: list
+    :param d2: Second dataset.
+    :type d2:list
+    :return: Class and value.
+    :rtype: tuple[Literal['large', 'medium', 'small', 'negligible', ''], Any]
     """
 
     # calculate the size of samples

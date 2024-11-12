@@ -1,9 +1,8 @@
 from enum import Enum
 
-""" Defines all available algorithms to be triggered via number in -a flag.
-"""
-
 class AlgorithmType(Enum):
+    """ Defines all available algorithms to be triggered via number in -a flag.
+    """
     NSGAII = 1
     PSO = 2 
     PS_RAND= 3 

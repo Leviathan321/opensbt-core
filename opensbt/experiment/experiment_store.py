@@ -12,12 +12,24 @@ class Singleton(object):
 
     def init(self, *args, **kwds):
         pass
-
+    
 class DefaultExperiments(Singleton):
+    """ This class allows to store and load experiments globally in OpenSBT. 
+    """
+
     def init(self):
+        """Initializes the store.
+        """
         self.store = {}
 
     def register(self, exp: Experiment):
+        """Registers an experiment in the store.
+
+        :param exp: The experiment to be registered.
+        :type exp: Experiment
+        :return: Output 1 if registration failed, otherwise 0.
+        :rtype: int
+        """
         if not exp.name in self.store:
             self.store[exp.name] = exp
             return 0
@@ -26,6 +38,13 @@ class DefaultExperiments(Singleton):
             return 1
 
     def load(self, experiment_name: str) -> Experiment:
+        """Loads an experiment based on the experiment name from the store.
+
+        :param experiment_name: The experiment name.
+        :type experiment_name: str
+        :return: Returns the experiment.
+        :rtype: Experiment
+        """
         if experiment_name in self.store:
             return self.store[experiment_name]
         else:
@@ -33,6 +52,11 @@ class DefaultExperiments(Singleton):
             return 1
 
     def get_store(self):
+        """Outputs the store.
+
+        :return: Return the store.
+        :rtype: Dict
+        """
         return self.store
 
 experiments_store = DefaultExperiments()

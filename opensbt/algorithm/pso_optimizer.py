@@ -8,13 +8,22 @@ from opensbt.model_ga.result import *
 import logging as log
 
 class PSOOptimizer(Optimizer):
+    """
+        This class provides search with the Particle Swarm Optimization algorithm which is already implemented in pymoo.
+    """
 
     algorithm_name = "PSO"
 
     def __init__(self,
                 problem: Problem,
                 config: SearchConfiguration):
+        """Initializes the particle swarm opimization approach for testing.
 
+        :param problem: The testing problem to be solved.
+        :type problem: SimulationProblem
+        :param config: The configuration for the search.
+        :type config: SearchConfiguration
+        """
         log.info("Initialized PSO Optimizer")
         
         self.config = config

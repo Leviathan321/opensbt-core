@@ -29,6 +29,8 @@ from opensbt.visualization import scenario_plotter
 from opensbt.config import BACKUP_FOLDER, CONSIDER_HIGH_VAL_OS_PLOT,  \
                            PENALTY_MAX, PENALTY_MIN, \
                            LAST_ITERATION_ONLY_DEFAULT \
+                               
+"""This module provides functions for the output and presentation of results."""
 
 def create_save_folder(problem: Problem, results_folder: str, algorithm_name: str, is_experimental=False):
     problem_name = problem.problem_name

@@ -3,16 +3,17 @@ from pymoo.core.sampling import Sampling
 from pymoo.util.normalization import denormalize
 import logging as log
 
-""" Generates aequidistant points in a grid shape.
-   Input:  
-         n_var: number of axis
-         x_l: lower bound for each axis
-         x_u: upper_bound for each axis
-         n_samples_one_axis: number of samples for one axis
-   Output: aequidistant points in a grid shape where space is defined by axis with lower/upper bounds xl/xu
-   ((TODO Pass number of samples for each axis via algorithm definition))
-"""
 def cartesian_by_bounds(n_var, xl, xu, n_samples_one_axis):
+    """ Generates aequidistant points in a grid shape.
+    
+        Input:  
+                n_var: number of axis
+                x_l: lower bound for each axis
+                x_u: upper_bound for each axis
+                n_samples_one_axis: number of samples for one axis
+        Output: aequidistant points in a grid shape where space is defined by axis with lower/upper bounds xl/xu
+        ((TODO Pass number of samples for each axis via algorithm definition))
+    """
     log.info(n_samples_one_axis)
     n_samples_by_axis = [n_samples_one_axis] * n_var
     X = [np.linspace(0, 1, n) for n in n_samples_by_axis]

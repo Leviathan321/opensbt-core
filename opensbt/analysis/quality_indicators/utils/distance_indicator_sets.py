@@ -3,17 +3,17 @@ import numpy as np
 from pymoo.core.indicator import Indicator
 from pymoo.util.misc import vectorized_cdist, at_least_2d_array
 
+""" The functions in this module are taken from pymoo.
+"""
 
 def euclidean_distance(a, b, norm=None):
     return np.sqrt((((a - b) / norm) ** 2).sum(axis=1))
-
 
 def modified_distance(z, a, norm=None):
     d = a - z
     d[d < 0] = 0
     d = d / norm
     return np.sqrt((d ** 2).sum(axis=1))
-
 
 def derive_ideal_and_nadir_from_pf(Z, ideal=None, nadir=None):
 
