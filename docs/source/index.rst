@@ -8,7 +8,8 @@ Welcome to OpenSBT's documentation! (Version: |version|)
 
 .. toctree::
    :maxdepth: 3
-   :caption: Contents:
+   :caption: Contents
+
 
 About
 ==================
@@ -21,7 +22,6 @@ Getting Started
 ===============
 
 This section will help you get started with installing and running **OpenSBT**.
-
 
 Installation
 +++++++++++++++
@@ -120,6 +120,11 @@ The tutorials include as an example the integration of a real-world FMI-based AE
 
 As another `example <https://git.fortiss.org/opensbt/prescan_runner>`_ we have integrated Simulink-based systems simulated in the Prescan simulator into OpenSBT.
 
+APIs/Modules
+===================================
+
+You can find an overview of implemented modules, classes and functions here: :ref:`opensbt-modules`.
+
 
 Tutorials
 ===============
@@ -140,7 +145,6 @@ An overview of the architecture is shown below:
    :alt: System Overview Diagram
    :width: 500px
    :align: center
-
 
 Output
 ======

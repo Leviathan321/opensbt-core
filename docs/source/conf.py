@@ -18,11 +18,14 @@ author = 'Lev Sorokin, Tiziano Munaro, Damir Safin'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = ['sphinx.ext.autodoc',
+            #   'sphinx.ext.autosummary',
               'sphinx_rtd_theme',
               'sphinx.ext.napoleon',
               'nbsphinx',
               'sphinx.ext.mathjax' # For math support
 ]
+
+# autosummary_generate = True
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -36,7 +39,9 @@ html_theme = "sphinx_rtd_theme"
 html_logo = '../figures/fortiss-openSBT-Logo-RGB-neg.png'
 html_theme_options = {
     'logo_only': True,
-    'display_version': True
+    'display_version': True,
+    'collapse_navigation': False,
+    'navigation_depth': 4
 }
 
 #############

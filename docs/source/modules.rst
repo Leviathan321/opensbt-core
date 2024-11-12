@@ -1,4 +1,6 @@
-opensbt
+.. _opensbt-modules:
+
+OpenSBT Modules
 =======
 
 .. toctree::
