@@ -23,7 +23,8 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx_rtd_theme',
               'sphinx.ext.napoleon',
               'nbsphinx',
-              'sphinx.ext.mathjax' # For math support
+              'sphinx.ext.mathjax', # For math support,
+              'sphinx.ext.viewcode'
 ]
 autodoc_default_options = {
     'members': True,
