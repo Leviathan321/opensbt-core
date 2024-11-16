@@ -7,7 +7,7 @@
 ![Pipeline Status](https://github.com/opensbt/opensbt-core/actions/workflows/main.yml/badge.svg)
 ![Docs Status](https://github.com/opensbt/opensbt-core/actions/workflows/sphinx.yml/badge.svg?branch=main&event=push)
 [![DOI](https://img.shields.io/badge/DOI-10.1145/3639478.3640027-orange.svg)](https://doi.org/10.1145/3639478.3640027)
-[![Documentation](https://img.shields.io/badge/Documentation-online-blue)](opensbt.github.io/opensbt-core/)
+[![Documentation](https://img.shields.io/badge/Documentation-online-blue)](https://opensbt.github.io/opensbt-core/)
 
 ## Table of Contents
 - [About](#about)
