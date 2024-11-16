@@ -1,0 +1,42 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.8.19-bookworm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python dependencies
+        run: |
+          echo "Running before script"
+          echo "Installing requirements..."
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          echo "Executing tests..."
+          pytest ./tests/test_experiments.py
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    container:
+      image: python:3.8.19-bookworm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deployment step
+        run: |
+          echo "No deployment commands for now."
