@@ -5,7 +5,9 @@
 # OpenSBT - A Modular Framework for Search-based Testing of Automated Driving Systems
 
 ![Pipeline Status](https://github.com/opensbt/opensbt-core/actions/workflows/main.yml/badge.svg)
+![Docs Status](https://github.com/opensbt/opensbt-core/actions/workflows/sphinx.yml/badge.svg?branch=main&event=push)
 [![DOI](https://img.shields.io/badge/DOI-10.1145/3639478.3640027-orange.svg)](https://doi.org/10.1145/3639478.3640027)
+[![Documentation](https://img.shields.io/badge/Documentation-online-blue)](opensbt.github.io/opensbt-core/)
 
 ## Table of Contents
 - [About](#about)
@@ -25,7 +27,7 @@ OpenSBT is a modular and extensible codebase designed to facilitate search-based
 
 ## Overview
 
-<div align="center"><img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/figures/OpenSBT_architecture_120124.png?raw=True" width=500 ></div>
+<div align="center"><img src="https://github.com/opensbt/opensbt-core/blob/main/docs/figures/OpenSBT_architecture_120124.png?raw=True" width=500 ></div>
 
 OpenSBT builds upon [Pymoo](https://pymoo.org/) 0.6.0.1 and extends internal optimization related models to tailor heuristic search algorithms for testing automated driving systems. An introductory video of OpenSBT can be found here: https://www.youtube.com/watch?v=qi_CTTzrk5s. 
 
@@ -45,7 +47,7 @@ If using as a standalone appplication install the dependencies after downloading
 pip install -r requirements.txt
 ```
 
-A complete installation example is available as a [jupyter notebook](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/jupyter/01_Installation.ipynb).
+A complete installation example is available as a [jupyter notebook](https://github.com/opensbt/opensbt-core/-/tree/main/docs/jupyter/01_Installation.ipynb).
 
 ## Getting Started
 
@@ -57,7 +59,7 @@ python run.py -e 5
 
 Several result artefacts are generated after the generation has finished. All artefacts are written into the *results* folder in a folder named DummySimulator (problem name). 
 
-You can find several tutorials as [jupyter notebooks](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/jupyter) which explain step-by-step of how integrate custom simulators and define testing components and objectives in OpenSBT.
+You can find several tutorials as [jupyter notebooks](https://github.com/opensbt/opensbt-core/-/tree/main/docs/jupyter) which explain step-by-step of how integrate custom simulators and define testing components and objectives in OpenSBT.
 
 The tutorials include as an example the integration of a real-world FMI-based AEB agent developed in the [fortiss Mobility lab](https://www.fortiss.org/forschung/fortiss-labs/detail/mobility-lab) simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner).
 
@@ -70,13 +72,13 @@ OpenSBT produces several result artefacts. An excerpt is given below.
 
 | Type | Description | Example | 
 |:--------------|:-------------|:--------------|
-| Design Space Plot | Visualization of all evaluated test cases in the input space and predicted failing regions using the decision tree algorithm, pairwise. Constraints of derived regions are stored in a CSV file [bounds_regions.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/bounds_regions.csv) and the learned tree in [tree.pdf](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/tree.pdf) | <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/design_space/orientation_ego_orientation_ped.png?raw=True" alt="Design Space Plot" width="400"/>  |
-| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/gif/0_trajectory.gif?raw=True" alt="Scenario Visualization" width="300"/> |
-Objective Space Plot | Visualization of fitness values of evaluated test cases, pairwise.   | <img src="https://github.com/ast-fortiss-tum/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/objective_space/Min Adapted Distance_Velocity At Min Adapted Distance.png?raw=True" alt="Objective Space Plot" width="400"/> |
-| All Testcases |  CSV file of all test inputs of all evaluated testcases | [all_testcases.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_testcases.csv) |
-| All Failing Testcases |  CSV file of all failing test inputs of all evaluated testcases | [all_critical_testcases.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_critical_testcases.csv)|
-| Calculation Properties |  CSV file of all experiment configuration parameters (e.g. algorithm parameters, such as population size, number iterations; search space, fitness function etc..).  | [calculation_properties.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/calculation_properties.csv) |
-| Evaluation Results |  CSV file containing performance values of the algorithm, e.g., number failing test cases found in relation to all evaluations, execution time.| [summary_results.csv](https://git.fortiss.org/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/summary_results.csv)|
+| Design Space Plot | Visualization of all evaluated test cases in the input space and predicted failing regions using the decision tree algorithm, pairwise. Constraints of derived regions are stored in a CSV file [bounds_regions.csv](https://github.com/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/bounds_regions.csv) and the learned tree in [tree.pdf](https://github.com/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/classification/tree.pdf) | <img src="https://github.com/opensbt/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/design_space/orientation_ego_orientation_ped.png?raw=True" alt="Design Space Plot" width="400"/>  |
+| Scenario 2D Visualization | Visualization of traces of the ego vehicle and adversaries in a two-dimensional GIF animation | <img src="https://github.com/opensbt/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/gif/0_trajectory.gif?raw=True" alt="Scenario Visualization" width="300"/> |
+Objective Space Plot | Visualization of fitness values of evaluated test cases, pairwise.   | <img src="https://github.com/opensbt/opensbt-core/blob/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/objective_space/Min Adapted Distance_Velocity At Min Adapted Distance.png?raw=True" alt="Objective Space Plot" width="400"/> |
+| All Testcases |  CSV file of all test inputs of all evaluated testcases | [all_testcases.csv](https://github.com/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_testcases.csv) |
+| All Failing Testcases |  CSV file of all failing test inputs of all evaluated testcases | [all_critical_testcases.csv](https://github.com/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/all_critical_testcases.csv)|
+| Calculation Properties |  CSV file of all experiment configuration parameters (e.g. algorithm parameters, such as population size, number iterations; search space, fitness function etc..).  | [calculation_properties.csv](https://github.com/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/calculation_properties.csv) |
+| Evaluation Results |  CSV file containing performance values of the algorithm, e.g., number failing test cases found in relation to all evaluations, execution time.| [summary_results.csv](https://github.com/opensbt/opensbt-core/-/tree/main/docs/example/results/single/PedestrianCrossingStartWalk/NSGA2-F/ex1/summary_results.csv)|
 
 ## Application
 
@@ -94,7 +96,7 @@ OpenSBT has been applied in research:
 - Replication Study: [Paper](https://dl.acm.org/doi/10.1016/j.infsof.2023.107286), [Code](https://github.com/Leviathan321/reflection_study) 
 - Autonomous Driving Testing: [Paper](https://doi.org/10.1007/978-3-031-46002-9_15), [Video](https://drive.google.com/file/d/1lr5BZpLFaxotwNFju43WF1C9fUTNM-SS/view?usp=sharing) 
 - Algorithm Benchmarking: [Paper](https://dl.acm.org/doi/10.1145/3643786.3648023), [Code](https://github.com/ast-fortiss-tum/svm-paper-deeptest-24) 
-- Failure Coverage Study: [Paper](https://arxiv.org/html/2410.11769v1), [Code](https://github.com/ast-fortiss-tum/coverage-emse-24) 
+- Failure Coverage Study: [Paper](https://link.springer.com/article/10.1007/s10664-024-10564-3), [Code](https://github.com/ast-fortiss-tum/coverage-emse-24) 
 
 ## Contribution
 
