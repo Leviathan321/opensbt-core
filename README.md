@@ -4,6 +4,9 @@
 
 # OpenSBT - A Modular Framework for Search-based Testing of Automated Driving Systems
 
+![Pipeline Status](https://github.com/opensbt/opensbt-core/actions/workflows/main.yml/badge.svg)
+[![DOI](https://img.shields.io/badge/DOI-10.1145/3639478.3640027-orange.svg)](https://doi.org/10.1145/3639478.3640027)
+
 ## Table of Contents
 - [About](#about)
 - [Overview](#overview)
