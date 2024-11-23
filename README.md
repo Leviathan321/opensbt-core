@@ -84,7 +84,7 @@ Objective Space Plot | Visualization of fitness values of evaluated test cases, 
 
 Following Simulators have been integrated already into OpenSBT:
 
-- [Prescan](https://plm.sw.siemens.com/de-DE/simcenter/autonomous-vehicle-solutions/prescan/?srsltid=AfmBOopocBsnRiNvzArkpWzeY4hpyFAta4txtL_dYqWWtkw4w5u3PzhE): [Example](https://git.fortiss.org/opensbt/prescan_runner)
+- [Prescan](https://plm.sw.siemens.com/de-DE/simcenter/autonomous-vehicle-solutions/prescan/?srsltid=AfmBOopocBsnRiNvzArkpWzeY4hpyFAta4txtL_dYqWWtkw4w5u3PzhE): [Example](https://git.fortiss.org/opensbt/prescan-runner)
 - [CARLA](https://carla.org/): [Example](https://git.fortiss.org/opensbt/carla-runner)
 - [Donkey](https://github.com/tawnkramer/donkey): [Example](https://github.com/opensbt/opensbt-core/tree/main/examples/lanekeeping/donkey?ref_type=heads)
 - [Udacity](https://github.com/udacity/self-driving-car-sim): [Example](https://github.com/opensbt/opensbt-core/tree/main/examples/lanekeeping/udacity?ref_type=heads)
