@@ -61,9 +61,9 @@ Several result artefacts are generated after the generation has finished. All ar
 
 You can find several tutorials as [jupyter notebooks](https://github.com/opensbt/opensbt-core/tree/main/docs/jupyter) which explain step-by-step of how integrate custom simulators and define testing components and objectives in OpenSBT.
 
-The tutorials include as an example the integration of a real-world FMI-based AEB agent developed in the [fortiss Mobility lab](https://www.fortiss.org/forschung/fortiss-labs/detail/mobility-lab) simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://git.fortiss.org/opensbt/carla-runner).
+The tutorials include as an example the integration of a real-world FMI-based AEB agent developed in the [fortiss Mobility lab](https://www.fortiss.org/forschung/fortiss-labs/detail/mobility-lab) simulated in [CARLA](https://carla.org/) using the simulator adapter [CARLA Runner Extension](https://github.com/opensbt/carla-runner).
 
-As another example we have integrated Simulink-based systems simulated in Prescan [simulator adapter](https://git.fortiss.org/opensbt/prescan_runner) into OpenSBT.
+As another example we have integrated Simulink-based systems simulated in Prescan [simulator adapter](https://github.com/opensbt/prescan_runner) into OpenSBT.
 
 
 ## Output
@@ -84,8 +84,8 @@ Objective Space Plot | Visualization of fitness values of evaluated test cases, 
 
 Following Simulators have been integrated already into OpenSBT:
 
-- [Prescan](https://plm.sw.siemens.com/de-DE/simcenter/autonomous-vehicle-solutions/prescan/?srsltid=AfmBOopocBsnRiNvzArkpWzeY4hpyFAta4txtL_dYqWWtkw4w5u3PzhE): [Example](https://git.fortiss.org/opensbt/prescan-runner)
-- [CARLA](https://carla.org/): [Example](https://git.fortiss.org/opensbt/carla-runner)
+- [Prescan](https://plm.sw.siemens.com/de-DE/simcenter/autonomous-vehicle-solutions/prescan/?srsltid=AfmBOopocBsnRiNvzArkpWzeY4hpyFAta4txtL_dYqWWtkw4w5u3PzhE): [Example](https://github.com/opensbt/prescan-runner)
+- [CARLA](https://carla.org/): [Example](https://github.com/opensbt/carla-runner)
 - [Donkey](https://github.com/tawnkramer/donkey): [Example](https://github.com/opensbt/opensbt-core/tree/main/examples/lanekeeping/donkey?ref_type=heads)
 - [Udacity](https://github.com/udacity/self-driving-car-sim): [Example](https://github.com/opensbt/opensbt-core/tree/main/examples/lanekeeping/udacity?ref_type=heads)
 - [BeamNG](https://www.beamng.com/game/): [Example]()
