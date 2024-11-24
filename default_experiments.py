@@ -1,5 +1,6 @@
 import os
 from opensbt.evaluation.fitness import *
+from opensbt.experiment.search_configuration import DefaultSearchConfiguration
 from opensbt.problem.adas_problem import ADASProblem
 from opensbt.problem.pymoo_test_problem import PymooTestProblem
 from opensbt.experiment.experiment_store import *
